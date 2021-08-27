@@ -1,66 +1,98 @@
 <template>
-  <div class="hello">
-    <h1>{{ results }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript" target="_blank" rel="noopener">typescript</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div>
+    <q-table title="Tasting Results"
+             :pagination="pagination"
+             :columns="columns"
+             :rows="rows"
+             table-header-class="table-header"
+    >
+
+      <template v-slot:header="props">
+        <q-tr :props="props">
+          <q-th text class="text-right">
+            Rank
+          </q-th>
+          <q-th
+              v-for="col in props.cols"
+              :key="col.name"
+              :props="props"
+          >
+            {{ col.label }}
+          </q-th>
+        </q-tr>
+      </template>
+
+      <template v-slot:body="props">
+        <q-tr :props="props" :key="`m_${props.row.index}`">
+          <q-td class="text-right">
+            {{ props.pageIndex + 1 }}
+          </q-td>
+
+          <q-td
+              v-for="col in props.cols"
+              :key="col.name"
+              :props="props"
+          >
+            {{ col.value }}
+          </q-td>
+        </q-tr>
+      </template>
+    </q-table>
   </div>
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted} from 'vue';
+import {defineComponent} from 'vue';
 import * as Papa from 'papaparse'
-import {ParseError} from "papaparse";
+import {ParseError, ParseResult} from "papaparse";
+import {
+  ResultSet,
+  transformDataSet
+} from "@/data-transformer";
 
-export class ResultSet {
-  data: any[] = []
+const resultOptions = {
+  defaultSort: 'Avg'
 }
 
 export default defineComponent({
   name: 'Results',
   data() {
     return {
-      results: new ResultSet()
+      results: new ResultSet(),
+      pagination: {
+        sortBy: resultOptions.defaultSort,
+        descending: true,
+        rowsPerPage: 100
+      },
+      columns: [] as any[],
+      rows: [] as any[]
     }
   },
   props: {
     msg: String,
   },
-  mounted() {
+  created() {
     let url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRHmJLjkK8hLoLt35evO0KrFEuBUtBeZo1FNFbIc7Qd2eTwgfhFjmtI8W4MOVm9I0sn2PhKxu2s-J9y/pub?single=true&output=csv";
     Papa.parse(url, {
       download: true,
       header: false,
       dynamicTyping: true,
-      error(error: ParseError, file?: File) {
+      error(error: ParseError) {
         console.log(error)
       },
-      complete: (results) => {
-        this.results.data = results.data
+      complete: (results: ParseResult<unknown>) => {
+        this.results = transformDataSet(results)
+
+        for (const header of this.results.headers) {
+          this.columns.push({
+            name: header,
+            label: header,
+            field: header,
+            sortable: true
+          })
+        }
+
+        this.rows = this.results.items
       }
     })
   }
@@ -69,18 +101,9 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
+.q-table th,
+.table-header {
+  text-transform: uppercase;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 </style>
