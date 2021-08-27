@@ -1,13 +1,16 @@
 <template>
-  <p>Click on a row to display all scores for a wine</p>
-  <div>
+  <div v-show="!publishId" class="bg-red-1">
+    you need to add the publish id of a published google spreadsheet as query parameter<br />
+    like "pid=[the pid]"
+  </div>
+  <div v-show="publishId">
+    <p>Click on a row to display all scores for a wine</p>
     <q-table title="Tasting Results"
              :pagination="pagination"
              :columns="columns"
              :rows="rows"
              table-header-class="table-header"
     >
-
       <template v-slot:header="props">
         <q-tr :props="props">
           <q-th text class="text-right">
@@ -27,7 +30,7 @@
         <q-tr :props="props" :key="`m_${props.row.index}`">
           <q-td
               class="text-right"
-              @click="props.expand = !props.expand" :icon="props.expand ? 'remove' : 'add'" >
+              @click="props.expand = !props.expand" :icon="props.expand ? 'remove' : 'add'">
             {{ props.pageIndex + 1 }}
           </q-td>
 
@@ -42,7 +45,7 @@
         </q-tr>
         <q-tr v-show="props.expand" :props="props">
           <q-td colspan="100%">
-            <div class="text-left">All Scores: {{props.row.individualScores.join(', ')}}</div>
+            <div class="text-left">All Scores: {{ props.row.individualScores.join(', ') }}</div>
           </q-td>
         </q-tr>
       </template>
@@ -67,6 +70,7 @@ export default defineComponent({
   name: 'Results',
   data() {
     return {
+      publishId: "" as string | null,
       results: new ResultSet(),
       pagination: {
         sortBy: resultOptions.defaultSort,
@@ -81,7 +85,14 @@ export default defineComponent({
     msg: String,
   },
   created() {
-    let url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRHmJLjkK8hLoLt35evO0KrFEuBUtBeZo1FNFbIc7Qd2eTwgfhFjmtI8W4MOVm9I0sn2PhKxu2s-J9y/pub?single=true&output=csv";
+    const urlParams = new URLSearchParams(window.location.search);
+    this.publishId = urlParams.get('pid');
+
+    if (!this.publishId) {
+      return
+    }
+
+    let url = `https://docs.google.com/spreadsheets/d/e/${this.publishId}/pub?single=true&output=csv`;
     Papa.parse(url, {
       download: true,
       header: false,
