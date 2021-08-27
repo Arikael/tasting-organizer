@@ -1,4 +1,5 @@
 <template>
+  <p>Click on a row to display all scores for a wine</p>
   <div>
     <q-table title="Tasting Results"
              :pagination="pagination"
@@ -24,7 +25,9 @@
 
       <template v-slot:body="props">
         <q-tr :props="props" :key="`m_${props.row.index}`">
-          <q-td class="text-right">
+          <q-td
+              class="text-right"
+              @click="props.expand = !props.expand" :icon="props.expand ? 'remove' : 'add'" >
             {{ props.pageIndex + 1 }}
           </q-td>
 
@@ -32,8 +35,14 @@
               v-for="col in props.cols"
               :key="col.name"
               :props="props"
+              @click="props.expand = !props.expand" :icon="props.expand ? 'remove' : 'add'"
           >
             {{ col.value }}
+          </q-td>
+        </q-tr>
+        <q-tr v-show="props.expand" :props="props">
+          <q-td colspan="100%">
+            <div class="text-left">All Scores: {{props.row.individualScores.join(', ')}}</div>
           </q-td>
         </q-tr>
       </template>
@@ -104,6 +113,10 @@ export default defineComponent({
 .q-table th,
 .table-header {
   text-transform: uppercase;
+}
+
+.q-table td {
+  cursor: pointer;
 }
 
 </style>

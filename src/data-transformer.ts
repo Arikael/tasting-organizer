@@ -56,7 +56,8 @@ function findHeaderBreakpoint(data: unknown[]): number {
 }
 
 function appendIndividualScoresAsArray(data: unknown[], headerBreakpoint: number): number[] {
-    return data.filter((score: unknown) => score).slice(headerBreakpoint + 1).sort() as number[]
+    return (data.filter((score: unknown) => score) as number[]).slice(headerBreakpoint + 1)
+        .sort((a: number, b: number) => a - b)
 }
 
 function transformResultRow(data: unknown[], headerBreakpoint: number): unknown[] {
