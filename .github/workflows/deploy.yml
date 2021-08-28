@@ -10,6 +10,7 @@ jobs:
     steps:
       - name: Deploy Vue
         run: |
+              npm ci
               npm run build
               cd dist
               git init
