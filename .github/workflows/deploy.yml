@@ -9,10 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Deploy Vue
+      - name: Build Vue
         run: |
               npm ci
               npm run build
+      - name: Deploy Vue
+        run: |
               cd dist
               git init
               git add -A
