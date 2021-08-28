@@ -10,7 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Deploy Vue
-        working-directory: ../
         run: |
               npm ci
               npm run build
