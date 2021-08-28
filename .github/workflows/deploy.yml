@@ -2,19 +2,18 @@ name: Deploy to GitHub pages
 
 on:
   push:
-    # this might change depending on whether you are publishing a site for a normal repo or a user/organization repo
     branches: [ master ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
+      - name: Deploy Vue
+        run: |
+              npm run build
+              cd dist
+              git init
+              git add -A
+              git commit -m 'deploy'
+              git push -f https://arikael:${{ secrets.GITHUB_TOKEN }}@github.com/arikael/tasting-organizer.git master:gh-pages
 
-      - name: Generate static vuepress files
-        uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
-      - run: npm ci
-      - run: npm run build
