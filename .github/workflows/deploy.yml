@@ -18,8 +18,8 @@ jobs:
               cd dist
               git init
               git add -A
-              git config --global user.email "action@github.com"
-              git config --global user.name "GitHub Action"
+              git config --global user.email "arikael@mailbox.org"
+              git config --global user.name "Arikael"
               git commit -m 'deploy'
               git push -f https://arikael:${{ secrets.GITHUB_TOKEN }}@github.com/arikael/tasting-organizer.git master:gh-pages
 
