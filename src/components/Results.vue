@@ -9,7 +9,7 @@
              :pagination="pagination"
              :columns="columns"
              :rows="rows"
-             dense
+             :dense="$q.screen.lt.md"
              table-header-class="table-header"
     >
       <template v-slot:header="props">
