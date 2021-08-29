@@ -30,7 +30,7 @@
       <template v-slot:body="props">
         <q-tr :props="props" :key="`m_${props.row.index}`">
           <q-td
-              class="text-right"
+              class="text-right rank-nr"
               @click="props.expand = !props.expand" :icon="props.expand ? 'remove' : 'add'">
             {{ props.pageIndex + 1 }}
           </q-td>
@@ -129,6 +129,10 @@ export default defineComponent({
 
 .q-table td {
   cursor: pointer;
+}
+
+.rank-nr {
+  color: indianred;
 }
 
 </style>
