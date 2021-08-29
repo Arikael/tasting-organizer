@@ -9,6 +9,7 @@
              :pagination="pagination"
              :columns="columns"
              :rows="rows"
+             dense
              table-header-class="table-header"
     >
       <template v-slot:header="props">
