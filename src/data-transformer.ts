@@ -3,6 +3,12 @@ import {ParseResult} from "papaparse";
 export class ResultSet {
     headers: string[] = []
     items: RowItem[] = []
+    highScores: Scores = {}
+    lowScores: Scores = {}
+}
+
+export interface Scores {
+    [key: string]: number
 }
 
 export interface RowItem {
@@ -12,17 +18,40 @@ export interface RowItem {
 export function transformDataSet(results: ParseResult<unknown>): ResultSet {
     const resultSet = new ResultSet()
     resultSet.headers = getHeadersFromData(results.data)
+
+    const separatorIndex = findSeparatorIndex(results.data[0] as unknown[])
     const headerBreakpoint = findHeaderBreakpoint(results.data[0] as unknown[])
     const skeletonRow = createSkeletonRow(resultSet.headers)
 
     let id = 0
+    const highScoreCalcIndex = (resultSet.headers).length - separatorIndex
 
     for (const data of results.data.slice(1)) {
-        const rowData = transformResultRow(data as unknown[], headerBreakpoint)
+        const rowData = transformResultRow(data as unknown[], headerBreakpoint, separatorIndex)
         const row = Object.assign({}, skeletonRow)
 
-        for (const i in rowData) {
+        for (let i = 0; i  < rowData.length; i++) {
             row[resultSet.headers[i]] = rowData[i]
+
+            if (i >= highScoreCalcIndex && !Number.isNaN(rowData[i])) {
+                const currentKey = resultSet.headers[i]
+                const number = rowData[i] as number
+
+                if (resultSet.highScores[currentKey] == undefined) {
+                    resultSet.highScores[currentKey] = number
+                }
+
+                if (resultSet.lowScores[currentKey] == undefined) {
+                    resultSet.lowScores[currentKey] = number
+                }
+
+                if(resultSet.highScores[currentKey] < number) {
+                    resultSet.highScores[currentKey] = number
+                }
+                else if(resultSet.lowScores[currentKey] > number) {
+                    resultSet.lowScores[currentKey] = number
+                }
+            }
         }
 
         row.individualScores = []
@@ -32,13 +61,16 @@ export function transformDataSet(results: ParseResult<unknown>): ResultSet {
         id++
     }
 
+    console.log(resultSet)
     return resultSet
 }
 
 function getHeadersFromData(data: unknown[]): string[] {
-    const headerBreakpoint = findHeaderBreakpoint(data[0] as unknown[])
+    const headerRow = data[0] as unknown[]
+    const headerBreakpoint = findHeaderBreakpoint(headerRow)
+    const separatorIndex = findSeparatorIndex(headerRow)
 
-    return transformResultRow(data[0] as unknown[], headerBreakpoint) as string[]
+    return transformResultRow(headerRow, headerBreakpoint, separatorIndex) as string[]
 }
 
 function createSkeletonRow(headers: any): RowItem {
@@ -55,15 +87,18 @@ function findHeaderBreakpoint(data: unknown[]): number {
     return data.findIndex((item) => !item)
 }
 
+function findSeparatorIndex(data: unknown[]): number {
+    return data.findIndex((item) => item === '###')
+}
+
 function appendIndividualScoresAsArray(data: unknown[], headerBreakpoint: number): number[] {
     return (data.filter((score: unknown) => score) as number[]).slice(headerBreakpoint + 1)
         .sort((a: number, b: number) => a - b)
 }
 
-function transformResultRow(data: unknown[], headerBreakpoint: number): unknown[] {
+function transformResultRow(data: unknown[], headerBreakpoint: number, separatorIndex: number): unknown[] {
     let transformedResults = []
     transformedResults = data.slice(0, headerBreakpoint)
-    const separatorIndex = transformedResults.findIndex((item) => item === '###')
 
     return [
         ...transformedResults.slice(separatorIndex + 1),
