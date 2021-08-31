@@ -1,6 +1,6 @@
 <template>
   <div v-show="!publishId" class="bg-red-1">
-    you need to add the publish id of a published google spreadsheet as query parameter<br />
+    you need to add the publish id of a published google spreadsheet as query parameter<br/>
     like "pid=[the pid]"
   </div>
   <div v-show="publishId">
@@ -34,14 +34,15 @@
               @click="props.expand = !props.expand" :icon="props.expand ? 'remove' : 'add'">
             {{ props.pageIndex + 1 }}
           </q-td>
-
           <q-td
               v-for="col in props.cols"
               :key="col.name"
               :props="props"
               @click="props.expand = !props.expand" :icon="props.expand ? 'remove' : 'add'"
           >
-            {{ col.value }}
+            <result-cell :value="col.value"
+                         :high-score="results.highScores[col.name]"
+                         :low-score="results.lowScores[col.name]"></result-cell>
           </q-td>
         </q-tr>
         <q-tr v-show="props.expand" :props="props">
@@ -62,6 +63,7 @@ import {
   ResultSet,
   transformDataSet
 } from "@/data-transformer";
+import ResultCell from "@/components/ResultCell.vue";
 
 const resultOptions = {
   defaultSort: 'Avg'
@@ -69,6 +71,7 @@ const resultOptions = {
 
 export default defineComponent({
   name: 'Results',
+  components: {ResultCell},
   data() {
     return {
       publishId: "" as string | null,
@@ -81,9 +84,6 @@ export default defineComponent({
       columns: [] as any[],
       rows: [] as any[]
     }
-  },
-  props: {
-    msg: String,
   },
   created() {
     const urlParams = new URLSearchParams(window.location.search);
