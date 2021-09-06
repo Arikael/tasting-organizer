@@ -1,10 +1,9 @@
 <template>
-  <div v-show="!publishId" class="bg-red-1">
-    you need to add the publish id of a published google spreadsheet as query parameter<br/>
-    like "pid=[the pid]"
+  <div v-show="!publishId" class="message-box error-box">
+    {{ $t('noPidError')}}
   </div>
   <div v-show="publishId">
-    <p>Click on a row to display all scores for a wine</p>
+    <p class="info-box">Click on a row to display all scores for a wine</p>
     <q-table title="Tasting Results"
              :pagination="pagination"
              :columns="columns"
@@ -26,7 +25,6 @@
           </q-th>
         </q-tr>
       </template>
-
       <template v-slot:body="props">
         <q-tr :props="props" :key="`m_${props.row.index}`">
           <q-td
@@ -82,8 +80,12 @@ export default defineComponent({
         rowsPerPage: 100
       },
       columns: [] as any[],
-      rows: [] as any[]
+      rows: [] as any[],
+      bestOfThree: [] as string[]
     }
+  },
+  computed: {
+
   },
   created() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -122,6 +124,8 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+@import "/src/styles/quasar.variables";
+
 .q-table th,
 .table-header {
   text-transform: uppercase;
@@ -133,6 +137,24 @@ export default defineComponent({
 
 .rank-nr {
   color: indianred;
+}
+
+.message-box {
+  border-width: 1px;
+  border-style: solid;
+  padding: map-get($space-sm, "x") map-get($space-sm, "y");
+}
+
+.info-box {
+  border-color: $blue-5;
+  background: $blue-1;
+  color: $blue-10;
+}
+
+.error-box {
+  border-color: $red-8;
+  background: $red-1;
+  color: $red-8;
 }
 
 </style>

@@ -1,0 +1,3 @@
+{
+  "noPidError": "Du musst die Publish ID eines publizierten Google Spreedsheets als Query Parameter angeben\nz.b. \"pid=[die pid]\" "
+}
