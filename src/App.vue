@@ -2,6 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <q-page-container>
       <q-page padding>
+        {{$i18n.locale}}
         <Results/>
       </q-page>
     </q-page-container>
