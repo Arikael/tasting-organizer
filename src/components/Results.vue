@@ -1,9 +1,15 @@
 <template>
   <div v-show="!publishId" class="message-box error-box">
-    {{ $t('noPidError')}}
+    {{ $t('noPidError') }}
   </div>
   <div v-show="publishId">
-    <p class="info-box">Click on a row to display all scores for a wine</p>
+    <div class="message-box info-box q-mb-md text-caption">
+      {{ $t('tastingInfoTitle') }}<br/>
+      <q-badge color="orange">{{ $t('orange') }}</q-badge>
+      {{ $t('tastingInfoLowDesc') }},
+      <q-badge color="green">{{ $t('green') }}</q-badge>
+      {{ $t('tastingInfoHighDesc') }}
+    </div>
     <q-table title="Tasting Results"
              :pagination="pagination"
              :columns="columns"
@@ -84,9 +90,7 @@ export default defineComponent({
       bestOfThree: [] as string[]
     }
   },
-  computed: {
-
-  },
+  computed: {},
   created() {
     const urlParams = new URLSearchParams(window.location.search);
     this.publishId = urlParams.get('pid');
@@ -140,15 +144,14 @@ export default defineComponent({
 }
 
 .message-box {
-  border-width: 1px;
-  border-style: solid;
+  border-left-width: 6px;
+  border-left-style: solid;
   padding: map-get($space-sm, "x") map-get($space-sm, "y");
 }
 
 .info-box {
   border-color: $blue-5;
-  background: $blue-1;
-  color: $blue-10;
+  background: $grey-2;
 }
 
 .error-box {

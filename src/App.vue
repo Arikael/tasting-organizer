@@ -1,11 +1,16 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-page-container>
-      <q-page padding>
-        <Results/>
-      </q-page>
-    </q-page-container>
-  </q-layout>
+  <div  >
+    <q-layout view="lHh Lpr lFf">
+      <q-header elevated class="q-pa-sm">
+        <q-toolbar-title>{{ $t('tastingTitle') }}</q-toolbar-title>
+      </q-header>
+      <q-page-container>
+        <q-page padding>
+          <Results/>
+        </q-page>
+      </q-page-container>
+    </q-layout>
+  </div>
 </template>
 
 <script lang="ts">
