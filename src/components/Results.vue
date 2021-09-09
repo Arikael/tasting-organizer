@@ -10,7 +10,7 @@
       <q-badge color="green">{{ $t('green') }}</q-badge>
       {{ $t('tastingInfoHighDesc') }}
     </div>
-    <q-table title="Tasting Results"
+    <q-table title="Pinot Noir Tasting"
              :pagination="pagination"
              :columns="columns"
              :rows="rows"

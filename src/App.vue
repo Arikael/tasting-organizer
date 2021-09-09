@@ -1,11 +1,13 @@
 <template>
-  <div  >
+  <div>
     <q-layout view="lHh Lpr lFf">
-      <q-header elevated class="q-pa-sm">
-        <q-toolbar-title>{{ $t('tastingTitle') }}</q-toolbar-title>
+      <q-header elevated>
+        <q-toolbar>
+          <q-toolbar-title>{{ $t('tastingTitle') }}</q-toolbar-title>
+        </q-toolbar>
       </q-header>
       <q-page-container>
-        <q-page padding>
+        <q-page class="q-pa-md">
           <Results/>
         </q-page>
       </q-page-container>
