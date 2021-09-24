@@ -61,7 +61,6 @@ export function transformDataSet(results: ParseResult<unknown>): ResultSet {
         id++
     }
 
-    console.log(resultSet)
     return resultSet
 }
 
