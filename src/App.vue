@@ -40,7 +40,7 @@ export default defineComponent({
 
   setup () {
     const $q = useQuasar()
-    const lang = ref($q.lang!.isoName)
+    const lang = ref($q.lang.isoName)
     const i18n = getCurrentInstance()?.appContext?.config?.globalProperties?.$i18n
 
     watch(lang, val => {
