@@ -5,5 +5,12 @@
   "tastingInfoLowDesc": "denotes the lowest score of a column",
   "tastingInfoHighDesc": "denotes the highest score of a column",
   "orange": "Orange",
-  "green": "Green"
+  "green": "Green",
+  "Rank": "rank",
+  "Wine": "wine",
+  "WineNr": "wineNr",
+  "Avg": "avg",
+  "Median": "median",
+  "Min": "min",
+  "Max": "max"
 }

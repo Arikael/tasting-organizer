@@ -4,6 +4,17 @@
       <q-header elevated>
         <q-toolbar>
           <q-toolbar-title>{{ $t('tastingTitle') }}</q-toolbar-title>
+          <q-btn flat round dense icon="language">
+            <q-menu auto-close>
+              <q-list>
+                <q-item clickable>
+                  <q-item-section v-on:click="changeLanguage('de')">DE</q-item-section></q-item>
+                <q-item clickable>
+                  <q-item-section v-on:click="changeLanguage('de')">EN</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
         </q-toolbar>
       </q-header>
       <q-page-container>
@@ -25,6 +36,12 @@ export default defineComponent({
 
   components: {
     Results
+  },
+
+  methods: {
+    changeLanguage(key: string) {
+      this.$i18n.locale = key.toLowerCase()
+    }
   }
 });
 </script>

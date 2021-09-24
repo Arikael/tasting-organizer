@@ -20,14 +20,14 @@
       <template v-slot:header="props">
         <q-tr :props="props">
           <q-th text class="text-right">
-            Rank
+            {{ $t('Rank') }}
           </q-th>
           <q-th
               v-for="col in props.cols"
               :key="col.name"
               :props="props"
           >
-            {{ col.label }}
+            {{ $t(col.label) }}
           </q-th>
         </q-tr>
       </template>

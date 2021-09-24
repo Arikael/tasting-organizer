@@ -5,5 +5,12 @@
   "tastingInfoLowDesc": "zeigt den tiefsten Wert einer Spalte an",
   "tastingInfoHighDesc": "zeigt den höchsten Wert einer Spalte an",
   "orange": "Orange",
-  "green": "Grün"
+  "green": "Grün",
+  "Rank": "Rang",
+  "Wine": "Wein",
+  "WineNr": "WeinNr",
+  "Avg": "Avg",
+  "Median": "Median",
+  "Min": "Min",
+  "Max": "Max"
 }
