@@ -12,5 +12,7 @@
   "Avg": "avg",
   "Median": "median",
   "Min": "min",
-  "Max": "max"
+  "Max": "max",
+  "AllScores": "All scores"
+
 }

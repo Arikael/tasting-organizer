@@ -10,7 +10,7 @@
                 <q-item clickable>
                   <q-item-section v-on:click="changeLanguage('de')">DE</q-item-section></q-item>
                 <q-item clickable>
-                  <q-item-section v-on:click="changeLanguage('de')">EN</q-item-section>
+                  <q-item-section v-on:click="changeLanguage('en')">EN</q-item-section>
                 </q-item>
               </q-list>
             </q-menu>

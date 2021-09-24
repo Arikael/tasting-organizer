@@ -51,7 +51,7 @@
         </q-tr>
         <q-tr v-show="props.expand" :props="props">
           <q-td colspan="100%">
-            <div class="text-left">All Scores: {{ props.row.individualScores.join(', ') }}</div>
+            <div class="text-left">{{ $t('AllScores') }}: {{ props.row.individualScores.join(', ') }}</div>
           </q-td>
         </q-tr>
       </template>
