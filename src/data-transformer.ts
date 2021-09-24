@@ -33,7 +33,7 @@ export function transformDataSet(results: ParseResult<unknown>): ResultSet {
         for (let i = 0; i  < rowData.length; i++) {
             row[resultSet.headers[i]] = rowData[i]
 
-            if (i >= highScoreCalcIndex && !Number.isNaN(rowData[i])) {
+            if (i >= highScoreCalcIndex && rowData[i] !== null && !Number.isNaN(rowData[i])) {
                 const currentKey = resultSet.headers[i]
                 const number = rowData[i] as number
 
@@ -97,8 +97,7 @@ function appendIndividualScoresAsArray(data: unknown[], headerBreakpoint: number
 }
 
 function transformResultRow(data: unknown[], headerBreakpoint: number, separatorIndex: number): unknown[] {
-    let transformedResults = []
-    transformedResults = data.slice(0, headerBreakpoint)
+    const transformedResults = data.slice(0, headerBreakpoint)
 
     return [
         ...transformedResults.slice(separatorIndex + 1),

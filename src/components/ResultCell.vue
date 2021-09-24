@@ -19,7 +19,8 @@ export default defineComponent( {
   },
   computed: {
     isScoreMatch(): boolean {
-      return !Number.isNaN(this.value) && (this.value === this.highScore || this.value == this.lowScore);
+      return this.value !== null && !Number.isNaN(this.value)
+          && (this.value === this.highScore || this.value == this.lowScore);
     },
     cssScoreBadgeColor(): string {
       if(Number.isNaN(this.value)) {
