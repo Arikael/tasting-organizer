@@ -91,7 +91,7 @@ function findSeparatorIndex(data: unknown[]): number {
 }
 
 function appendIndividualScoresAsArray(data: unknown[], headerBreakpoint: number): number[] {
-    return (data.filter((score: unknown) => score) as number[]).slice(headerBreakpoint + 1)
+    return (data.filter((score: unknown) => score) as number[]).slice(headerBreakpoint)
         .sort((a: number, b: number) => a - b)
 }
 
