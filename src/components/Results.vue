@@ -61,8 +61,6 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import * as Papa from 'papaparse'
-import {ParseError, ParseResult} from "papaparse";
 import {
   ResultSet,
   transformDataSet
@@ -99,29 +97,29 @@ export default defineComponent({
       return
     }
 
-    let url = `https://docs.google.com/spreadsheets/d/e/${this.publishId}/pub?single=true&output=csv`;
-    Papa.parse(url, {
-      download: true,
-      header: false,
-      dynamicTyping: true,
-      error(error: ParseError) {
-        console.log(error)
-      },
-      complete: (results: ParseResult<unknown>) => {
-        this.results = transformDataSet(results)
-
-        for (const header of this.results.headers) {
-          this.columns.push({
-            name: header,
-            label: header,
-            field: header,
-            sortable: true
-          })
-        }
-
-        this.rows = this.results.items
-      }
-    })
+    // let url = `https://docs.google.com/spreadsheets/d/e/${this.publishId}/pub?single=true&output=csv`;
+    // Papa.parse(url, {
+    //   download: true,
+    //   header: false,
+    //   dynamicTyping: true,
+    //   error(error: ParseError) {
+    //     console.log(error)
+    //   },
+    //   complete: (results: ParseResult<unknown>) => {
+    //     this.results = transformDataSet(results)
+    //
+    //     for (const header of this.results.headers) {
+    //       this.columns.push({
+    //         name: header,
+    //         label: header,
+    //         field: header,
+    //         sortable: true
+    //       })
+    //     }
+    //
+    //     this.rows = this.results.items
+    //   }
+    // })
   }
 });
 </script>
