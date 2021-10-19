@@ -61,10 +61,6 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import {
-  ResultSet,
-  transformDataSet
-} from "@/data-transformer";
 import ResultCell from "@/components/ResultCell.vue";
 
 const resultOptions = {
@@ -77,7 +73,7 @@ export default defineComponent({
   data() {
     return {
       publishId: "" as string | null,
-      results: new ResultSet(),
+      results: null,
       pagination: {
         sortBy: resultOptions.defaultSort,
         descending: true,
