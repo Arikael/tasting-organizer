@@ -19,7 +19,7 @@
       </q-header>
       <q-page-container>
         <q-page class="q-pa-sm">
-          <Results/>
+          <router-view></router-view>
         </q-page>
       </q-page-container>
     </q-layout>
@@ -28,16 +28,10 @@
 
 <script lang="ts">
 import {defineComponent, getCurrentInstance, ref, watch} from 'vue';
-import Results from './components/Results.vue'
 import {useQuasar} from "quasar";
 
 export default defineComponent({
   name: 'LayoutDefault',
-
-  components: {
-    Results
-  },
-
   setup () {
     const $q = useQuasar()
     const lang = ref($q.lang.isoName)

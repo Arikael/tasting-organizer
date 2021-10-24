@@ -1,20 +1,29 @@
 <template>
   <div>
-    {{ wine.name }}
-  </div>
-  <div>
-
+    <q-input outlined v-model="score" :label="label" :dense="true"></q-input>
   </div>
 </template>
 
 <script lang="ts">
-import {WineWithScore} from "./BaseWine";
 import {defineComponent} from "vue";
 
 export default defineComponent({
   name: "WineScore",
   props: {
-    wine: WineWithScore
+    modelValue: Number,
+    label: String
+  },
+  emits: ['update:modelValue'],
+  computed: {
+    score: {
+      get() {
+        return this.modelValue
+      },
+      set(val: string) {
+        const score = parseInt(val)
+        this.$emit('update:modelValue', score)
+      }
+    }
   }
 })
 </script>

@@ -1,22 +1,30 @@
 <template>
   <div>
-    {{ flight.name }}
+    Name {{ modelValue.name }}
   </div>
   <div class="flight-wines">
-    <wine-score :wine="wine" v-for="wine in flight.wines" v-bind:key="wine.id"></wine-score>
+    <wine-score v-model="flightValues.wines[index].score" :label="flightValues.wines[index].name"
+                v-for="(wine, index) in flightValues.wines" v-bind:key="wine.id"></wine-score>
   </div>
 </template>
 
 <script lang="ts">
-import {BaseFlight} from "./BaseWine";
-import {defineComponent} from "vue";
+import {defineComponent, PropType} from "vue";
 import WineScore from "@/modules/scoring/WineScore.vue";
+import {Flight, WineWithScore} from "@/modules/scoring/Entities";
 
 export default defineComponent({
   name: "ScoringFlight",
   components: {WineScore},
   props: {
-    flight: BaseFlight
+    modelValue: {
+      type: Object as PropType<Flight<WineWithScore>>
+    }
+  },
+  data() {
+    return {
+      flightValues: this.modelValue
+    }
   }
 })
 </script>
