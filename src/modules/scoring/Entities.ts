@@ -22,4 +22,6 @@ export class Tasting {
     title = ''
     date: Date = new Date()
     intro = ''
+    outro = ''
+    revealAfter: 'flight' | 'submit' | 'admin' = 'flight'
 }

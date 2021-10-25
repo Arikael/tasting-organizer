@@ -1,15 +1,20 @@
 <template>
   <h2>{{ baseData.title }}</h2>
-  <div>
+  <div v-if="index === 0">
+    <div v-if="hasIntro">
+      {{baseData.intro}}
+    </div>
     <q-input outlined v-model="scoringData.username" :label="$t('name')" :dense="true"></q-input>
   </div>
-  <div>
-    <scoring-flight v-model="scoringData.flights[index]" v-bind:key="index"></scoring-flight>
+  <div v-if="isFlightStep">
+    <scoring-flight v-model="scoringData.flights[index - 1]" v-bind:key="index - 1"></scoring-flight>
   </div>
   <div class="flight-navigation">
-    <q-btn color="primary" :label="$t('next')" />
+    <q-btn color="primary" v-if="canMoveBack" @click="moveBack()" :label="$t('back')" />
+    <q-btn color="primary" v-if="canMoveForward" @click="moveForward()" :label="$t('next')" />
+    <q-btn color="primary" v-if="isLastStep" :label="$t('submit')" />
   </div>
-  {{flights }}
+  {{scoringData }}
 </template>
 
 <script lang="ts">
@@ -28,27 +33,63 @@ export default defineComponent({
   },
   setup(props) {
     const tastingData = initializeCurrentTasting(props.tastingId)
-
+    
     return {
       baseData: tastingData.baseData,
-      scoringData: tastingData.scoreData,
+      scoringData: ref(tastingData.scoreData),
     }
   },
   data() {
     return {
       index: 0,
+      step: 'base'
+    }
+  },
+  computed: {
+    isFlightStep: {
+      get() {
+        return this.index > 0 && this.index <= this.scoringData.flights.length;
+      }
+    },
+    isLastStep: {
+      get() {
+        return this.index >= this.scoringData.flights.length;
+      }
+    },
+    hasIntro: {
+      get(): boolean {
+        return this.baseData.intro.length > 0
+      }
+    },
+    hasOutro: {
+      get(): boolean {
+        return this.baseData.outro.length > 0
+      }
+    },
+    canMoveForward: {
+      get(): boolean {
+        return this.index < this.scoringData.flights.length
+      }
+    },
+    canMoveBack: {
+      get(): boolean {
+        return this.index > 0
+      }
     }
   },
   methods: {
-    nextFlight() {
-      if(this.index < this.scoringData.flights.length) {
+    moveForward() {
+      if(this.canMoveForward) {
         this.index += 1
       }
     },
-    previousFlight() {
-      if(this.index > 0) {
+    moveBack() {
+      if(this.canMoveBack) {
         this.index -= 1
       }
+    },
+    submit() {
+      return;
     }
   }
 })
