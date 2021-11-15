@@ -9,6 +9,9 @@
     "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\""
   },
   "dependencies": {
+    "@feathersjs/feathers": "^4.5.11",
+    "@feathersjs/socketio-client": "^4.5.11",
+    "@feathersjs/vuex": "^4.0.1-pre.7",
     "@quasar/extras": "^1.11.1",
     "core-js": "^3.18.0",
     "quasar": "^2.1.0",
