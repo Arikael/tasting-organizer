@@ -46,35 +46,25 @@ export default defineComponent({
     }
   },
   computed: {
-    isFlightStep: {
-      get() {
+    isFlightStep(): boolean {
         return this.index > 0 && this.index <= this.scoringData.flights.length;
-      }
     },
-    isLastStep: {
-      get() {
+    isLastStep(): boolean {
         return this.index >= this.scoringData.flights.length;
-      }
     },
-    hasIntro: {
-      get(): boolean {
+    hasIntro(): boolean {
         return this.baseData.intro.length > 0
-      }
     },
-    hasOutro: {
-      get(): boolean {
+    hasOutro(): boolean {
         return this.baseData.outro.length > 0
-      }
+
     },
-    canMoveForward: {
-      get(): boolean {
+    canMoveForward(): boolean {
         return this.index < this.scoringData.flights.length
-      }
+
     },
-    canMoveBack: {
-      get(): boolean {
+    canMoveBack(): boolean {
         return this.index > 0
-      }
     }
   },
   methods: {

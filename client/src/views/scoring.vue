@@ -3,8 +3,8 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
-import ScoringContainer from "@/modules/scoring/ScoringContainer.vue";
+import {defineComponent} from "vue"
+import ScoringContainer from "@/modules/scoring/ScoringContainer.vue"
 
 export default defineComponent({
   name: "scoring",
