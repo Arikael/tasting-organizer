@@ -1,16 +1,16 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
 import scoring from "@/views/scoring.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
+    path: '/scoring/:id',
     name: 'Scoring',
     component: scoring
   }
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
 

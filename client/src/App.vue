@@ -29,9 +29,14 @@
 <script lang="ts">
 import {defineComponent, getCurrentInstance, ref, watch} from 'vue';
 import {useQuasar} from "quasar";
+import {createClient} from "@/api/client";
+import {Store} from "@/api/store";
 
 export default defineComponent({
   name: 'LayoutDefault',
+  provide: {
+    store: new Store()
+  },
   setup () {
     const $q = useQuasar()
     const lang = ref($q.lang.isoName)
