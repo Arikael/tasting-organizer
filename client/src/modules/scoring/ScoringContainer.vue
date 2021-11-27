@@ -4,7 +4,7 @@
     <div v-if="hasIntro">
       {{ store.tasting.intro }}
     </div>
-    <q-input outlined v-model="scoringData.username" :label="$t('name')" :dense="true"></q-input>
+    <q-input outlined :model-value="store.scoreData.userName" @update:model-value="updateUser" :label="$t('name')" :dense="true"></q-input>
   </div>
   <div v-if="isFlightStep">
     <scoring-flight v-model="store.tasting.flights[index - 1]" v-bind:key="index - 1"></scoring-flight>
@@ -14,14 +14,13 @@
     <q-btn color="primary" v-if="canMoveForward" @click="moveForward()" :label="$t('next')"/>
     <q-btn color="primary" v-if="isLastStep" :label="$t('submit')"/>
   </div>
-  {{ store.tasting }}
+  {{ store.state }}
 </template>
 
 <script lang="ts">
 import {defineComponent, inject, onMounted, ref} from "vue";
 import ScoringFlight from "@/modules/scoring/ScoringFlight.vue";
 import {Store} from "@/api/store";
-import {initializeCurrentTasting} from "@/modules/scoring/ScoringService";
 
 export default defineComponent({
   name: "ScoringContainer",
@@ -41,11 +40,9 @@ export default defineComponent({
       }
     })
 
-    const tastingData = initializeCurrentTasting(props.tastingId)
-
     return {
-      store,
-      scoringData: ref(tastingData.scoreData),
+      store: store,
+      userName: ref(store.scoreData.userName),
     }
   },
   data() {
@@ -75,6 +72,9 @@ export default defineComponent({
     }
   },
   methods: {
+    updateUser(value: string) {
+      this.store.setUser(value)
+    },
     moveForward() {
       if (this.canMoveForward) {
         this.index += 1

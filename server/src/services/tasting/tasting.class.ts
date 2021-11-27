@@ -22,7 +22,7 @@ export class Tasting extends Service {
         publicId: id
       }
     })
-console.log('asdg')
+
     return tastings.then((results: any) => {
       return results.length === 1 ? results[0] : null
     })

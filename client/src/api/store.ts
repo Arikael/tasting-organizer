@@ -1,16 +1,26 @@
-import {Flight, Tasting, TastingScoreData, WineWithScore} from "@/modules/scoring/Entities";
+import {Flight, Score, Tasting, TastingScoreData, WineWithScore} from "@/modules/scoring/Entities";
 import feathers from "@feathersjs/feathers";
 import {createClient} from "@/api/client";
 import {reactive, ref} from "vue";
+import {createId} from "@/helpers";
+import {UnwrapNestedRefs} from "@vue/reactivity";
 
 export class Store {
-    public get tasting() {
+    public get tasting(): UnwrapNestedRefs<Tasting> {
         return this.state.tasting
     }
 
-    private state = reactive({
+    public get scoreData() {
+        return this.state.scoreData
+    }
+
+    public state = reactive({
         tasting: new Tasting(),
-        scores: {}
+        scoreData: {
+            userId: '',
+            userName: '',
+            scores: Array<Score>(),
+        }
     })
     private client: feathers.Application<any>
 
@@ -24,6 +34,33 @@ export class Store {
 
             return this.state.tasting
         })
+    }
+
+    public setUser(userName: string): void {
+        this.state.scoreData.userName = userName
+
+        if (!this.state.scoreData.userId) {
+            this.state.scoreData.userId = createId(4)
+        }
+    }
+
+    public getScore(wineId: string): Score | undefined {
+        const scoreData = this.state.scoreData.scores.find(x => x.wineId === wineId)
+
+        return scoreData ? scoreData : undefined
+    }
+
+    public setScore(wineId: string, score: number): void {
+        const scoreData = this.getScore(wineId)
+
+        if (scoreData) {
+            scoreData.score = score
+        } else {
+            this.state.scoreData.scores.push({
+                score,
+                wineId
+            })
+        }
     }
 }
 
@@ -52,36 +89,3 @@ function mapApiDataToTasting(data: any): Tasting {
 
     return tasting
 }
-
-export const getTastingDataForScoring = (tastingId: string): Tasting => {
-    const tasting = new Tasting()
-    tasting.title = "My Tasting"
-    tasting.flights.push({
-            name: "flight 1",
-            wines: [
-                {
-                    name: "Wine 1",
-                    id: "1"
-                },
-                {
-                    name: "Wine 2",
-                    id: "2"
-                }
-            ]
-        },
-        {
-            name: "flight 2",
-            wines: [
-                {
-                    name: "Wine 3",
-                    id: "3"
-                },
-                {
-                    name: "Wine 4",
-                    id: "4"
-                }
-            ]
-        })
-
-    return tasting
-};

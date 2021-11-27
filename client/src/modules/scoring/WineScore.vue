@@ -1,27 +1,44 @@
 <template>
   <div>
-    <q-input outlined v-model="score" :label="label" :dense="true"></q-input>
+    <q-input outlined :model-value="score" @update:model-value="updateScore" :label="wine?.name" :dense="true"></q-input>
   </div>
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, inject} from "vue";
+import {BaseWine} from "@/modules/scoring/Entities";
+import {Store} from "@/api/store";
 
 export default defineComponent({
   name: "WineScore",
   props: {
-    modelValue: Number,
-    label: String
+    wine: BaseWine
   },
-  emits: ['update:modelValue'],
+  setup(props) {
+    const store = inject<Store>('store') ?? new Store()
+
+    return {
+      store,
+      wineName: props.wine?.name ?? ''
+    }
+  },
   computed: {
-    score: {
-      get() {
-        return this.modelValue
-      },
-      set(val: string) {
-        const score = parseInt(val)
-        this.$emit('update:modelValue', score)
+    score(): number {
+      let score = 0
+      if(this.wine) {
+        score = this.store.getScore(this.wine?.id)?.score ?? 0
+      }
+
+      return score
+    }
+  },
+  methods: {
+    updateScore(value: string) {
+      const score = parseInt(value, 10)
+      const wineId = this.wine?.id ?? ''
+
+      if(!isNaN(score) && wineId) {
+        this.store.setScore(wineId , score)
       }
     }
   }

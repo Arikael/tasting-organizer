@@ -12,6 +12,13 @@ export class Flight<T> {
     wines: T[] = []
 }
 
+
+
+export class Score {
+    wineId = ''
+    score = 0
+}
+
 export class TastingScoreData {
     username = ''
     flights: Flight<WineWithScore>[] = []

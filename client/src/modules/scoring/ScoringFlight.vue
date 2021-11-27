@@ -3,8 +3,8 @@
     Name {{ modelValue.name }}
   </div>
   <div class="flight-wines">
-    <wine-score v-model="flightValues.wines[index].score" :label="flightValues.wines[index].name"
-                v-for="(wine, index) in flightValues.wines" v-bind:key="wine.id"></wine-score>
+    <wine-score :wine="wine"
+                v-for="(wine) in flightValues.wines" v-bind:key="wine.id"></wine-score>
   </div>
 </template>
 
