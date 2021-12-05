@@ -25,6 +25,8 @@ export class TastingScoreData {
 }
 
 export class Tasting {
+    id = ''
+    publicId = ''
     flights: Flight<BaseWine>[] = []
     title = ''
     date: Date = new Date()

@@ -4,7 +4,7 @@
     <div v-if="hasIntro">
       {{ store.tasting.intro }}
     </div>
-    <q-input outlined :model-value="store.scoreData.userName" @update:model-value="updateUser" :label="$t('name')" :dense="true"></q-input>
+    <q-input outlined :model-value="store.scoreData.userName" @change="updateUser" :label="$t('name')" :dense="true"></q-input>
   </div>
   <div v-if="isFlightStep">
     <scoring-flight v-model="store.tasting.flights[index - 1]" v-bind:key="index - 1"></scoring-flight>
@@ -34,9 +34,9 @@ export default defineComponent({
   setup(props) {
     const store = inject<Store>('store') ?? new Store()
 
-    onMounted(function () {
+    onMounted(async() => {
       if (store) {
-        store.loadTastingForScoring(props.tastingId)
+        await store.loadTastingForScoring(props.tastingId)
       }
     })
 

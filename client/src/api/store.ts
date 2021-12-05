@@ -1,7 +1,7 @@
 import {Flight, Score, Tasting, TastingScoreData, WineWithScore} from "@/modules/scoring/Entities";
 import feathers from "@feathersjs/feathers";
 import {createClient} from "@/api/client";
-import {reactive, ref} from "vue";
+import {reactive, ref, unref} from "vue";
 import {createId} from "@/helpers";
 import {UnwrapNestedRefs} from "@vue/reactivity";
 
@@ -28,12 +28,29 @@ export class Store {
         this.client = createClient()
     }
 
-    public loadTastingForScoring(id: string): Promise<Tasting> {
-        return this.client.service('tasting').get(id).then((result: any) => {
+    public async loadTastingForScoring(id: string): Promise<boolean> {
+        const tasting$ = this.client.service('tasting').get(id).then((result: any) => {
             this.state.tasting = mapApiDataToTasting(result)
 
             return this.state.tasting
         })
+
+        let scoring$ = new Promise<any>((resolve) => {
+            resolve({})
+        })
+
+        const localData = window.localStorage.getItem('tasting-organizer')
+
+        if (localData) {
+            const localObject = JSON.parse(localData)
+
+            if (localObject[id]) {
+                scoring$ = this.client.service('scoring').find({query: {id: id, userId: localObject[id]}})
+                    .then((x: any) => this.state.scoreData = x)
+            }
+        }
+
+        return await Promise.all([tasting$, scoring$]).then(() => true).catch(() => false)
     }
 
     public setUser(userName: string): void {
@@ -42,6 +59,14 @@ export class Store {
         if (!this.state.scoreData.userId) {
             this.state.scoreData.userId = createId(4)
         }
+
+        const service = this.client.service('scoring')
+        service.patch(this.tasting.id, this.scoreData).then((x: any) => console.log(x))
+
+        const localData: any = {}
+        localData[this.tasting.publicId] = this.state.scoreData.userId
+
+        window.localStorage.setItem('tasting-organizer', JSON.stringify(localData))
     }
 
     public getScore(wineId: string): Score | undefined {
@@ -61,11 +86,16 @@ export class Store {
                 wineId
             })
         }
+
+        const service = this.client.service('scoring')
+        service.patch(this.state.tasting.id, this.scoreData)
     }
 }
 
 function mapApiDataToTasting(data: any): Tasting {
     const tasting = new Tasting()
+    tasting.id = data._id ?? ''
+    tasting.publicId = data.publicId ?? ''
     tasting.title = data.title ?? ''
     tasting.intro = data.intro ?? ''
     tasting.date = data.date

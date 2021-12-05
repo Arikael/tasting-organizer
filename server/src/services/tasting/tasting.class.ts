@@ -15,7 +15,6 @@ export class Tasting extends Service {
   }
 
   get(id: Id, params?: Params): Promise<any> {
-    console.log(id)
     const tastings = super.find({
       query: {
         $limit: 1,
