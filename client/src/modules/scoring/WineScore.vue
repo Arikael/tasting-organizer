@@ -6,13 +6,13 @@
 
 <script lang="ts">
 import {defineComponent, inject} from "vue";
-import {BaseWine} from "@/modules/scoring/Entities";
 import {Store} from "@/api/store";
+import {BaseWineDto} from '@/api/types'
 
 export default defineComponent({
   name: "WineScore",
   props: {
-    wine: BaseWine
+    wine: BaseWineDto
   },
   setup(props) {
     const store = inject<Store>('store') ?? new Store()

@@ -11,14 +11,14 @@
 <script lang="ts">
 import {defineComponent, PropType} from "vue";
 import WineScore from "@/modules/scoring/WineScore.vue";
-import {Flight, WineWithScore} from "@/modules/scoring/Entities";
+import {BaseWineDto, FlightDto} from '@/api/types'
 
 export default defineComponent({
   name: "ScoringFlight",
   components: {WineScore},
   props: {
     modelValue: {
-      type: Object as PropType<Flight<WineWithScore>>
+      type: Object as PropType<FlightDto<BaseWineDto>>
     }
   },
   data() {

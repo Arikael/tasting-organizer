@@ -1,42 +1,39 @@
-import {Flight, Score, Tasting, WineWithScore} from "@/modules/scoring/Entities";
+import {BaseWineDto, FlightDto, ScoreDto, TastingDto } from './types'
 import feathers from "@feathersjs/feathers";
 import {createClient} from "@/api/client";
 import {reactive } from "vue";
 import {createId} from "@/helpers";
 import {UnwrapNestedRefs} from "@vue/reactivity";
+import {ServiceTypes, UserScoresDto} from './types'
 
 export class Store {
-    public get tasting(): UnwrapNestedRefs<Tasting> {
+    public get tasting(): UnwrapNestedRefs<TastingDto> {
         return this.state.tasting
     }
 
-    public get scoreData() {
+    public get scoreData(): UserScoresDto {
         return this.state.scoreData
     }
 
     public state = reactive({
-        tasting: new Tasting(),
-        scoreData: {
-            userId: '',
-            userName: '',
-            scores: Array<Score>(),
-        }
+        tasting: new TastingDto(),
+        scoreData: new UserScoresDto()
     })
-    private client: feathers.Application<any>
+    private client: feathers.Application<ServiceTypes>
 
     constructor() {
         this.client = createClient()
     }
 
     public async loadTastingForScoring(id: string): Promise<boolean> {
-        const tasting$ = this.client.service('tasting').get(id).then((result: any) => {
+        const tasting$ = this.client.service('tasting').get(id).then((result: TastingDto) => {
             this.state.tasting = mapApiDataToTasting(result)
 
             return this.state.tasting
         })
 
-        let scoring$ = new Promise<any>((resolve) => {
-            resolve({})
+        let scoring$ = new Promise<UserScoresDto>((resolve) => {
+            resolve(new UserScoresDto())
         })
 
         const localData = window.localStorage.getItem('tasting-organizer')
@@ -46,7 +43,7 @@ export class Store {
 
             if (localObject[id]) {
                 scoring$ = this.client.service('scoring').get(id ,{query: { userId: localObject[id]}})
-                    .then((x: any) => this.state.scoreData = x)
+                    .then((x: UserScoresDto) => this.state.scoreData = x)
             }
         }
 
@@ -61,15 +58,19 @@ export class Store {
         }
 
         const service = this.client.service('scoring')
-        service.patch(this.tasting.id, this.scoreData).then((x: any) => console.log(x))
+        service.update(this.tasting.id, this.scoreData).then((x: any) => console.log(x))
 
+        this.createLocalTastingData()
+    }
+
+    private createLocalTastingData() {
         const localData: any = {}
         localData[this.tasting.publicId] = this.state.scoreData.userId
 
         window.localStorage.setItem('tasting-organizer', JSON.stringify(localData))
     }
 
-    public getScore(wineId: string): Score | undefined {
+    public getScore(wineId: string): ScoreDto | undefined {
         const scoreData = this.state.scoreData.scores.find(x => x.wineId === wineId)
 
         return scoreData ? scoreData : undefined
@@ -92,8 +93,8 @@ export class Store {
     }
 }
 
-function mapApiDataToTasting(data: any): Tasting {
-    const tasting = new Tasting()
+function mapApiDataToTasting(data: any): TastingDto {
+    const tasting = new TastingDto()
     tasting.id = data._id ?? ''
     tasting.publicId = data.publicId ?? ''
     tasting.title = data.title ?? ''
@@ -103,17 +104,16 @@ function mapApiDataToTasting(data: any): Tasting {
     tasting.flights = []
 
     if (data.flights && Array.isArray(data.flights)) {
-        data.flights.map((flight: any) => {
-            const scoreFlight = new Flight<WineWithScore>()
+        data.flights.map((flight: FlightDto<BaseWineDto>) => {
+            const tastingFlight = new FlightDto<BaseWineDto>()
             flight.wines.map((wine: any) => {
-                scoreFlight.wines.push({
+                tastingFlight.wines.push({
                     name: wine.name,
                     id: wine.id,
-                    score: 0
                 })
             })
 
-            tasting.flights.push(scoreFlight)
+            tasting.flights.push(tastingFlight)
         })
     }
 

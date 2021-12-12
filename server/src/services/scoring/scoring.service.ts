@@ -1,15 +1,7 @@
 // Initializes the `Scoring` service on path `/scoring`
-import { ServiceAddons } from '@feathersjs/feathers'
 import { Application } from '../../declarations'
 import { Scoring } from './scoring.class'
 import hooks from './scoring.hooks'
-
-// Add this service to the service type index
-declare module '../../declarations' {
-  interface ServiceTypes {
-    'scoring': Scoring & ServiceAddons<any>;
-  }
-}
 
 export default function (app: Application): void {
   const options = {

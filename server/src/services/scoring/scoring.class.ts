@@ -4,9 +4,9 @@ import {Application} from '../../declarations'
 import {NullableId, Params} from '@feathersjs/feathers'
 import logger from '../../logger'
 import {BadRequest, GeneralError} from '@feathersjs/errors'
-import {UserScoringDto} from '../../../../common/api/scoring'
+import {UserScoresDto} from '../../types'
 
-export class Scoring extends Service<UserScoringDto> {
+export class Scoring extends Service<UserScoresDto> {
   //eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructor(options: Partial<MongoDBServiceOptions>, app: Application) {
     super(options)
@@ -18,7 +18,7 @@ export class Scoring extends Service<UserScoringDto> {
     })
   }
 
-  async get(id: NullableId, params?: Params): Promise<UserScoringDto> {
+  async get(id: NullableId, params?: Params): Promise<UserScoresDto> {
     if (!params?.query?.userId) {
       const error = new BadRequest('query.userId was not provide')
       return Promise.reject(error)
@@ -52,10 +52,10 @@ export class Scoring extends Service<UserScoringDto> {
       ).toArray()
 
       if(results.length === 0) {
-        return Promise.resolve(new UserScoringDto())
+        return Promise.resolve(new UserScoresDto())
       }
 
-      return Promise.resolve(results[0] as UserScoringDto)
+      return Promise.resolve(results[0] as UserScoresDto)
 
     } catch (e) {
       console.log(e)

@@ -1,9 +1,10 @@
 import {Db} from 'mongodb'
 import {Service, MongoDBServiceOptions} from 'feathers-mongodb'
 import {Application} from '../../declarations'
-import {Id, Paginated, Params} from '@feathersjs/feathers'
+import {Id, Params} from '@feathersjs/feathers'
+import {TastingDto} from '../../types'
 
-export class Tasting extends Service {
+export class Tasting extends Service<TastingDto> {
   //eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructor(options: Partial<MongoDBServiceOptions>, app: Application) {
     super(options)
@@ -14,7 +15,7 @@ export class Tasting extends Service {
     })
   }
 
-  get(id: Id, params?: Params): Promise<any> {
+  get(id: Id, params?: Params): Promise<TastingDto> {
     const tastings = super.find({
       query: {
         $limit: 1,
