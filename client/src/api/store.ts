@@ -1,7 +1,7 @@
-import {Flight, Score, Tasting, TastingScoreData, WineWithScore} from "@/modules/scoring/Entities";
+import {Flight, Score, Tasting, WineWithScore} from "@/modules/scoring/Entities";
 import feathers from "@feathersjs/feathers";
 import {createClient} from "@/api/client";
-import {reactive, ref, unref} from "vue";
+import {reactive } from "vue";
 import {createId} from "@/helpers";
 import {UnwrapNestedRefs} from "@vue/reactivity";
 
@@ -45,7 +45,7 @@ export class Store {
             const localObject = JSON.parse(localData)
 
             if (localObject[id]) {
-                scoring$ = this.client.service('scoring').find({query: {id: id, userId: localObject[id]}})
+                scoring$ = this.client.service('scoring').get(id ,{query: { userId: localObject[id]}})
                     .then((x: any) => this.state.scoreData = x)
             }
         }
@@ -88,7 +88,7 @@ export class Store {
         }
 
         const service = this.client.service('scoring')
-        service.patch(this.state.tasting.id, this.scoreData)
+        service.update(this.state.tasting.id, this.scoreData)
     }
 }
 

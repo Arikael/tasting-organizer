@@ -1,11 +1,12 @@
 import {Db, ObjectId, UpdateResult} from 'mongodb'
 import {Service, MongoDBServiceOptions} from 'feathers-mongodb'
 import {Application} from '../../declarations'
-import {Id, NullableId, Paginated, Params} from '@feathersjs/feathers'
+import {NullableId, Params} from '@feathersjs/feathers'
 import logger from '../../logger'
 import {BadRequest, GeneralError} from '@feathersjs/errors'
+import {UserScoringDto} from '../../../../common/api/scoring'
 
-export class Scoring extends Service {
+export class Scoring extends Service<UserScoringDto> {
   //eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructor(options: Partial<MongoDBServiceOptions>, app: Application) {
     super(options)
@@ -17,48 +18,10 @@ export class Scoring extends Service {
     })
   }
 
-  // async find(params?: Params): Promise<any[]> {
-  //
-  //   // if(!params) {
-  //   //
-  //   // }
-  //   //
-  //   // if(params?.user) {
-  //   //   logger.error('getting score for user: no params.user provided')
-  //   //
-  //   //   const  new BadRequest('400 bad request')
-  //   // }
-  //
-  //   return await this.Model.aggregate(
-  //     [
-  //       {
-  //         "$unwind": "$scores"
-  //       },
-  //       {
-  //         "$match": {
-  //           "_id": new ObjectId(id),
-  //           "scores.userId": params.user
-  //         }
-  //       },
-  //       {
-  //         "$project": {
-  //           "scores": "$scores"
-  //         }
-  //       },
-  //       {
-  //         "$replaceRoot": {
-  //           "newRoot": "$scores"
-  //         }
-  //       }
-  //     ]
-  //   )
-  // }
-
-  async find(params?: Params): Promise<any> {
-
-    if (!params?.query?.id || !params?.query?.userId) {
-
-      return Promise.resolve({})
+  async get(id: NullableId, params?: Params): Promise<UserScoringDto> {
+    if (!params?.query?.userId) {
+      const error = new BadRequest('query.userId was not provide')
+      return Promise.reject(error)
     }
 
     console.log(params?.query)
@@ -87,24 +50,28 @@ export class Scoring extends Service {
           }
         ]
       ).toArray()
-      console.log(results)
-      return results.length === 1 ? results[0] : {}
-    }
-    catch(e) {
+
+      if(results.length === 0) {
+        return Promise.resolve(new UserScoringDto())
+      }
+
+      return Promise.resolve(results[0] as UserScoringDto)
+
+    } catch (e) {
       console.log(e)
+      return Promise.reject(e)
     }
   }
 
-  async patch(id: NullableId, data: Partial<any>, params?: Params): Promise<any> {
+  async update(id: NullableId, data: Partial<any>, params?: Params): Promise<any> {
     if (!id) {
       return Promise.reject()
     }
 
-    console.log(data)
     const userScores = await this.Model.findOne({
       'scores.userId': data.userId
     })
-    console.log(id)
+
     let result: Promise<UpdateResult>
 
     if (userScores) {

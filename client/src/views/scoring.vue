@@ -10,7 +10,7 @@ import {useRoute} from "vue-router";
 export default defineComponent({
   name: "scoring",
   components: {ScoringContainer},
-  setup(props) {
+  setup() {
     const route = useRoute()
     let tastingId = ''
     let id = route.params?.id ?? ''

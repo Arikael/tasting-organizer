@@ -1,4 +1,4 @@
-export function createId(length: number) {
+export function createId(length: number): string {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;
@@ -7,5 +7,6 @@ export function createId(length: number) {
         result += characters.charAt(Math.floor(Math.random() *
             charactersLength));
     }
+
     return result;
 }

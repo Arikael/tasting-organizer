@@ -2,17 +2,12 @@
   "compilerOptions": {
     "target": "es2018",
     "module": "commonjs",
-    "outDir": "./lib",
-    "rootDir": "./src",
+    "outDir": ".",
+    "rootDir": "./",
     "strict": true,
     "esModuleInterop": true,
     "composite": true
   },
-  "references": [
-    {
-      "path": "../common"
-    }
-  ],
   "exclude": [
     "test"
   ]
