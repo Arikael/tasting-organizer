@@ -76,7 +76,7 @@ export class Store {
         return scoreData ? scoreData : undefined
     }
 
-    public setScore(wineId: string, score: number): void {
+    public async setScore(wineId: string, score: number): Promise<UserScoresDto> {
         const scoreData = this.getScore(wineId)
 
         if (scoreData) {
@@ -89,7 +89,7 @@ export class Store {
         }
 
         const service = this.client.service('scoring')
-        service.update(this.state.tasting.id, this.scoreData)
+        return await service.update(this.state.tasting.id, this.scoreData)
     }
 }
 
@@ -106,7 +106,7 @@ function mapApiDataToTasting(data: any): TastingDto {
     if (data.flights && Array.isArray(data.flights)) {
         data.flights.map((flight: FlightDto<BaseWineDto>) => {
             const tastingFlight = new FlightDto<BaseWineDto>()
-            flight.wines.map((wine: any) => {
+            flight.wines.map((wine: BaseWineDto) => {
                 tastingFlight.wines.push({
                     name: wine.name,
                     id: wine.id,

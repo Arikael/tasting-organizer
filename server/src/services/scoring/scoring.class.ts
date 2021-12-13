@@ -20,7 +20,7 @@ export class Scoring extends Service<UserScoresDto> {
 
   async get(id: NullableId, params?: Params): Promise<UserScoresDto> {
     if (!params?.query?.userId) {
-      const error = new BadRequest('query.userId was not provide')
+      const error = new BadRequest('query.userId was not provided')
       return Promise.reject(error)
     }
 

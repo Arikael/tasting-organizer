@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-input outlined :model-value="score" @update:model-value="updateScore" :label="wine?.name" :dense="true"></q-input>
+    <q-input outlined :model-value="score" @update:model-value="updateScore" :label="label" :dense="true"></q-input>
   </div>
 </template>
 
@@ -23,6 +23,13 @@ export default defineComponent({
     }
   },
   computed: {
+    label(): string {
+      if(this.store.tasting.revealAfter !== 'always') {
+        return `${this.$t('wine')} ${(this.wine?.name ?? '')}`
+      }
+
+      return this.wine?.name ?? ''
+    },
     score(): number {
       let score = 0
       if(this.wine) {
