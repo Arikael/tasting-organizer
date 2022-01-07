@@ -50,7 +50,7 @@ export class Scoring extends Service<UserScoresDto> {
           }
         ]
       ).toArray()
-  console.log(results)
+
       if(results.length === 0) {
         return Promise.resolve(new UserScoresDto())
       }
