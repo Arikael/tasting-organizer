@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import {defineComponent, inject} from "vue";
-import {Store} from "@/api/store";
+import {Store} from "@/store/store";
 import {BaseWineDto} from '@/api/types'
 
 export default defineComponent({

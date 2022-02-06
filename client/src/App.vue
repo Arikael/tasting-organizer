@@ -29,7 +29,7 @@
 <script lang="ts">
 import {defineComponent, getCurrentInstance, ref, watch} from 'vue';
 import {useQuasar} from "quasar";
-import {Store} from "@/api/store";
+import {Store} from "@/store/store";
 
 export default defineComponent({
   name: 'LayoutDefault',

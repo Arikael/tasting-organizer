@@ -9,6 +9,9 @@
   <div v-if="isFlightStep">
     <scoring-flight v-model="store.tasting.flights[index - 1]" v-bind:key="index - 1"></scoring-flight>
   </div>
+  <div>
+    <flight-reveal></flight-reveal>
+  </div>
   <div class="flight-navigation">
     <q-btn color="primary" v-if="canMoveBack" @click="moveBack()" :label="$t('back')"/>
     <q-btn color="primary" v-if="canMoveForward" @click="moveForward()" :label="$t('next')"/>
@@ -20,11 +23,12 @@
 <script lang="ts">
 import {defineComponent, inject, onMounted, ref} from "vue";
 import ScoringFlight from "@/modules/scoring/ScoringFlight.vue";
-import {Store} from "@/api/store";
+import {Store} from "@/store/store";
+import FlightReveal from "@/modules/scoring/FlightReveal.vue";
 
 export default defineComponent({
   name: "ScoringContainer",
-  components: {ScoringFlight},
+  components: {FlightReveal, ScoringFlight},
   props: {
     tastingId: {
       type: String,

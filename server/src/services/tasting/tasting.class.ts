@@ -5,7 +5,7 @@ import {Id, Params} from '@feathersjs/feathers'
 import {BaseWineDto, TastingDto} from '../../types'
 import {NotFound} from '@feathersjs/errors'
 
-export class Tasting extends Service<TastingDto> {
+export class Tasting extends Service<Partial<TastingDto>> {
   //eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructor(options: Partial<MongoDBServiceOptions>, app: Application) {
     super(options)
@@ -16,13 +16,8 @@ export class Tasting extends Service<TastingDto> {
     })
   }
 
-  get(id: Id, params?: Params): Promise<TastingDto> {
-    const tastings = super.find({
-      query: {
-        $limit: 1,
-        publicId: id
-      }
-    })
+  get(id: Id, params?: Params): Promise<Partial<TastingDto>> {
+    const tastings = super.find(params)
 
     return tastings.then((results: any) => {
       if(results.length === 0) {
@@ -36,7 +31,7 @@ export class Tasting extends Service<TastingDto> {
   }
 
   private changeWineNamesForFlightReveal(tasting: TastingDto): TastingDto {
-    if (tasting.revealAfter === 'always') {
+    if (!tasting.revealAfter || tasting.revealAfter === 'always') {
       return tasting
     }
 
