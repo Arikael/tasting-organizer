@@ -1,10 +1,14 @@
 import {Tasting} from '../services/tasting/tasting.class'
 import {ServiceAddons} from '@feathersjs/feathers'
 import {Scoring} from '../services/scoring/scoring.class'
+import {FlightReveal} from '../services/flight-reveal/flight-reveal.class'
+
+export type RevealAfter = 'flight' | 'never' | 'always'
 
 export interface ServiceTypes {
   'tasting': Tasting & ServiceAddons<any>
   'scoring': Scoring & ServiceAddons<any>
+  'flight-reveal': FlightReveal & ServiceAddons<any>
 }
 
 export class UserScoresDto {
@@ -27,11 +31,12 @@ export class TastingDto {
   date: Date = new Date()
   intro = ''
   outro = ''
-  revealAfter: 'flight' | 'never' | 'always' = 'flight'
+  revealAfter: RevealAfter = 'flight'
 }
 
 
 export class FlightDto<T> {
+  id = ''
   name = ''
   wines: T[] = []
 }
@@ -39,4 +44,11 @@ export class FlightDto<T> {
 export class BaseWineDto {
   name = ''
   id = ''
+}
+
+export class FlightRevealDto {
+  flightId = ''
+  revealAfter: RevealAfter = 'flight'
+  wines: string[] = []
+
 }

@@ -8,11 +8,21 @@ import {ServiceTypes, UserScoresDto} from '../api/types'
 import {
     FlightStepConfig,
     flightStepMove,
-    FlightStepState,
+    FlightStepState, isFlightStepState,
     UiStep,
     UiStepConfiguration
 } from "@/store/UiSteps";
-import { mapApiDataToTasting } from '@/api/mappings'
+import {mapApiDataToTasting} from '@/api/mappings'
+
+export class State {
+    tasting = new TastingDto()
+    scoreData = new UserScoresDto()
+    test: Record<string, any> = {}
+    ui: {
+        currentStep: string,
+        currentStepState: Record<string, any>
+    } = {currentStep: '', currentStepState: {}}
+}
 
 export class Store {
     public get tasting(): UnwrapNestedRefs<TastingDto> {
@@ -23,12 +33,48 @@ export class Store {
         return this.state.scoreData
     }
 
-    public state = reactive({
+    public uiStepConfigurations: UiStepConfiguration[] = [
+        {
+            id: 'intro',
+            state: {}
+        },
+        {
+            id: 'flight',
+            move: flightStepMove,
+            state: {
+                flightIndex: 0,
+                isOnFlightReveal: false
+            } as FlightStepState,
+            getConfig: (state: State | UnwrapNestedRefs<State>): FlightStepConfig => {
+                let flightId = '';
+
+                if (state.ui.currentStepState !== undefined && isFlightStepState(state.ui.currentStepState)) {
+                    if (state.ui.currentStepState.flightIndex > state.tasting.flights.length) {
+                        throw `state flight index is higher than flight length ${state.ui.currentStepState.flightIndex} > ${state.tasting.flights.length} `
+                    }
+                    flightId = state.tasting.flights[state.ui.currentStepState.flightIndex].id;
+                }
+
+                return {
+                    flightId,
+                    flightCount: state.tasting.flights.length,
+                    tastingPublicId: state.tasting.publicId,
+                    client: this.client
+                }
+            }
+        }
+    ]
+
+    public state: UnwrapNestedRefs<State> = reactive({
         tasting: new TastingDto(),
         scoreData: new UserScoresDto(),
+        test: {
+            i: 0,
+            t: '1'
+        },
         ui: {
-            flightIndex: 0,
-            currentStep: ''
+            currentStep: this.uiStepConfigurations[0].id,
+            currentStepState: this.uiStepConfigurations[0].state
         }
     })
 
@@ -38,58 +84,50 @@ export class Store {
 
     private client: feathers.Application<ServiceTypes>
 
-    private uiStepConfigurations: UiStepConfiguration[] = [
-        {
-            id: 'intro',
-        },
-        {
-            id: 'flight',
-            move: flightStepMove,
-            state: {
-                flightIndex: 0,
-                isOnFlightReveal: false
-            } as FlightStepState,
-            getConfig: (): FlightStepConfig => {
-                return {
-                    flightCount: 0,
-                    tastingPublicId: '',
-                    client: this.client
-                }
-            }
-        }
-    ]
-
-    public moveUi(step: UiStep) {
+    public async moveUi(step: UiStep): Promise<boolean> {
         let index = this.uiStepConfigurations.findIndex(x => x.id === this.state.ui.currentStep)
-
+        this.state.test.i++
         if (index === -1) {
             index = 0
         }
 
-        const newIndex = step === 'prev' ? index + 1 : index - 1
+        const newIndex = step === 'next' ? index + 1 : index - 1
 
-        if (index > 0 && index < this.uiStepConfigurations.length) {
+        // TODO use state step config
+        if (index >= 0 && index < this.uiStepConfigurations.length) {
             const stepConfig = this.uiStepConfigurations[index]
 
             if (stepConfig.move !== undefined) {
                 let config = {}
                 let state = {}
 
-                if(stepConfig.getConfig !== undefined) {
-                    config = stepConfig.getConfig()
+                if (stepConfig.getConfig !== undefined) {
+                    config = stepConfig.getConfig(this.state)
                 }
 
-                if(stepConfig.state !== undefined) {
-                    state = stepConfig.state
+                if (stepConfig.state !== undefined) {
+                    state = this.state.ui.currentStepState
                 }
 
-                const hasStepped = stepConfig.move(config, state)
+                const hasStepped = await stepConfig.move(config, state)
 
-                if (!hasStepped) {
+                if (hasStepped) {
                     this.state.ui.currentStep = this.uiStepConfigurations[newIndex].id
+                    this.state.ui.currentStepState = this.uiStepConfigurations[newIndex].state
+                } else {
+                    this.state.ui.currentStepState = state
                 }
+
+                return false
+            } else {
+
+this.state.ui.currentStep = this.uiStepConfigurations[newIndex].id
+   this.state.ui.currentStepState = this.uiStepConfigurations[newIndex].state
+                return true
             }
         }
+
+        return false
     }
 
     public async loadTastingForScoring(id: string): Promise<boolean> {

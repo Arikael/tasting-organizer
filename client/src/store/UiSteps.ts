@@ -1,20 +1,25 @@
-import {ServiceTypes} from '../api/types'
-import feathers from "@feathersjs/feathers";
+import {BaseWineDto, ServiceTypes} from '../api/types'
+import feathers from '@feathersjs/feathers';
+import {FeathersError} from '@feathersjs/errors'
+import {State} from "@/store/store";
+import {UnwrapNestedRefs} from "@vue/reactivity";
 export type UiStep = 'prev' | 'next'
 
 export interface UiStepConfiguration {
     id: string,
     move?: (config: Record<string, unknown>, state: Record<string, unknown>) => Promise<boolean>
-    state?: Record<string, unknown>
-    getConfig?: () => Record<string, unknown>
+    state: Record<string, unknown>
+    getConfig?: (state: State | UnwrapNestedRefs<State>) => Record<string, unknown>
 }
 
 export type FlightStepState = {
     flightIndex: number,
-    isOnFlightReveal: boolean
+    isOnFlightReveal: boolean,
+    revealedWines: string[]
 }
 
 export type FlightStepConfig = {
+    flightId: string,
     flightCount: number,
     tastingPublicId: string,
     client: feathers.Application<ServiceTypes>
@@ -34,7 +39,7 @@ function isFlightStepConfig(config: Record<string, unknown>): config is FlightSt
         && typeKey<FlightStepConfig>('client') in config;
 }
 
-function isFlightStepState(config: Record<string, unknown>): config is FlightStepState {
+export function isFlightStepState(config: Record<string, unknown>): config is FlightStepState {
     return typeKey<FlightStepState>('flightIndex') in config
         && typeKey<FlightStepState>('isOnFlightReveal') in config;
 }
@@ -50,21 +55,27 @@ export async function flightStepMove(config: Record<string, unknown>, state: Rec
         return true
     }
 
-    const result = await config.client.service('tasting').get(config.tastingPublicId, {
-        query: {
-            $select: ['revealAfter', 'flights'],
-            revealAfter: 'flight'
-        }
-    })
+    let needsReveal = false
 
-    const needsReveal = true
+    if(!state.isOnFlightReveal) {
+        const result = await config.client.service('flight-reveal').get(config.flightId, {
+            query: {
+                publicId: config.tastingPublicId
+            }
+        })
+
+        if (result.revealAfter === 'flight') {
+            needsReveal = true
+            state.revealedWines = result.wines
+        }
+    }
 
     if (needsReveal) {
         state.isOnFlightReveal = true
     } else {
         state.flightIndex++
+        state.isOnFlightReveal = false
     }
-    //needs reveal
 
     return false
 }

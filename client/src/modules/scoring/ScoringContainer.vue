@@ -1,16 +1,17 @@
 <template>
+  {{store.state.ui.currentStepState}}
+  {{store.state.ui.currentStep}}
+
   <h2>{{ store.tasting.title }}</h2>
-  <div v-if="index === 0">
+  <div v-if="store.state.ui.currentStep === 'intro'">
     <div v-if="hasIntro">
       {{ store.tasting.intro }}
     </div>
     <q-input outlined :model-value="store.scoreData.userName" @change="updateUser" :label="$t('name')" :dense="true"></q-input>
   </div>
   <div v-if="isFlightStep">
-    <scoring-flight v-model="store.tasting.flights[index - 1]" v-bind:key="index - 1"></scoring-flight>
-  </div>
-  <div>
-    <flight-reveal></flight-reveal>
+    <scoring-flight v-if="!isFlightRevealStep"></scoring-flight>
+    <flight-reveal v-if="isFlightRevealStep"></flight-reveal>
   </div>
   <div class="flight-navigation">
     <q-btn color="primary" v-if="canMoveBack" @click="moveBack()" :label="$t('back')"/>
@@ -21,10 +22,11 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, inject, onMounted, ref} from "vue";
+import {computed, defineComponent, inject, onMounted, ref} from "vue";
 import ScoringFlight from "@/modules/scoring/ScoringFlight.vue";
 import {Store} from "@/store/store";
 import FlightReveal from "@/modules/scoring/FlightReveal.vue";
+import {isFlightStepState} from "@/store/UiSteps";
 
 export default defineComponent({
   name: "ScoringContainer",
@@ -46,18 +48,26 @@ export default defineComponent({
 
     return {
       store: store,
-      userName: ref(store.scoreData.userName),
+      userName1: computed(() => store.state.test.i),
+      isFlightRevealStep: computed((): boolean => {
+        console.log(store.state.ui.currentStepState)
+
+        if(store.state.ui.currentStepState !== undefined && isFlightStepState(store.state.ui.currentStepState)) {
+          return store.state.ui.currentStepState.isOnFlightReveal
+        }
+
+        return false
+      })
     }
   },
   data() {
     return {
       index: 0,
-      step: 'base'
     }
   },
   computed: {
     isFlightStep(): boolean {
-      return this.index > 0 && this.index <= this.store.tasting.flights.length;
+      return this.store.state.ui.currentStep === 'flight'
     },
     isLastStep(): boolean {
       return this.index >= this.store.tasting.flights.length;
@@ -79,15 +89,11 @@ export default defineComponent({
     updateUser(value: string) {
       this.store.setUser(value)
     },
-    moveForward() {
-      if (this.canMoveForward) {
-        this.index += 1
-      }
+    async moveForward() {
+      await this.store.moveUi('next')
     },
-    moveBack() {
-      if (this.canMoveBack) {
-        this.index -= 1
-      }
+    async moveBack() {
+      await this.store.moveUi('prev')
     },
     submit() {
       return;

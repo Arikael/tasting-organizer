@@ -11,8 +11,10 @@ export function mapApiDataToTasting(data: any): TastingDto {
     tasting.flights = []
 
     if (data.flights && Array.isArray(data.flights)) {
-        data.flights.map((flight: FlightDto<BaseWineDto>) => {
+        data.flights.map((flight: any) => {
             const tastingFlight = new FlightDto<BaseWineDto>()
+            tastingFlight.id = flight._id
+            tastingFlight.name = flight.name
             flight.wines.map((wine: BaseWineDto) => {
                 tastingFlight.wines.push({
                     name: wine.name,

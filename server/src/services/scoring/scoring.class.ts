@@ -10,7 +10,6 @@ export class Scoring extends Service<UserScoresDto> {
   //eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructor(options: Partial<MongoDBServiceOptions>, app: Application) {
     super(options)
-
     const client: Promise<Db> = app.get('mongoClient')
 
     client.then(db => {
@@ -23,8 +22,6 @@ export class Scoring extends Service<UserScoresDto> {
       const error = new BadRequest('query.userId was not provided')
       return Promise.reject(error)
     }
-
-    console.log(params?.query)
 
     try {
       const results = await this.Model.aggregate(
@@ -58,7 +55,6 @@ export class Scoring extends Service<UserScoresDto> {
       return Promise.resolve(results[0] as UserScoresDto)
 
     } catch (e) {
-      console.log(e)
       return Promise.reject(e)
     }
   }

@@ -31,7 +31,7 @@ export class Tasting extends Service<Partial<TastingDto>> {
   }
 
   private changeWineNamesForFlightReveal(tasting: TastingDto): TastingDto {
-    if (!tasting.revealAfter || tasting.revealAfter === 'always') {
+    if (tasting.revealAfter === 'always') {
       return tasting
     }
 
