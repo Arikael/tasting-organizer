@@ -8,7 +8,8 @@
             <q-menu auto-close>
               <q-list>
                 <q-item clickable>
-                  <q-item-section v-on:click="changeLanguage('de')">DE</q-item-section></q-item>
+                  <q-item-section v-on:click="changeLanguage('de')">DE</q-item-section>
+                </q-item>
                 <q-item clickable>
                   <q-item-section v-on:click="changeLanguage('en-US')">EN</q-item-section>
                 </q-item>
@@ -28,15 +29,28 @@
 
 <script lang="ts">
 import {defineComponent, getCurrentInstance, ref, watch} from 'vue';
-import {useQuasar} from "quasar";
+import {
+  QBtn,
+  QHeader,
+  QItem,
+  QLayout,
+  QList,
+  QMenu,
+  QPage,
+  QPageContainer,
+  QToolbar,
+  QToolbarTitle,
+  useQuasar
+} from "quasar";
 import {Store} from "@/store/store";
 
 export default defineComponent({
   name: 'LayoutDefault',
+  components: {QLayout, QHeader, QToolbar, QToolbarTitle, QBtn, QMenu, QItem, QList, QPageContainer, QPage},
   provide: {
     store: new Store()
   },
-  setup () {
+  setup() {
     const $q = useQuasar()
     const lang = ref($q.lang.isoName)
     const i18n = getCurrentInstance()?.appContext?.config?.globalProperties?.$i18n

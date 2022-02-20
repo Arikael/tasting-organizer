@@ -27,10 +27,11 @@ import ScoringFlight from "@/modules/scoring/ScoringFlight.vue";
 import {Store} from "@/store/store";
 import FlightReveal from "@/modules/scoring/FlightReveal.vue";
 import {isFlightStepState} from "@/store/UiSteps";
+import {QBtn, QInput} from "quasar"
 
 export default defineComponent({
   name: "ScoringContainer",
-  components: {FlightReveal, ScoringFlight},
+  components: {FlightReveal, ScoringFlight, QBtn, QInput},
   props: {
     tastingId: {
       type: String,

@@ -5,12 +5,14 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, inject} from "vue";
-import {Store} from "@/store/store";
+import {defineComponent, inject} from 'vue';
+import {Store} from '@/store/store';
 import {BaseWineDto} from '@/api/types'
+import {QInput} from 'quasar';
 
 export default defineComponent({
-  name: "WineScore",
+  name: 'WineScore',
+  components: {QInput},
   props: {
     wine: BaseWineDto
   },
@@ -24,7 +26,7 @@ export default defineComponent({
   },
   computed: {
     label(): string {
-      if(this.store.tasting.revealAfter !== 'always') {
+      if (this.store.tasting.revealAfter !== 'always') {
         return `${this.$t('wine')} ${(this.wine?.name ?? '')}`
       }
 
@@ -32,7 +34,7 @@ export default defineComponent({
     },
     score(): number {
       let score = 0
-      if(this.wine) {
+      if (this.wine) {
         score = this.store.getScore(this.wine?.id)?.score ?? 0
       }
 
@@ -44,8 +46,8 @@ export default defineComponent({
       const score = parseInt(value, 10)
       const wineId = this.wine?.id ?? ''
 
-      if(!isNaN(score) && wineId) {
-        this.store.setScore(wineId , score)
+      if (!isNaN(score) && wineId) {
+        this.store.setScore(wineId, score)
       }
     }
   }
