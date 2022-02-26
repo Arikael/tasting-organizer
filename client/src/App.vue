@@ -42,7 +42,6 @@ import {
   QToolbarTitle,
   useQuasar
 } from "quasar";
-import {Store} from "@/store/store";
 
 export default defineComponent({
   name: 'LayoutDefault',
@@ -58,9 +57,6 @@ export default defineComponent({
     QPageContainer,
     QPage,
     QItemSection
-  },
-  provide: {
-    store: new Store()
   },
   setup() {
     const $q = useQuasar()

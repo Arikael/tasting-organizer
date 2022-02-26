@@ -1,14 +1,16 @@
-import {BaseWineDto, ServiceTypes} from '../api/types'
+import {ServiceTypes} from '../api/types'
 import feathers from '@feathersjs/feathers';
-import {FeathersError} from '@feathersjs/errors'
-import {State} from "@/store/store";
+import {state, State} from "@/store/state";
 import {UnwrapNestedRefs} from "@vue/reactivity";
+import {useApiClient} from "@/api/client";
+import getters from './getters'
+
 export type UiStep = 'prev' | 'next'
+export type StepIds = 'intro' | 'flight' | 'end'
 
 export interface UiStepConfiguration {
-    id: string,
-    move?: (config: Record<string, unknown>, state: Record<string, unknown>) => Promise<boolean>
-    state: Record<string, unknown>
+    id: StepIds,
+    move?: (config: Record<string, unknown>, state: State) => Promise<boolean>
     getConfig?: (state: State | UnwrapNestedRefs<State>) => Record<string, unknown>
 }
 
@@ -24,6 +26,33 @@ export type FlightStepConfig = {
     tastingPublicId: string,
     client: feathers.Application<ServiceTypes>
 }
+
+export const stepConfiguration: UiStepConfiguration[] = [
+    {
+        id: 'flight',
+        move: flightStepMove,
+        getConfig: (state: State | UnwrapNestedRefs<State>): FlightStepConfig => {
+            let flightId = '';
+
+            const stepState = getters.currentStepState.value
+
+            if (stepState !== undefined && isFlightStepState(stepState)) {
+                if (stepState.flightIndex > state.tasting.flights.length) {
+                    throw `state flight index is higher than flight length ${stepState.flightIndex} > ${state.tasting.flights.length} `
+                }
+                flightId = state.tasting.flights[stepState.flightIndex].id;
+            }
+
+            return {
+                flightId,
+                flightCount: state.tasting.flights.length,
+                tastingPublicId: state.tasting.publicId,
+                client: useApiClient()
+            }
+        }
+    }
+]
+
 
 function prop<T, K extends keyof T>(obj: T, key: K) {
     return obj[key];
@@ -44,20 +73,23 @@ export function isFlightStepState(config: Record<string, unknown>): config is Fl
         && typeKey<FlightStepState>('isOnFlightReveal') in config;
 }
 
-export async function flightStepMove(config: Record<string, unknown>, state: Record<string, unknown>)
+export async function flightStepMove(config: Record<string, unknown>, state: State)
     : Promise<boolean> {
 
-    if (!isFlightStepConfig(config) || !isFlightStepState(state)) {
+    const stepState = getters.currentStepState.value
+
+    if (!isFlightStepConfig(config) || !isFlightStepState(stepState)) {
         return Promise.resolve(false)
     }
 
-    if (state.flightIndex >= config.flightCount) {
+
+    if (stepState.flightIndex >= config.flightCount || stepState.flightIndex === 0 && state.ui.currentStepIndexChange < 0) {
         return true
     }
 
     let needsReveal = false
 
-    if(!state.isOnFlightReveal) {
+    if(!stepState.isOnFlightReveal) {
         const result = await config.client.service('flight-reveal').get(config.flightId, {
             query: {
                 publicId: config.tastingPublicId
@@ -66,15 +98,15 @@ export async function flightStepMove(config: Record<string, unknown>, state: Rec
 
         if (result.revealAfter === 'flight') {
             needsReveal = true
-            state.revealedWines = result.wines
+            stepState.revealedWines = result.wines
         }
     }
 
     if (needsReveal) {
-        state.isOnFlightReveal = true
+        stepState.isOnFlightReveal = true
     } else {
-        state.flightIndex++
-        state.isOnFlightReveal = false
+        stepState.flightIndex++
+        stepState.isOnFlightReveal = false
     }
 
     return false

@@ -11,31 +11,20 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, inject} from "vue";
-import WineScore from "@/modules/scoring/WineScore.vue";
-import {BaseWineDto, FlightDto} from '@/api/types'
-import {Store} from "@/store/store";
-import {isFlightStepState} from "@/store/UiSteps";
+import {defineComponent} from 'vue'
+import WineScore from '@/modules/scoring/WineScore.vue'
+import {store} from '@/store'
 
 export default defineComponent({
   name: "ScoringFlight",
   components: {WineScore},
   setup() {
-    const store = inject<Store>('store') ?? new Store()
-
     return {
-      store
+      flight: store.getters.currentFlight
     }
   },
   computed: {
-    flight(): FlightDto<BaseWineDto> {
-      if (this.store.state.ui.currentStep == 'flight' && this.store.state.ui.currentStepState
-          && isFlightStepState(this.store.state.ui.currentStepState)) {
-        return this.store.state.tasting.flights[this.store.state.ui.currentStepState.flightIndex]
-      }
 
-      return new FlightDto<BaseWineDto>()
-    }
   }
 })
 </script>

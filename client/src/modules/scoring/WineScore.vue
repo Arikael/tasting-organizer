@@ -3,10 +3,10 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, inject} from 'vue';
-import {Store} from '@/store/store';
+import {defineComponent} from 'vue';
 import {BaseWineDto} from '@/api/types'
 import {QInput} from 'quasar';
+import {store} from "@/store";
 
 export default defineComponent({
   name: 'WineScore',
@@ -15,8 +15,6 @@ export default defineComponent({
     wine: BaseWineDto
   },
   setup(props) {
-    const store = inject<Store>('store') ?? new Store()
-
     return {
       store,
       wineName: props.wine?.name ?? ''
@@ -24,7 +22,7 @@ export default defineComponent({
   },
   computed: {
     label(): string {
-      if (this.store.tasting.revealAfter !== 'always') {
+      if (this.store.state.tasting.revealAfter !== 'always') {
         return `${this.$t('wine')} ${(this.wine?.name ?? '')}`
       }
 
@@ -33,7 +31,7 @@ export default defineComponent({
     score(): number {
       let score = 0
       if (this.wine) {
-        score = this.store.getScore(this.wine?.id)?.score ?? 0
+        score = this.store.getters.getScore(this.wine?.id)?.score ?? 0
       }
 
       return score
@@ -45,7 +43,7 @@ export default defineComponent({
       const wineId = this.wine?.id ?? ''
 
       if (!isNaN(score) && wineId) {
-        this.store.setScore(wineId, score)
+        this.store.setters.setScore(wineId, score)
       }
     }
   }
