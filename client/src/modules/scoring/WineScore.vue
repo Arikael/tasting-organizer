@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <q-input outlined :model-value="score" @update:model-value="updateScore" :label="label" :dense="true"></q-input>
-  </div>
+  <q-input class="q-my-sm" filled :model-value="score" @update:model-value="updateScore" :label="label"></q-input>
 </template>
 
 <script lang="ts">

@@ -1,13 +1,14 @@
 <template>
-  {{store.state.ui.currentStepState}}
-  {{store.state.ui.currentStep}}
-
-  <h2>{{ store.tasting.title }}</h2>
-  <div v-if="store.state.ui.currentStep === 'intro'">
-    <div v-if="hasIntro">
+  <div class="content-box content-box--padding tasting-header">
+    <h2 class="text-subtitle1 tasting-title">{{ store.tasting.title }}</h2>
+    <span class="text-caption"><q-icon name="today" class="q-mr-xs"></q-icon>{{ getTastingDate }}</span>
+    <div class="text-caption q-pt-md" v-if="hasIntro">
       {{ store.tasting.intro }}
     </div>
-    <q-input outlined :model-value="store.scoreData.userName" @change="updateUser" :label="$t('name')" :dense="true"></q-input>
+  </div>
+  <div class="content-box content-box--padding" v-if="store.state.ui.currentStep === 'intro'">
+    <q-input class="q-my-sm" :model-value="store.scoreData.userName" @change="updateUser"
+             :label="$t('yourUsername')"></q-input>
   </div>
   <div v-if="isFlightStep">
     <scoring-flight v-if="!isFlightRevealStep"></scoring-flight>
@@ -18,7 +19,6 @@
     <q-btn color="primary" v-if="canMoveForward" @click="moveForward()" :label="$t('next')"/>
     <q-btn color="primary" v-if="isLastStep" :label="$t('submit')"/>
   </div>
-  {{ store.state }}
 </template>
 
 <script lang="ts">
@@ -27,11 +27,11 @@ import ScoringFlight from "@/modules/scoring/ScoringFlight.vue";
 import {Store} from "@/store/store";
 import FlightReveal from "@/modules/scoring/FlightReveal.vue";
 import {isFlightStepState} from "@/store/UiSteps";
-import {QBtn, QInput} from "quasar"
+import {QBtn, QIcon, QInput} from "quasar"
 
 export default defineComponent({
   name: "ScoringContainer",
-  components: {FlightReveal, ScoringFlight, QBtn, QInput},
+  components: {FlightReveal, ScoringFlight, QBtn, QInput, QIcon},
   props: {
     tastingId: {
       type: String,
@@ -41,7 +41,7 @@ export default defineComponent({
   setup(props) {
     const store = inject<Store>('store') ?? new Store()
 
-    onMounted(async() => {
+    onMounted(async () => {
       if (store) {
         await store.loadTastingForScoring(props.tastingId)
       }
@@ -53,7 +53,7 @@ export default defineComponent({
       isFlightRevealStep: computed((): boolean => {
         console.log(store.state.ui.currentStepState)
 
-        if(store.state.ui.currentStepState !== undefined && isFlightStepState(store.state.ui.currentStepState)) {
+        if (store.state.ui.currentStepState !== undefined && isFlightStepState(store.state.ui.currentStepState)) {
           return store.state.ui.currentStepState.isOnFlightReveal
         }
 
@@ -67,6 +67,9 @@ export default defineComponent({
     }
   },
   computed: {
+    getTastingDate(): string {
+      return this.store.state.tasting.date.toDateString()
+    },
     isFlightStep(): boolean {
       return this.store.state.ui.currentStep === 'flight'
     },
@@ -103,6 +106,15 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../../styles/quasar.variables";
 
+  .tasting-title {
+    margin: 0;
+    line-height: 1;
+  }
+
+  .flight-navigation {
+    padding: 0 map-get($space-md, 'x');
+  }
 </style>

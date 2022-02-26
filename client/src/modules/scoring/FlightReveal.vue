@@ -1,5 +1,14 @@
 <template>
-  {{ wines }}
+  <div class="content-box">
+    <div class="flight-header content-box_header">
+      FlightReveal
+    </div>
+    <ul>
+      <li v-for="(wine) in wines" v-bind:key="wine">
+        {{wine}}
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script lang="ts">

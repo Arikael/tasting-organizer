@@ -6,7 +6,7 @@ export function mapApiDataToTasting(data: any): TastingDto {
     tasting.publicId = data.publicId ?? ''
     tasting.title = data.title ?? ''
     tasting.intro = data.intro ?? ''
-    tasting.date = data.date
+    tasting.date = new Date(data.date)
     tasting.outro = data.outro ?? ''
     tasting.flights = []
 

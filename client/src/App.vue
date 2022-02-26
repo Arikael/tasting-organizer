@@ -19,7 +19,7 @@
         </q-toolbar>
       </q-header>
       <q-page-container>
-        <q-page class="q-pa-sm">
+        <q-page class="bg-blue-grey-1">
           <router-view></router-view>
         </q-page>
       </q-page-container>
@@ -32,7 +32,7 @@ import {defineComponent, getCurrentInstance, ref, watch} from 'vue';
 import {
   QBtn,
   QHeader,
-  QItem,
+  QItem, QItemSection,
   QLayout,
   QList,
   QMenu,
@@ -46,7 +46,19 @@ import {Store} from "@/store/store";
 
 export default defineComponent({
   name: 'LayoutDefault',
-  components: {QLayout, QHeader, QToolbar, QToolbarTitle, QBtn, QMenu, QItem, QList, QPageContainer, QPage},
+  components: {
+    QLayout,
+    QHeader,
+    QToolbar,
+    QToolbarTitle,
+    QBtn,
+    QMenu,
+    QItem,
+    QList,
+    QPageContainer,
+    QPage,
+    QItemSection
+  },
   provide: {
     store: new Store()
   },

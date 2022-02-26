@@ -1,10 +1,12 @@
 <template>
-  <div>
-    Name {{ flight.name }}
-  </div>
-  <div class="flight-wines">
-    <wine-score :wine="wine"
-                v-for="(wine) in flight.wines" v-bind:key="wine.id"></wine-score>
+  <div class="content-box">
+    <div class="flight-header content-box_header">
+      {{ flight.name }}
+    </div>
+    <div class="flight-wines">
+      <wine-score :wine="wine"
+                  v-for="(wine) in flight.wines" v-bind:key="wine.id"></wine-score>
+    </div>
   </div>
 </template>
 
@@ -38,6 +40,11 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../../styles/quasar.variables";
+@import "../../styles/mixins";
 
+.flight-wines {
+  @include default-content-padding;
+}
 </style>
