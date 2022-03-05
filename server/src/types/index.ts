@@ -44,6 +44,7 @@ export class FlightDto<T> {
 export class BaseWineDto {
   name = ''
   id = ''
+  revealedName = ''
 }
 
 export class FlightRevealDto {

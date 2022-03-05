@@ -9,6 +9,7 @@ export function mapApiDataToTasting(data: any): TastingDto {
     tasting.date = new Date(data.date)
     tasting.outro = data.outro ?? ''
     tasting.flights = []
+    tasting.revealAfter = data.revealAfter
 
     if (data.flights && Array.isArray(data.flights)) {
         data.flights.map((flight: any) => {
@@ -19,6 +20,7 @@ export function mapApiDataToTasting(data: any): TastingDto {
                 tastingFlight.wines.push({
                     name: wine.name,
                     id: wine.id,
+                    revealedName: tasting.revealAfter === 'always' ? wine.name : ''
                 })
             })
 

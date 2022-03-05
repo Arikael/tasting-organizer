@@ -1,9 +1,9 @@
-import {stepConfiguration, UiStep} from "@/store/UiSteps";
-import getters from "@/store/getters";
-import {state} from "@/store/state";
-import setters from "@/store/setters";
-import {mapApiDataToTasting} from "@/api/mappings";
-import {useApiClient} from "@/api/client";
+import {UiStep} from '@/store/UiSteps';
+import getters from '@/store/getters';
+import {state} from '@/store/state';
+import setters from '@//store/setters';
+import {mapApiDataToTasting} from '@/api/mappings';
+import {useApiClient} from '@/api/client';
 import {TastingDto, UserScoresDto} from '@/api/types'
 
 async function moveUi(step: UiStep): Promise<boolean> {
@@ -13,32 +13,19 @@ async function moveUi(step: UiStep): Promise<boolean> {
     }
 
     const newIndex = step === 'next' ? index + 1 : index - 1
+    const validIndex = setters.trySetCurrentStepIndexChange(newIndex)
 
-    if (index >= 0 && index < state.ui.steps.length) {
-        // TODO handle return
-        setters.setCurrentStepIndexChange(newIndex)
+    if (validIndex) {
+        const step = state.ui.steps[newIndex]
 
-        const stepId = state.ui.steps[index].id
-        const stepConfig = stepConfiguration.find(x => x.id === stepId)
-
-        if (stepConfig !== undefined && stepConfig.move !== undefined) {
-            let config = {}
-
-            if (stepConfig.getConfig !== undefined) {
-                config = stepConfig.getConfig(state)
-            }
-
-            const hasStepped = await stepConfig.move(config, state)
-
-            if (hasStepped) {
-                setters.setCurrentStep(state.ui.steps[newIndex].id)
-            }
-
-            return false
-        } else {
-            setters.setCurrentStep(state.ui.steps[newIndex].id)
-            return true
+        // TODO make more dynamic and/or use Pinia
+        if (step.type === 'reveal') {
+            await loadCurrentRevealedWines()
         }
+
+        setters.setCurrentStep(state.ui.steps[newIndex])
+
+        return true
     }
 
     return false
@@ -67,10 +54,41 @@ async function loadTastingForScoring(id: string): Promise<boolean> {
         }
     }
 
-    return await Promise.all([tasting$, scoring$]).then(() => true).catch(() => false)
+    return await Promise.all([tasting$, scoring$]).then((values) => {
+        setters.setUiSteps(values[0])
+
+        return true
+    }).catch(() => false)
 }
+
+async function loadCurrentRevealedWines() {
+    const flight = getters.currentFlight?.value
+
+
+    if (flight.wines.every(x => x.revealedName)) {
+        return
+    }
+
+    if (flight && state.tasting.revealAfter === 'flight') {
+        return useApiClient().service('flight-reveal').get(flight.id, {
+            query: {
+                publicId: state.tasting.publicId
+            }
+        }).then(flightReveal => {
+            // TODO: maybe use Id.
+            if (flightReveal.wines.length !== flight.wines.length) {
+                throw `flightReveal returned ${flightReveal.wines.length} names whereas flight expects ${flight.wines.length} names`
+            }
+            for (let i = 0; i < flightReveal.wines.length; i++) {
+                flight.wines[i].revealedName = flightReveal.wines[i]
+            }
+        })
+    }
+}
+
 
 export default {
     loadTastingForScoring,
+    loadCurrentRevealedWines,
     moveUi
 }

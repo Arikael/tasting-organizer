@@ -3,37 +3,20 @@ import {reactive} from "vue"
 import {UnwrapNestedRefs} from "@vue/reactivity"
 import {UserScoresDto} from '../api/types'
 import {
-    FlightStepState, StepIds
+    Step
 } from "@/store/UiSteps";
 
 export class State {
     tasting = new TastingDto()
     scoreData = new UserScoresDto()
     ui: {
-        currentStep: StepIds,
+        currentStep: Pick<Step, 'id' | 'type'>,
         currentStepIndexChange: number,
-        steps: {
-            id: StepIds,
-            stepState: Record<string, unknown>
-        }[]
+        steps: Step[]
     } = {
-        currentStep: 'intro',
+        currentStep: {id: 'intro', type: 'intro'},
         currentStepIndexChange: 0,
-        steps:
-            [
-                {
-                    id: 'intro',
-                    stepState: {}
-                },
-                {
-                    id: 'flight',
-                    stepState: {
-                        flightIndex: 0,
-                        isOnFlightReveal: false,
-                        revealedWines: []
-                    } as FlightStepState
-                }
-            ]
+        steps: []
     }
 }
 

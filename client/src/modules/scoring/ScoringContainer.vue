@@ -6,13 +6,13 @@
       {{ state.tasting.intro }}
     </div>
   </div>
-  <div class="content-box content-box--padding" v-if="state.ui.currentStep === 'intro'">
+  <div class="content-box content-box--padding" v-if="state.ui.currentStep.type === 'intro'">
     <q-input class="q-my-sm" :model-value="state.scoreData.userName" @change="setUser"
              :label="$t('yourUsername')"></q-input>
   </div>
-  <div v-if="state.ui.currentStep === 'flight'">
-    <scoring-flight v-if="!isOnFlightRevealStep"></scoring-flight>
-    <flight-reveal v-if="isOnFlightRevealStep"></flight-reveal>
+  <div>
+    <scoring-flight v-if="state.ui.currentStep.type === 'flight'"></scoring-flight>
+    <flight-reveal v-if="state.ui.currentStep.type === 'reveal'"></flight-reveal>
   </div>
   <div class="flight-navigation">
     <q-btn color="primary" v-if="canMoveBack" @click="moveBack()" :label="$t('back')"/>
@@ -39,7 +39,7 @@ export default defineComponent({
   },
   setup(props) {
     onMounted(async () => {
-        await store.actions.loadTastingForScoring(props.tastingId)
+      await store.actions.loadTastingForScoring(props.tastingId)
     })
 
     return {
@@ -76,12 +76,12 @@ export default defineComponent({
 <style scoped lang="scss">
 @import "../../styles/quasar.variables";
 
-  .tasting-title {
-    margin: 0;
-    line-height: 1;
-  }
+.tasting-title {
+  margin: 0;
+  line-height: 1;
+}
 
-  .flight-navigation {
-    padding: 0 map-get($space-md, 'x');
-  }
+.flight-navigation {
+  padding: 0 map-get($space-md, 'x');
+}
 </style>

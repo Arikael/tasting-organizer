@@ -1,31 +1,27 @@
-import {UnwrapNestedRefs} from "@vue/reactivity";
-import {BaseWineDto, FlightDto, ScoreDto, TastingDto, UserScoresDto} from "@/api/types";
-import {state} from "@/store/state";
-import {isFlightStepState} from "@/store/UiSteps";
-import {computed} from "vue";
+import {UnwrapNestedRefs} from '@vue/reactivity';
+import {BaseWineDto, FlightDto, ScoreDto, TastingDto} from '@/api/types';
+import {state} from './state';
+import {computed} from 'vue';
+import {Step} from './UiSteps';
 
-function getCurrentStepState(): Record<string, unknown> {
+function getCurrentStep(): Step | undefined {
     if (state.ui.currentStep !== undefined) {
-        const currentStep = state.ui.steps.find(x => x.id === state.ui.currentStep)
+        const currentStep = state.ui.steps.find(x => x.id === state.ui.currentStep.id)
 
         if (currentStep !== undefined) {
-            return currentStep?.stepState
+            return currentStep
         }
     }
 
-    return {}
+    return undefined
 }
 
 function getCurrentStepIndex(): number {
-    return state.ui.steps.findIndex(x => x.id === state.ui.currentStep)
+    return state.ui.steps.findIndex(x => x.id === state.ui.currentStep.id)
 }
 
 function getTasting(): Readonly<UnwrapNestedRefs<TastingDto>> {
     return state.tasting
-}
-
-function getScoreData(): UserScoresDto {
-    return state.scoreData
 }
 
 function getScore(wineId: string): ScoreDto | undefined {
@@ -35,36 +31,30 @@ function getScore(wineId: string): ScoreDto | undefined {
 }
 
 function getCurrentFlight(): FlightDto<BaseWineDto> {
-    const stepState = getCurrentStepState()
+    const step = getCurrentStep()
 
-    if (state.ui.currentStep == 'flight' && stepState
-        && isFlightStepState(stepState)) {
-        return state.tasting.flights[stepState.flightIndex]
+    // TODO: handle flight id better
+    if (step && (step.type === 'flight' || step.type === 'reveal')) {
+        const id = step.id.replace('flight-', '').replace('reveal-', '')
+        return state.tasting.flights.find(x => x.id === id) ?? new FlightDto<BaseWineDto>()
     }
 
     return new FlightDto<BaseWineDto>()
 }
 
-function getCurrentRevealedWines() {
-    const stepState = getCurrentStepState()
+function isOnFlightRevealStep(): boolean {
+    const step = getCurrentStep()
 
-    if (stepState !== undefined && isFlightStepState(stepState)) {
-        return stepState.revealedWines
-    }
+    return step !== undefined && step.type === 'reveal'
 }
 
-function isOnFlightRevealStep(): boolean {
-    const stepState = getCurrentStepState()
+function getCurrentRevealedWines(): string[] {
+    const currentFlight = getCurrentFlight()
 
-    if (isFlightStepState(stepState)) {
-        return stepState.isOnFlightReveal
-    }
-
-    return false
+    return currentFlight.wines.map(x => x.revealedName)
 }
 
 function isOnFirstStep(): boolean {
-    console.log(state)
     return getCurrentStepIndex() <= 0
 }
 
@@ -86,7 +76,7 @@ export default {
     canMoveBack: computed(() => canMoveBack()),
     canMoveForward: computed(() => canMoveForward()),
     isOnFlightRevealStep: computed(() => isOnFlightRevealStep()),
-    currentStepState: computed(() => getCurrentStepState()),
+    currentStepState: computed(() => getCurrentStep()),
     currentStepIndex: computed(() => getCurrentStepIndex()),
     getScore,
     getTasting,
