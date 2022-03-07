@@ -59,7 +59,7 @@ function isOnFirstStep(): boolean {
 }
 
 function isOnLastStep(): boolean {
-    return getCurrentStepIndex() > state.ui.steps.length
+    return getCurrentStepIndex() >= state.ui.steps.length - 1
 }
 
 function canMoveForward(): boolean {

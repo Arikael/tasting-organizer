@@ -25,8 +25,6 @@ export class FlightReveal extends Service<FlightRevealDto> {
       return Promise.reject(error)
     }
 
-    console.log(id)
-
     const result = await this.Model.aggregate([
       {
         '$unwind': '$flights'

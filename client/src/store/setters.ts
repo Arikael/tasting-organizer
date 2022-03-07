@@ -11,18 +11,6 @@ function setCurrentStep(step: Step) {
     state.ui.currentStep = step
 }
 
-function trySetCurrentStepIndexChange(newIndex: number): boolean {
-    const currentStepIndex = getters.currentStepIndex.value
-
-    if(currentStepIndex + newIndex < 0 || currentStepIndex + newIndex > state.ui.steps.length) {
-        return false
-    }
-
-    state.ui.currentStepIndexChange = newIndex
-
-    return true
-}
-
 function setUser(userName: string): void {
     state.scoreData.userName = userName
 
@@ -36,7 +24,7 @@ function setUser(userName: string): void {
     createLocalTastingData()
 }
 
-async function  setScore(wineId: string, score: number): Promise<UserScoresDto> {
+async function setScore(wineId: string, score: number): Promise<UserScoresDto> {
     const scoreData = getters.getScore(wineId)
 
     if (scoreData) {
@@ -48,6 +36,16 @@ async function  setScore(wineId: string, score: number): Promise<UserScoresDto> 
         })
     }
 
+    return updateScores()
+}
+
+async function finishScoring(): Promise<UserScoresDto> {
+    state.scoreData.isFinished = true
+
+    return updateScores()
+}
+
+async function updateScores(): Promise<UserScoresDto> {
     const service = useApiClient().service('scoring')
     return await service.update(state.tasting.id, state.scoreData)
 }
@@ -58,19 +56,16 @@ function setUiSteps(tasting: TastingDto) {
         type: 'intro'
     })
 
-    for(const flight of tasting.flights) {
+    for (const flight of tasting.flights) {
         state.ui.steps.push({
             id: `flight-${flight.id}`,
             type: 'flight'
         })
 
-        if(tasting.revealAfter === 'flight') {
+        if (tasting.revealAfter === 'flight') {
             state.ui.steps.push({
                 id: `reveal-${flight.id}`,
-                type: 'reveal',
-                stepState: {
-                    revealedWines: []
-                }
+                type: 'reveal'
             })
         }
     }
@@ -92,6 +87,6 @@ export default {
     setScore,
     setCurrentStep,
     setUser,
-    trySetCurrentStepIndexChange: trySetCurrentStepIndexChange,
-    setUiSteps
+    setUiSteps,
+    finishScoring
 }

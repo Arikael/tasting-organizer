@@ -11,11 +11,9 @@ export class State {
     scoreData = new UserScoresDto()
     ui: {
         currentStep: Pick<Step, 'id' | 'type'>,
-        currentStepIndexChange: number,
         steps: Step[]
     } = {
         currentStep: {id: 'intro', type: 'intro'},
-        currentStepIndexChange: 0,
         steps: []
     }
 }

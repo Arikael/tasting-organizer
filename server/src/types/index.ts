@@ -14,6 +14,7 @@ export interface ServiceTypes {
 export class UserScoresDto {
   userId = ''
   userName = ''
+  isFinished = false
   scores: ScoreDto[] = []
 }
 

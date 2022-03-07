@@ -14,5 +14,7 @@
   "Min": "min",
   "Max": "max",
   "AllScores": "All scores",
-  "yourUsername": "Your name"
+  "yourUsername": "Your name",
+  "scoreAlreadySubmitted": "You have already submitted your scores"
+
 }

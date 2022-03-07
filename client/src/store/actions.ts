@@ -13,9 +13,8 @@ async function moveUi(step: UiStep): Promise<boolean> {
     }
 
     const newIndex = step === 'next' ? index + 1 : index - 1
-    const validIndex = setters.trySetCurrentStepIndexChange(newIndex)
 
-    if (validIndex) {
+    if (newIndex >= 0 && newIndex <= state.ui.steps.length - 1) {
         const step = state.ui.steps[newIndex]
 
         // TODO make more dynamic and/or use Pinia
