@@ -1,13 +1,39 @@
 <template>
-
+  <div class="content-box content-box--padding tasting-header">
+    <h2 class="text-subtitle1 tasting-title">{{ state.tasting.title }}</h2>
+    <span class="text-caption"><q-icon name="today" class="q-mr-xs"></q-icon>{{ tastingDate }}</span>
+    <div class="text-caption q-pt-md" v-if="hasIntro">
+      {{ state.tasting.intro }}
+    </div>
+  </div>
+  <div class="content-box content-box--padding" v-if="state.ui.currentStep.type === 'intro'">
+    <q-input class="q-my-sm" :model-value="state.scoreData.userName" @change="setUser"
+             :label="$t('yourUsername')"></q-input>
+  </div>
 </template>
 
-<script>
+<script lang="ts">
+import {store} from "@/store";
+import {QIcon, QInput} from "quasar";
+import {computed} from "vue";
+
 export default {
-  name: "ScoringIntro"
+  name: "ScoringIntro",
+  components: {QInput, QIcon},
+  setup() {
+    return {
+      state: store.state,
+      setUser: store.setters.setUser,
+      hasIntro: computed(() => store.state.tasting.intro.length > 0),
+      tastingDate: computed(() => store.state.tasting.date.toDateString())
+    }
+  }
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.tasting-title {
+  margin: 0;
+  line-height: 1;
+}
 </style>
