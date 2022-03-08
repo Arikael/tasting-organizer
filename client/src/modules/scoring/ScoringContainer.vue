@@ -48,18 +48,9 @@ export default defineComponent({
       canMoveForward: store.getters.canMoveForward,
       canMoveBack: store.getters.canMoveBack,
       isOnLastStep: store.getters.isOnLastStep,
-      finishScoring: store.setters.finishScoring
-    }
-  },
-  methods: {
-    async moveForward() {
-      await store.actions.moveUi('next')
-    },
-    async moveBack() {
-      await store.actions.moveUi('prev')
-    },
-    submit() {
-      return;
+      finishScoring: store.setters.finishScoring,
+      moveForward: () => store.actions.moveUi('next'),
+      moveBack: () => store.actions.moveUi('prev')
     }
   }
 })
