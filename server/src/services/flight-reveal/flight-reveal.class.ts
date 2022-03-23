@@ -5,7 +5,7 @@ import {Id, Params} from '@feathersjs/feathers'
 import {FlightRevealDto} from '../../types'
 import {BadRequest} from '@feathersjs/errors'
 import 'reflect-metadata'
-import {plainToClass} from 'class-transformer'
+import {plainToInstance} from 'class-transformer'
 
 export class FlightReveal extends Service<FlightRevealDto> {
   //eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -49,7 +49,7 @@ export class FlightReveal extends Service<FlightRevealDto> {
         result[0]['wines'] = []
       }
 
-      return plainToClass(FlightRevealDto, result[0])
+      return plainToInstance(FlightRevealDto, result[0])
     }
 
     return new FlightRevealDto()
