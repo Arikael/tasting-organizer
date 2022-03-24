@@ -2,6 +2,9 @@ import {Tasting} from '../services/tasting/tasting.class'
 import {ServiceAddons} from '@feathersjs/feathers'
 import {Scoring} from '../services/scoring/scoring.class'
 import {FlightReveal} from '../services/flight-reveal/flight-reveal.class'
+import {Type} from 'class-transformer'
+import 'reflect-metadata'
+import {TastingResult} from '../services/tasting-result/tasting-result.class'
 
 export type RevealAfter = 'flight' | 'never' | 'always'
 
@@ -9,6 +12,7 @@ export interface ServiceTypes {
   'tasting': Tasting & ServiceAddons<any>
   'scoring': Scoring & ServiceAddons<any>
   'flight-reveal': FlightReveal & ServiceAddons<any>
+  'tasting-result': TastingResult & ServiceAddons<any>
 }
 
 export class UserScoresDto {
@@ -52,5 +56,28 @@ export class FlightRevealDto {
   flightId = ''
   revealAfter: RevealAfter = 'flight'
   wines: string[] = []
+}
 
+export class ResultWineDto {
+  flightName = ''
+  wineIndex = 0
+  name = ''
+  id = ''
+}
+
+export class TastingResultDto {
+  title = ''
+  @Type(() => SingleTastingResultDto)
+    wineResults: SingleTastingResultDto[] = []
+}
+
+export class SingleTastingResultDto {
+  @Type(() => ResultWineDto)
+    wine = new ResultWineDto()
+  avg = 0
+  min = 0
+  max = 0
+  stddev = 0
+  @Type(() => UserScoresDto)
+    scores: UserScoresDto[] = []
 }
