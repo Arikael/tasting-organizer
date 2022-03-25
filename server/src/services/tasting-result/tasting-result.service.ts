@@ -5,7 +5,7 @@ import hooks from './tasting-result.hooks'
 
 export default function (app: Application): void {
   const options = {
-    paginate: app.get('paginate')
+    // paginate: app.get('paginate')
   }
 
   // Initialize our service with any options it requires

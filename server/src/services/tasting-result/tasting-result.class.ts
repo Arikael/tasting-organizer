@@ -7,17 +7,20 @@ import {TastingResultDto} from '../../types'
 
 export class TastingResult extends Service<TastingResultDto> {
   //eslint-disable-next-line @typescript-eslint/no-unused-vars
+  collectionName = 'tasting-organizer'
   constructor(options: Partial<MongoDBServiceOptions>, app: Application) {
     super(options)
 
     const client: Promise<Db> = app.get('mongoClient')
 
     client.then(db => {
-      this.Model = db.collection('tasting-organizer')
+      this.Model = db.collection(this.collectionName)
     })
   }
 
   async get(id: Id, params?: Params): Promise<TastingResultDto> {
+    // TODO the query does more or less what it should. It contains some extraneous values and wrongly named properties.
+    // it should be refactored
     const result = await this.Model.aggregate(
       [
         {
@@ -42,14 +45,17 @@ export class TastingResult extends Service<TastingResultDto> {
         },
         {
           $lookup: {
-            from: 'collection',
+            from: this.collectionName,
             let: {
               wineId: '$scores.scores.wineId',
               'tastingId': '$_id'
             },
             pipeline: [
               {
-                '$unwind': '$flights'
+                '$unwind': {
+                  'path': '$flights',
+                  'includeArrayIndex': 'flightIndex'
+                }
               },
               {
                 '$unwind': {
@@ -82,8 +88,9 @@ export class TastingResult extends Service<TastingResultDto> {
                   _id: 0,
                   'name': '$flights.wines.name',
                   'flight': '$flights.name',
-                  'wineId': '$flights.wines.id',
-                  'index': '$index'
+                  'id': '$flights.wines.id',
+                  'index': '$index',
+                  'flightIndex': '$flightIndex'
                 }
               }
             ],
@@ -144,7 +151,7 @@ export class TastingResult extends Service<TastingResultDto> {
         }
       ]
     ).toArray()
-    console.log(result)
+
     if (result.length === 0) {
       return Promise.resolve( new TastingResultDto())
     }

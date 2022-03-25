@@ -2,7 +2,7 @@ import {Tasting} from '../services/tasting/tasting.class'
 import {ServiceAddons} from '@feathersjs/feathers'
 import {Scoring} from '../services/scoring/scoring.class'
 import {FlightReveal} from '../services/flight-reveal/flight-reveal.class'
-import {Type} from 'class-transformer'
+import {Expose, Type} from 'class-transformer'
 import 'reflect-metadata'
 import {TastingResult} from '../services/tasting-result/tasting-result.class'
 
@@ -59,20 +59,29 @@ export class FlightRevealDto {
 }
 
 export class ResultWineDto {
-  flightName = ''
-  wineIndex = 0
+  flight = ''
+  flightIndex = 0
+  index = 0
   name = ''
   id = ''
 }
 
-export class TastingResultDto {
+// all the tasting results type need refactoring as soon as the query is improved
+export class TastingResultBaseDataDto {
   title = ''
+}
+
+export class TastingResultDto {
+  @Type(() => TastingResultBaseDataDto)
+  @Expose({name: '_id'})
+    tasting = new TastingResultBaseDataDto()
   @Type(() => SingleTastingResultDto)
     wineResults: SingleTastingResultDto[] = []
 }
 
 export class SingleTastingResultDto {
   @Type(() => ResultWineDto)
+  @Expose({name: '_id'})
     wine = new ResultWineDto()
   avg = 0
   min = 0
