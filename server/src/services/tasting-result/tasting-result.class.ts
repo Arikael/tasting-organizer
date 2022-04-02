@@ -146,6 +146,39 @@ export class TastingResult extends Service<TastingResultDto> {
             '_id': '$tasting',
             'wineResults': {
               '$addToSet': '$$ROOT'
+            },
+            'highMax': {
+              '$max': '$max'
+            },
+            'lowMin': {
+              '$min': '$min'
+            },
+            'highAvg': {
+              '$max': '$avg'
+            },
+            'lowAvg': {
+              '$min': '$avg'
+            },
+            'lowStddev': {
+              '$min': '$stddev'
+            },
+            'highStddev': {
+              '$max': '$stddev'
+            }
+          }
+        },
+        {
+          '$project': {
+            'tasting': '$_id',
+            'wineResults': '$wineResults',
+            '_id': 0,
+            'highAndLowScores': {
+              'highMax': '$highMax',
+              'lowMin': '$lowMin',
+              'highAvg': '$highAvg',
+              'lowAvg': '$lowAvg',
+              'highStddev': '$highStddev',
+              'lowStddev': '$lowStddev'
             }
           }
         }
