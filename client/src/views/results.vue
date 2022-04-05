@@ -1,14 +1,22 @@
 <template>
-  <q-table>
-
-  </q-table>
+  <TastingResults :tasting-id="tastingId"></TastingResults>
 </template>
 
 <script lang="ts">
-import {QTable} from 'quasar';
+import TastingResults from "@/modules/scoring/TastingResults.vue";
+import {useScoringUtils} from "@/modules/scoring/useScoringUtils";
 
 export default {
-  name: "results"
+  name: "results",
+  components: {TastingResults},
+  setup() {
+    const utils = useScoringUtils()
+    const tastingId =utils.loadTastingId()
+
+    return {
+      tastingId
+    }
+  }
 }
 </script>
 

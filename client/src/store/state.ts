@@ -1,4 +1,4 @@
-import {TastingDto} from '../api/types'
+import {TastingDto, TastingResultDto} from '../api/types'
 import {reactive} from "vue"
 import {UnwrapNestedRefs} from "@vue/reactivity"
 import {UserScoresDto} from '../api/types'
@@ -8,6 +8,7 @@ import {
 
 export class State {
     tasting = new TastingDto()
+    tastingResults = new TastingResultDto()
     scoreData = new UserScoresDto()
     ui: {
         currentStep: Pick<Step, 'id' | 'type'>,

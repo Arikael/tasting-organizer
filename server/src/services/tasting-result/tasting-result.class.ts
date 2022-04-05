@@ -89,8 +89,7 @@ export class TastingResult extends Service<TastingResultDto> {
                   'name': '$flights.wines.name',
                   'flight': '$flights.name',
                   'id': '$flights.wines.id',
-                  'index': '$index',
-                  'flightIndex': '$flightIndex'
+                  'wineNr': { $concat: [{$toString: {$add: ['$flightIndex', 1]}}, '.', {$toString: {$add: ['$index', 1]}}]}
                 }
               }
             ],
@@ -150,6 +149,12 @@ export class TastingResult extends Service<TastingResultDto> {
             'highMax': {
               '$max': '$max'
             },
+            'lowMax': {
+              '$min': '$max'
+            },
+            'highMin': {
+              '$max': '$min'
+            },
             'lowMin': {
               '$min': '$min'
             },
@@ -174,6 +179,8 @@ export class TastingResult extends Service<TastingResultDto> {
             '_id': 0,
             'highAndLowScores': {
               'highMax': '$highMax',
+              'lowMax': '$lowMax',
+              'highMin': '$highMin',
               'lowMin': '$lowMin',
               'highAvg': '$highAvg',
               'lowAvg': '$lowAvg',

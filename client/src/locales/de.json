@@ -13,6 +13,7 @@
   "Median": "Median",
   "Min": "Min",
   "Max": "Max",
+  "Stddev": "Stddev",
   "AllScores": "Alle Bewertungen",
   "yourUsername": "Dein Name",
   "scoreAlreadySubmitted": "Du hast deine Bewertungen bereits abgegeben"

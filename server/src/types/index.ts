@@ -60,23 +60,22 @@ export class FlightRevealDto {
 
 export class ResultWineDto {
   flight = ''
-  flightIndex = 0
-  index = 0
   name = ''
   id = ''
+  wineNr = ''
 }
 
 // all the tasting results type need refactoring as soon as the query is improved
-export class TastingResultBaseDataDto {
-  title = ''
-}
-
 export class TastingResultDto {
   @Type(() => TastingResultBaseDataDto)
-  @Expose({name: '_id'})
     tasting = new TastingResultBaseDataDto()
   @Type(() => SingleTastingResultDto)
     wineResults: SingleTastingResultDto[] = []
+  highAndLowScores: {[key: string]: number} = {}
+}
+
+export class TastingResultBaseDataDto {
+  title = ''
 }
 
 export class SingleTastingResultDto {

@@ -5,21 +5,19 @@
 <script lang="ts">
 import {defineComponent } from "vue";
 import ScoringContainer from "@/modules/scoring/ScoringContainer.vue";
-import {useRoute} from "vue-router";
+import {useScoringUtils} from "@/modules/scoring/useScoringUtils";
 
 export default defineComponent({
   name: "scoring",
   components: {ScoringContainer},
   setup() {
-    const route = useRoute()
-    let tastingId = ''
-    let id = route.params?.id ?? ''
-    tastingId = Array.isArray(id) ? id[0] : id
+    const utils = useScoringUtils()
+    const tastingId =utils.loadTastingId()
 
     return {
       tastingId
     }
-  },
+  }
 })
 </script>
 

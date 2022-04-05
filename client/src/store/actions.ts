@@ -4,7 +4,7 @@ import {state} from '@/store/state';
 import setters from '@//store/setters';
 import {mapApiDataToTasting} from '@/api/mappings';
 import {useApiClient} from '@/api/client';
-import {TastingDto, UserScoresDto} from '@/api/types'
+import {TastingDto, TastingResultDto, UserScoresDto} from '@/api/types'
 
 async function moveUi(step: UiStep): Promise<boolean> {
     let index = getters.currentStepIndex.value
@@ -63,7 +63,6 @@ async function loadTastingForScoring(id: string): Promise<boolean> {
 async function loadCurrentRevealedWines() {
     const flight = getters.currentFlight?.value
 
-
     if (flight.wines.every(x => x.revealedName)) {
         return
     }
@@ -85,9 +84,19 @@ async function loadCurrentRevealedWines() {
     }
 }
 
+async function loadTastingResults(id: string): Promise<TastingResultDto> {
+    const client = useApiClient()
+
+    return client.service('tasting-result').get(id).then((result: TastingResultDto) => {
+        state.tastingResults = result
+
+        return state.tastingResults
+    })
+}
 
 export default {
     loadTastingForScoring,
+    loadTastingResults,
     loadCurrentRevealedWines,
     moveUi
 }
