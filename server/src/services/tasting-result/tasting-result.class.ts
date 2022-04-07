@@ -103,7 +103,12 @@ export class TastingResult extends Service<TastingResultDto> {
                 {
                   '_id': '$_id',
                   'tasting': '$tasting',
-                  'scores': '$scores'
+                  'score': {
+                    'userId': '$scores.userId',
+                    'userName': '$scores.userName',
+                    'score': '$scores.scores.score',
+                    'wineId': '$scores.scores.wineId'
+                  }
                 },
                 {
                   'wine': {
@@ -121,22 +126,22 @@ export class TastingResult extends Service<TastingResultDto> {
           '$group': {
             '_id': '$wine',
             'avg': {
-              '$avg': '$scores.scores.score'
+              '$avg': '$score.score'
             },
             'min': {
-              '$min': '$scores.scores.score'
+              '$min': '$score.score'
             },
             'max': {
-              '$max': '$scores.scores.score'
+              '$max': '$score.score'
             },
             'stddev': {
-              '$stdDevPop': '$scores.scores.score'
+              '$stdDevPop': '$score.score'
             },
             'tasting': {
               '$first': '$tasting'
             },
             'scores': {
-              '$addToSet': '$scores'
+              '$addToSet': '$score'
             }
           }
         },
