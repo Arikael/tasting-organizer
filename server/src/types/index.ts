@@ -15,7 +15,12 @@ export interface ServiceTypes {
   'tasting-result': TastingResult & ServiceAddons<any>
 }
 
-export class UserScoresDto {
+export interface IScoreUser {
+  userId: string
+  userName: string
+}
+
+export class UserScoresDto implements IScoreUser {
   userId = ''
   userName = ''
   isFinished = false
@@ -71,10 +76,11 @@ export class TastingResultDto {
     tasting = new TastingResultBaseDataDto()
   @Type(() => SingleTastingResultDto)
     wineResults: SingleTastingResultDto[] = []
-  highAndLowScores: {[key: string]: number} = {}
+  highAndLowScores: { [key: string]: number } = {}
 }
 
 export class TastingResultBaseDataDto {
+  publicId = ''
   title = ''
 }
 
@@ -86,6 +92,11 @@ export class SingleTastingResultDto {
   min = 0
   max = 0
   stddev = 0
-  @Type(() => UserScoresDto)
-    scores: UserScoresDto[] = []
+  @Type(() => ScoreWithUserDto)
+    scores: ScoreWithUserDto[] = []
+}
+
+export class ScoreWithUserDto extends ScoreDto implements IScoreUser {
+  userId = ''
+  userName = ''
 }

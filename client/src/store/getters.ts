@@ -3,6 +3,11 @@ import {BaseWineDto, FlightDto, ScoreDto, TastingDto} from '@/api/types';
 import {state} from './state';
 import {computed} from 'vue';
 import {Step} from './UiSteps';
+import {useUtils} from "@/utils/useUtils";
+
+function currentUser(): string {
+    return useUtils().readUserIdFromBrowser(state.tastingId)
+}
 
 function getCurrentStep(): Step | undefined {
     if (state.ui.currentStep !== undefined) {
@@ -81,5 +86,6 @@ export default {
     getScore,
     getTasting,
     currentFlight: computed(() => getCurrentFlight()),
-    currentRevealedWines: computed(() => getCurrentRevealedWines())
+    currentRevealedWines: computed(() => getCurrentRevealedWines()),
+    currentUser: computed(() => currentUser())
 }

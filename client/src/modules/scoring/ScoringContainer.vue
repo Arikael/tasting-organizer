@@ -31,15 +31,9 @@ import ScoringIntro from "@/modules/scoring/ScoringIntro.vue";
 export default defineComponent({
   name: "ScoringContainer",
   components: {ScoringIntro, ScoringEnd, FlightReveal, ScoringFlight, QBtn},
-  props: {
-    tastingId: {
-      type: String,
-      default: ''
-    }
-  },
-  setup(props) {
+  setup() {
     onMounted(async () => {
-      await store.actions.loadTastingForScoring(props.tastingId)
+      await store.actions.loadTastingForScoring()
     })
 
     return {

@@ -5,9 +5,11 @@ import setters from '@//store/setters';
 import {mapApiDataToTasting} from '@/api/mappings';
 import {useApiClient} from '@/api/client';
 import {TastingDto, TastingResultDto, UserScoresDto} from '@/api/types'
+import {useUtils} from "@/utils/useUtils";
 
 async function moveUi(step: UiStep): Promise<boolean> {
     let index = getters.currentStepIndex.value
+
     if (index === -1) {
         index = 0
     }
@@ -30,10 +32,12 @@ async function moveUi(step: UiStep): Promise<boolean> {
     return false
 }
 
-async function loadTastingForScoring(id: string): Promise<boolean> {
+async function loadTastingForScoring(): Promise<boolean> {
+    const id = useUtils().loadTastingIdFromBrowser();
     const client = useApiClient()
     const tasting$ = client.service('tasting').get(id).then((result: Partial<TastingDto>) => {
         state.tasting = mapApiDataToTasting(result)
+        state.tastingId = state.tasting.id
 
         return state.tasting
     })
@@ -42,15 +46,11 @@ async function loadTastingForScoring(id: string): Promise<boolean> {
         resolve(new UserScoresDto())
     })
 
-    const localData = window.localStorage.getItem('tasting-organizer')
+    const userId = useUtils().readUserIdFromBrowser(id)
 
-    if (localData) {
-        const localObject = JSON.parse(localData)
-
-        if (localObject[id]) {
-            scoring$ = client.service('scoring').get(id, {query: {userId: localObject[id]}})
-                .then((x: UserScoresDto) => state.scoreData = x)
-        }
+    if (userId) {
+        scoring$ = client.service('scoring').get(id, {query: {userId: userId}})
+            .then((x: UserScoresDto) => state.scoreData = x)
     }
 
     return await Promise.all([tasting$, scoring$]).then((values) => {
@@ -84,11 +84,13 @@ async function loadCurrentRevealedWines() {
     }
 }
 
-async function loadTastingResults(id: string): Promise<TastingResultDto> {
+async function loadTastingResults(): Promise<TastingResultDto> {
+    const id = useUtils().loadTastingIdFromBrowser();
     const client = useApiClient()
 
     return client.service('tasting-result').get(id).then((result: TastingResultDto) => {
         state.tastingResults = result
+        state.tastingId = result.tasting.publicId
 
         return state.tastingResults
     })

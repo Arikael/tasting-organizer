@@ -16,6 +16,7 @@
   "Stddev": "Stddev",
   "AllScores": "All scores",
   "yourUsername": "Your name",
-  "scoreAlreadySubmitted": "You have already submitted your scores"
+  "scoreAlreadySubmitted": "You have already submitted your scores",
+  "MyScore": "My score"
 
 }

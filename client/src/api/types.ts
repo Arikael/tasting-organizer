@@ -7,21 +7,17 @@ import {
     ScoreDto,
     TastingResultDto,
     SingleTastingResultDto,
-    ResultWineDto
+    ScoreWithUserDto
 } from '../../../server/src/types'
 
-declare module '../../../server/src/types' {
-    interface ResultWineDto {
-        wineNr: string
-    }
+export {
+    ServiceTypes,
+    UserScoresDto,
+    TastingDto,
+    BaseWineDto,
+    FlightDto,
+    ScoreDto,
+    TastingResultDto,
+    SingleTastingResultDto,
+    ScoreWithUserDto
 }
-
-
-Object.defineProperty(ResultWineDto.prototype, 'wineNr', {
-    get() {
-        return 'Wine'
-    }
-})
-
-
-export {ServiceTypes, UserScoresDto, TastingDto, BaseWineDto, FlightDto, ScoreDto, TastingResultDto, SingleTastingResultDto}

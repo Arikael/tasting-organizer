@@ -6,8 +6,10 @@ import {
     Step
 } from "@/store/UiSteps";
 
+// separate state by module
 export class State {
     tasting = new TastingDto()
+    tastingId = ''
     tastingResults = new TastingResultDto()
     scoreData = new UserScoresDto()
     ui: {

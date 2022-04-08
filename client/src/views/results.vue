@@ -4,14 +4,14 @@
 
 <script lang="ts">
 import TastingResults from "@/modules/scoring/TastingResults.vue";
-import {useScoringUtils} from "@/modules/scoring/useScoringUtils";
+import {useUtils} from "@/utils/useUtils";
 
 export default {
   name: "results",
   components: {TastingResults},
   setup() {
-    const utils = useScoringUtils()
-    const tastingId =utils.loadTastingId()
+    const utils = useUtils()
+    const tastingId =utils.loadTastingIdFromBrowser()
 
     return {
       tastingId

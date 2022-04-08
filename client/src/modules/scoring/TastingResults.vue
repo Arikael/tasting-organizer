@@ -49,7 +49,7 @@
         </q-tr>
         <q-tr v-show="props.expand" :props="props">
           <q-td colspan="100%">
-            <div class="text-left">{{ $t('AllScores') }}: {{ props.row.scores.join(', ') }}</div>
+            <div class="text-left"><tasting-result-detail-row :scores="props.row.scores"></tasting-result-detail-row></div>
           </q-td>
         </q-tr>
       </template>
@@ -58,12 +58,13 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onMounted} from 'vue';
+import {defineComponent, onMounted} from 'vue';
 import TastingResultCell from '@/modules/scoring/TastingResultCell.vue';
 import {store} from '@/store';
 import {QBadge, QTable, QTd, QTh, QTr} from 'quasar';
 import {SingleTastingResultDto} from '@/api/types'
 import {useI18n} from "vue-i18n";
+import TastingResultDetailRow from "@/modules/scoring/TastingResultDetailRow.vue";
 
 const resultOptions = {
   defaultSort: 'avg'
@@ -77,13 +78,12 @@ export default defineComponent({
       default: ''
     }
   },
-  components: {TastingResultCell, QTable, QTd, QTr, QTh, QBadge},
-  setup(props) {
-    const state = store.state
+  components: {TastingResultDetailRow, TastingResultCell, QTable, QTd, QTr, QTh, QBadge},
+  setup() {
     const i18n = useI18n({useScope: 'global'})
 
     onMounted(async () => {
-      await store.actions.loadTastingResults(props.tastingId)
+      await store.actions.loadTastingResults()
     })
 
     return {
@@ -104,8 +104,7 @@ export default defineComponent({
           name: 'wineNr',
           field: ((row: SingleTastingResultDto) => row.wine.wineNr),
           sortable: true,
-          label: i18n.t('WineNr'),
-          //format: (val: string) => i18n.t('Wine') + ' ' + val
+          label: i18n.t('WineNr')
         },
         {
           name: 'avg',

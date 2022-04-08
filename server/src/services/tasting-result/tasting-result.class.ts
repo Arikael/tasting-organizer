@@ -107,7 +107,8 @@ export class TastingResult extends Service<TastingResultDto> {
                     'userId': '$scores.userId',
                     'userName': '$scores.userName',
                     'score': '$scores.scores.score',
-                    'wineId': '$scores.scores.wineId'
+                    'wineId': '$scores.scores.wineId',
+                    'scores': 0
                   }
                 },
                 {
