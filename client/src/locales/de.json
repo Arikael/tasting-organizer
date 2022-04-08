@@ -17,5 +17,6 @@
   "AllScores": "Alle Bewertungen",
   "yourUsername": "Dein Name",
   "scoreAlreadySubmitted": "Du hast deine Bewertungen bereits abgegeben",
-  "MyScore": "Meine Bewertung"
+  "MyScore": "Meine Bewertung",
+  "ScoringScaleMinMaxDesc": "Ihr könnt für jeden Wein eine Punktzahl zwischen {min} und {max} vergeben"
 }

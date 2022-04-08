@@ -1,25 +1,31 @@
 import {ScoreDto} from './index'
 import {IScoreUser} from './common'
+import {Expose, Type} from 'class-transformer'
 
 export type RevealAfter = 'flight' | 'never' | 'always'
 
-
 export class TastingDto {
-  id = ''
+  @Expose({name: '_id'})
+    id = ''
   publicId = ''
-  flights: FlightDto<BaseWineDto>[] = []
+  @Type(() => ScoringScale)
+    scoringScale = new ScoringScale()
+  @Type(() => FlightDto)
+    flights: FlightDto[] = []
   title = ''
-  date = new Date()
+  @Type(() => Date)
+    date = new Date()
   intro = ''
   outro = ''
   revealAfter: RevealAfter = 'flight'
 }
 
-
-export class FlightDto<T> {
-  id = ''
+export class FlightDto {
+  @Expose({name: '_id'})
+    id = ''
   name = ''
-  wines: T[] = []
+  @Type(() => BaseWineDto)
+    wines: BaseWineDto[] = []
 }
 
 export class BaseWineDto {
@@ -38,5 +44,27 @@ export class UserScoresDto implements IScoreUser {
   userId = ''
   userName = ''
   isFinished = false
-  scores: ScoreDto[] = []
+  @Type(() => ScoreDto)
+    scores: ScoreDto[] = []
+}
+
+export interface IScoringScale {
+  min: number
+  max: number
+}
+
+export class ScoringScale implements IScoringScale {
+  @Expose({name: '_id'})
+    id = ''
+  name = ''
+  min = 0
+  max = 0
+  @Type(() => ScoringScaleItem)
+    items: ScoringScaleItem[] = []
+}
+
+export class ScoringScaleItem implements IScoringScale {
+  description = ''
+  min = 0
+  max = 0
 }

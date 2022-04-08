@@ -1,5 +1,5 @@
 import {UnwrapNestedRefs} from '@vue/reactivity';
-import {BaseWineDto, FlightDto, ScoreDto, TastingDto} from '@/api/types';
+import {FlightDto, ScoreDto, ScoringScale, TastingDto} from '@/api/types';
 import {state} from './state';
 import {computed} from 'vue';
 import {Step} from './UiSteps';
@@ -35,16 +35,20 @@ function getScore(wineId: string): ScoreDto | undefined {
     return scoreData ? scoreData : undefined
 }
 
-function getCurrentFlight(): FlightDto<BaseWineDto> {
+function getCurrentFlight(): FlightDto {
     const step = getCurrentStep()
 
     // TODO: handle flight id better
     if (step && (step.type === 'flight' || step.type === 'reveal')) {
         const id = step.id.replace('flight-', '').replace('reveal-', '')
-        return state.tasting.flights.find(x => x.id === id) ?? new FlightDto<BaseWineDto>()
+        return state.tasting.flights.find(x => x.id === id) ?? new FlightDto()
     }
 
-    return new FlightDto<BaseWineDto>()
+    return new FlightDto()
+}
+
+function getCurrentScoreScale(): ScoringScale {
+    return state.tasting.scoringScale
 }
 
 function isOnFlightRevealStep(): boolean {
@@ -77,7 +81,6 @@ function canMoveBack(): boolean {
 
 function isTastingResultLoaded(): boolean {
     return !!state.tastingResults.tasting.publicId;
-
 }
 
 export default {
@@ -93,5 +96,6 @@ export default {
     getTasting,
     currentFlight: computed(() => getCurrentFlight()),
     currentRevealedWines: computed(() => getCurrentRevealedWines()),
-    currentUser: computed(() => currentUser())
+    currentUser: computed(() => currentUser()),
+    currentScoreScale: computed(() => getCurrentScoreScale())
 }

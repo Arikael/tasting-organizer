@@ -4,8 +4,9 @@ import {Application} from '../../declarations'
 import {Id, Params} from '@feathersjs/feathers'
 import {BaseWineDto, TastingDto} from '../../types'
 import {NotFound} from '@feathersjs/errors'
+import {plainToInstance} from 'class-transformer'
 
-export class Tasting extends Service<Partial<TastingDto>> {
+export class Tasting extends Service<TastingDto> {
   //eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructor(options: Partial<MongoDBServiceOptions>, app: Application) {
     super(options)
@@ -16,27 +17,30 @@ export class Tasting extends Service<Partial<TastingDto>> {
     })
   }
 
-  get(id: Id, params?: Params): Promise<Partial<TastingDto>> {
+  get(id: Id, params?: Params): Promise<TastingDto> {
     const tastings = super.find(params)
 
     return tastings.then((results: any) => {
-      if(results.length === 0) {
+      if (results.length === 0) {
         // TODO doesn't return 404
         return Promise.reject(new NotFound())
       }
       return results
     }).then((results: any) => {
-      return this.changeWineNamesForFlightReveal(results[0])
+      const tasting = plainToInstance(TastingDto, results[0])
+      return this.changeWineNamesForFlightReveal(tasting)
     })
   }
 
   private changeWineNamesForFlightReveal(tasting: TastingDto): TastingDto {
-    if (tasting.revealAfter === 'always') {
-      return tasting
-    }
-
     for (let i = 0; i < tasting.flights.length; i++) {
-      tasting.flights[i].wines.map((x: BaseWineDto, wineIndex: number) => x.name = `${i}.${wineIndex}`)
+      tasting.flights[i].wines.map((x: BaseWineDto, wineIndex: number) => {
+        if (tasting.revealAfter === 'always') {
+          x.revealedName = x.name
+        } else {
+          x.name = `${i}.${wineIndex}`
+        }
+      })
     }
 
     return tasting

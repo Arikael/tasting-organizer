@@ -7,7 +7,9 @@ import {
     ScoreDto,
     TastingResultDto,
     SingleTastingResultDto,
-    ScoreWithUserDto
+    ScoreWithUserDto,
+    ScoringScale,
+    ScoringScaleItem
 } from '../../../server/src/types'
 
 export {
@@ -19,5 +21,7 @@ export {
     ScoreDto,
     TastingResultDto,
     SingleTastingResultDto,
-    ScoreWithUserDto
+    ScoreWithUserDto,
+    ScoringScale,
+    ScoringScaleItem
 }

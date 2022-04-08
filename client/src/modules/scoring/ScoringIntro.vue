@@ -5,6 +5,7 @@
     <div class="text-caption q-pt-md" v-if="hasIntro">
       {{ state.tasting.intro }}
     </div>
+    <scoring-scale-description></scoring-scale-description>
   </div>
   <div class="content-box content-box--padding" v-if="state.ui.currentStep.type === 'intro'">
     <q-input class="q-my-sm" :model-value="state.scoreData.userName" @change="setUser"
@@ -16,10 +17,11 @@
 import {store} from "@/store";
 import {QIcon, QInput} from "quasar";
 import {computed} from "vue";
+import ScoringScaleDescription from "@/modules/scoring/ScoringScaleDescription.vue";
 
 export default {
   name: "ScoringIntro",
-  components: {QInput, QIcon},
+  components: {ScoringScaleDescription, QInput, QIcon},
   setup() {
     return {
       state: store.state,

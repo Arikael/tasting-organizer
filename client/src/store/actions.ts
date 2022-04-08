@@ -37,7 +37,8 @@ async function loadTastingForScoring(): Promise<boolean> {
     const id = useUtils().loadTastingIdFromBrowser();
     const client = useApiClient()
     const tasting$ = client.service('tasting').get(id).then((result: Partial<TastingDto>) => {
-        state.tasting = mapApiDataToTasting(result)
+        const tmp = plainToInstance(TastingDto, result)
+        state.tasting = mapApiDataToTasting(tmp)
         state.tastingId = state.tasting.id
 
         return state.tasting
