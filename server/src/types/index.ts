@@ -38,7 +38,7 @@ export class TastingDto {
   publicId = ''
   flights: FlightDto<BaseWineDto>[] = []
   title = ''
-  date: Date = new Date()
+  date = new Date()
   intro = ''
   outro = ''
   revealAfter: RevealAfter = 'flight'
@@ -82,6 +82,8 @@ export class TastingResultDto {
 export class TastingResultBaseDataDto {
   publicId = ''
   title = ''
+  @Type(() => Date)
+    date = new Date()
 }
 
 export class SingleTastingResultDto {

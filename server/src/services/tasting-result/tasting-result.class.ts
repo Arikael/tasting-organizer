@@ -34,6 +34,7 @@ export class TastingResult extends Service<TastingResultDto> {
             'tasting': {
               'title': '$title',
               'publicId': '$publicId',
+              'date': '$date'
             }
           }
         },

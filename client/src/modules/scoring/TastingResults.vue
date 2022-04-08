@@ -1,16 +1,19 @@
 <template>
-  <div v-show="state.tastingResults">
-    <div class="message-box info-box q-mb-md text-caption">
-      {{ $t('tastingInfoTitle') }}<br/>
-      <q-badge color="orange">{{ $t('orange') }}</q-badge>
-      {{ $t('tastingInfoLowDesc') }},
-      <q-badge color="green">{{ $t('green') }}</q-badge>
-      {{ $t('tastingInfoHighDesc') }}
+  <div v-if="isTastingResultLoaded">
+    <div class="content-box content-box--padding">
+      <h2 class="text-subtitle1 content-box__title">{{ store.state.tastingResults.tasting.title }}</h2>
+      <span class="text-caption"><q-icon name="today" class="q-mr-xs"></q-icon>{{ tastingDate }}</span>
+      <div class="text-caption q-pt-md">
+        {{ $t('tastingInfoTitle') }}<br/>
+        <q-badge color="orange">{{ $t('orange') }}</q-badge>
+        {{ $t('tastingInfoLowDesc') }},
+        <q-badge color="green">{{ $t('green') }}</q-badge>
+        {{ $t('tastingInfoHighDesc') }}
+      </div>
     </div>
-    <q-table :title="state.tastingResults.tasting.title"
-             :pagination="pagination"
+    <q-table :pagination="pagination"
              :columns="columns"
-             :rows="state.tastingResults.wineResults"
+             :rows="store.state.tastingResults.wineResults"
              :dense="$q.screen.lt.md"
              row-key="wine"
              table-header-class="table-header"
@@ -49,7 +52,9 @@
         </q-tr>
         <q-tr v-show="props.expand" :props="props">
           <q-td colspan="100%">
-            <div class="text-left"><tasting-result-detail-row :scores="props.row.scores"></tasting-result-detail-row></div>
+            <div class="text-left">
+              <tasting-result-detail-row :scores="props.row.scores"></tasting-result-detail-row>
+            </div>
           </q-td>
         </q-tr>
       </template>
@@ -58,10 +63,10 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted} from 'vue';
+import {computed, defineComponent, onMounted} from 'vue';
 import TastingResultCell from '@/modules/scoring/TastingResultCell.vue';
 import {store} from '@/store';
-import {QBadge, QTable, QTd, QTh, QTr} from 'quasar';
+import {QBadge, QIcon, QTable, QTd, QTh, QTr} from 'quasar';
 import {SingleTastingResultDto} from '@/api/types'
 import {useI18n} from "vue-i18n";
 import TastingResultDetailRow from "@/modules/scoring/TastingResultDetailRow.vue";
@@ -78,7 +83,7 @@ export default defineComponent({
       default: ''
     }
   },
-  components: {TastingResultDetailRow, TastingResultCell, QTable, QTd, QTr, QTh, QBadge},
+  components: {TastingResultDetailRow, TastingResultCell, QTable, QTd, QTr, QTh, QBadge, QIcon},
   setup() {
     const i18n = useI18n({useScope: 'global'})
 
@@ -87,8 +92,10 @@ export default defineComponent({
     })
 
     return {
+      isTastingResultLoaded: store.getters.isTastingResultLoaded,
+      tastingDate: computed(() => store.state.tastingResults.tasting.date.toDateString()),
       t: i18n,
-      state: store.state,
+      store: store,
       pagination: {
         sortBy: resultOptions.defaultSort,
         descending: true,

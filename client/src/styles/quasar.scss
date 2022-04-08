@@ -10,6 +10,11 @@
   margin-bottom: map-get($space-lg, 'y');
 }
 
+.content-box__title {
+  margin: 0;
+  line-height: 1;
+}
+
 .content-box--padding {
   @include default-content-padding;
 }

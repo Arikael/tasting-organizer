@@ -1,6 +1,6 @@
 <template>
   <div class="content-box content-box--padding tasting-header">
-    <h2 class="text-subtitle1 tasting-title">{{ state.tasting.title }}</h2>
+    <h2 class="text-subtitle1 content-box__title">{{ state.tasting.title }}</h2>
     <span class="text-caption"><q-icon name="today" class="q-mr-xs"></q-icon>{{ tastingDate }}</span>
     <div class="text-caption q-pt-md" v-if="hasIntro">
       {{ state.tasting.intro }}
@@ -30,10 +30,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="scss">
-.tasting-title {
-  margin: 0;
-  line-height: 1;
-}
-</style>

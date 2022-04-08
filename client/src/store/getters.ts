@@ -75,7 +75,13 @@ function canMoveBack(): boolean {
     return !isOnFirstStep()
 }
 
+function isTastingResultLoaded(): boolean {
+    return !!state.tastingResults.tasting.publicId;
+
+}
+
 export default {
+    isTastingResultLoaded: computed(() => isTastingResultLoaded()),
     isOnLastStep: computed(() => isOnLastStep()),
     isOnFirstStep: computed(() => isOnFirstStep()),
     canMoveBack: computed(() => canMoveBack()),

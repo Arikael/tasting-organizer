@@ -6,6 +6,7 @@ import {mapApiDataToTasting} from '@/api/mappings';
 import {useApiClient} from '@/api/client';
 import {TastingDto, TastingResultDto, UserScoresDto} from '@/api/types'
 import {useUtils} from "@/utils/useUtils";
+import {plainToInstance} from "class-transformer";
 
 async function moveUi(step: UiStep): Promise<boolean> {
     let index = getters.currentStepIndex.value
@@ -89,8 +90,11 @@ async function loadTastingResults(): Promise<TastingResultDto> {
     const client = useApiClient()
 
     return client.service('tasting-result').get(id).then((result: TastingResultDto) => {
-        state.tastingResults = result
-        state.tastingId = result.tasting.publicId
+        const tmp = plainToInstance(TastingResultDto, result)
+        // this is an ugly workaround because the type annotation for date doesn't seem to work properly
+        tmp.tasting.date = new Date(tmp.tasting.date);
+        state.tastingResults = tmp
+        state.tastingId = state.tastingResults.tasting.publicId
 
         return state.tastingResults
     })
