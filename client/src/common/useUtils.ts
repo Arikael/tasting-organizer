@@ -6,9 +6,8 @@ export function useUtils() {
         loadTastingIdFromBrowser: () => {
             const route = useRoute()
             const id = route.params?.id ?? '';
-            const tastingId = Array.isArray(id) ? id[0] : id
 
-            return tastingId
+            return Array.isArray(id) ? id[0] : id
         },
         readUserIdFromBrowser: (tastingId: string) => {
             const localData = window.localStorage.getItem('tasting-organizer')
