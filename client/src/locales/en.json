@@ -18,6 +18,7 @@
   "yourUsername": "Your name",
   "scoreAlreadySubmitted": "You have already submitted your scores",
   "MyScore": "My score",
-  "ScoringScaleMinMaxDesc": "You can award points between {min} and {max} for every wine"
+  "ScoringScaleMinMaxDesc": "You can award points between {min} and {max} for every wine",
+  "ScoringNotInRangeError": "Die Bewertung muss zwischen {min} und {max} liegen"
 
 }

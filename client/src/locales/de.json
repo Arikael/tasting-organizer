@@ -18,5 +18,6 @@
   "yourUsername": "Dein Name",
   "scoreAlreadySubmitted": "Du hast deine Bewertungen bereits abgegeben",
   "MyScore": "Meine Bewertung",
-  "ScoringScaleMinMaxDesc": "Ihr könnt für jeden Wein eine Punktzahl zwischen {min} und {max} vergeben"
+  "ScoringScaleMinMaxDesc": "Ihr könnt für jeden Wein eine Punktzahl zwischen {min} und {max} vergeben",
+  "ScoringNotInRangeError": "Your score must be between {min} and {max}"
 }

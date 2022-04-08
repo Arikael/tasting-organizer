@@ -1,3 +1,9 @@
+import {TransformFnParams} from 'class-transformer'
+
+export const transformMongoIdToString = (params: TransformFnParams) => {
+  return params.obj._id.toHexString()
+}
+
 export interface IScoreUser {
   userId: string
   userName: string

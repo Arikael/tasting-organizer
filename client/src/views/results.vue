@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import TastingResults from "@/modules/scoring/TastingResults.vue";
-import {useUtils} from "@/utils/useUtils";
+import {useUtils} from "@/common/useUtils";
 
 export default {
   name: "results",

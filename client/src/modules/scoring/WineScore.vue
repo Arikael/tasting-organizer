@@ -1,50 +1,79 @@
 <template>
-  <q-input class="q-my-sm" filled :model-value="score" @update:model-value="updateScore" :label="label"></q-input>
+  <q-input class="q-my-sm" type="number" filled v-model="score"
+           :error="!scoreStatus.ok"
+           debounce="500"
+           :error-message="$t('ScoringNotInRangeError', {min: currentScale.min, max: currentScale.max})"
+           :label="label"></q-input>
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
-import {BaseWineDto} from '@/api/types'
+import {computed, defineComponent, onMounted, ref, WritableComputedRef} from 'vue';
+import {BaseWineDto, UserScoresDto} from '@/api/types'
 import {QInput} from 'quasar';
 import {store} from "@/store";
+import {useI18n} from "vue-i18n";
+import {ActionResult, FormFieldState} from "@/common/types";
 
 export default defineComponent({
   name: 'WineScore',
   components: {QInput},
   props: {
-    wine: BaseWineDto
+    wine: BaseWineDto,
+    default: () => new BaseWineDto()
   },
   setup(props) {
+    const i18n = useI18n({useScope: 'global'})
+    const scoreStatus = ref<FormFieldState<number>>(new FormFieldState<number>(0))
+    
+    const setCurrentScore = (wineId: string, defaultValue = 0) => {
+      if (wineId) {
+        scoreStatus.value.value = store.getters.getScore(wineId)?.score ?? defaultValue
+      }
+    }
+    
+    onMounted(() => {
+      setCurrentScore(props.wine?.id ?? '')
+    })
+
+    const score: WritableComputedRef<number> = computed({
+          get(): number {
+            return scoreStatus.value.value
+          },
+          set(value: number): void {
+            const score = parseInt(value.toString(10), 10)
+            const wineId = props.wine?.id ?? ''
+            scoreStatus.value.value = score
+
+            if (!isNaN(score) && wineId) {
+              store.setters.setScore(wineId, score).then((x: boolean | UserScoresDto) => {
+                if (x === false) {
+                  scoreStatus.value.ok = false
+                } else {
+                  scoreStatus.value.ok = true
+
+                  setCurrentScore(wineId, score)
+                }
+              })
+            } else {
+              scoreStatus.value.ok = false
+            }
+          }
+        }
+    )
+
     return {
       store,
-      wineName: props.wine?.name ?? ''
-    }
-  },
-  computed: {
-    label(): string {
-      if (this.store.state.tasting.revealAfter !== 'always') {
-        return `${this.$t('wine')} ${(this.wine?.name ?? '')}`
-      }
+      currentScale: store.getters.currentScoreScale,
+      scoreStatus: computed(() => scoreStatus.value),
+      wineName: props.wine?.name ?? '',
+      score,
+      label: computed((): string => {
+        if (store.state.tasting.revealAfter !== 'always') {
+          return `${i18n.t('Wine')} ${(props.wine?.name ?? '')}`
+        }
 
-      return this.wine?.name ?? ''
-    },
-    score(): number {
-      let score = 0
-      if (this.wine) {
-        score = this.store.getters.getScore(this.wine?.id)?.score ?? 0
-      }
-
-      return score
-    }
-  },
-  methods: {
-    updateScore(value: string) {
-      const score = parseInt(value, 10)
-      const wineId = this.wine?.id ?? ''
-
-      if (!isNaN(score) && wineId) {
-        this.store.setters.setScore(wineId, score)
-      }
+        return props.wine?.name ?? ''
+      })
     }
   }
 })

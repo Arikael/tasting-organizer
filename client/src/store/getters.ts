@@ -3,7 +3,7 @@ import {FlightDto, ScoreDto, ScoringScale, TastingDto} from '@/api/types';
 import {state} from './state';
 import {computed} from 'vue';
 import {Step} from './UiSteps';
-import {useUtils} from "@/utils/useUtils";
+import {useUtils} from "@/common/useUtils";
 
 function currentUser(): string {
     return useUtils().readUserIdFromBrowser(state.tastingId)

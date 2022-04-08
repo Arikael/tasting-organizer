@@ -4,6 +4,7 @@ import {useApiClient} from '@/api/client';
 import getters from '@/store/getters';
 import {TastingDto, UserScoresDto} from '@/api/types'
 import {Step} from "@/store/UiSteps";
+import {useScoringValidators} from "@/modules/scoring/useScoringValidators";
 
 // TODO move all setters to actions
 
@@ -24,8 +25,14 @@ function setUser(userName: string): void {
     createLocalTastingData()
 }
 
-async function setScore(wineId: string, score: number): Promise<UserScoresDto> {
+async function setScore(wineId: string, score: number): Promise<UserScoresDto | boolean> {
     const scoreData = getters.getScore(wineId)
+
+    const result = useScoringValidators().isInValidRange(score)
+
+    if(!result) {
+        return false
+    }
 
     if (scoreData) {
         scoreData.score = score

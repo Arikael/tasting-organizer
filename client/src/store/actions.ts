@@ -5,7 +5,7 @@ import setters from '@//store/setters';
 import {mapApiDataToTasting} from '@/api/mappings';
 import {useApiClient} from '@/api/client';
 import {TastingDto, TastingResultDto, UserScoresDto} from '@/api/types'
-import {useUtils} from "@/utils/useUtils";
+import {useUtils} from "@/common/useUtils";
 import {plainToInstance} from "class-transformer";
 
 async function moveUi(step: UiStep): Promise<boolean> {

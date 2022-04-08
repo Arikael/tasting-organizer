@@ -60,10 +60,10 @@ export class Scoring extends Service<UserScoresDto> {
   }
 
   async update(id: NullableId, data: Partial<any>, params?: Params): Promise<any> {
+    console.log(id)
     if (!id) {
       return Promise.reject()
     }
-
     const userScores = await this.Model.findOne({
       'scores.userId': data.userId
     })
@@ -71,6 +71,7 @@ export class Scoring extends Service<UserScoresDto> {
     let result: Promise<UpdateResult>
 
     if (userScores) {
+      console.log(data)
       result = this.Model.updateOne({
         '_id': new ObjectId(id),
         'scores.userId': data.userId
@@ -94,6 +95,7 @@ export class Scoring extends Service<UserScoresDto> {
     try {
       await result
       returnedData = data
+      console.log(result)
 
       return returnedData
     } catch (e) {

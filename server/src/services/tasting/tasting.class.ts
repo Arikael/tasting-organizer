@@ -28,6 +28,7 @@ export class Tasting extends Service<TastingDto> {
       return results
     }).then((results: any) => {
       const tasting = plainToInstance(TastingDto, results[0])
+
       return this.changeWineNamesForFlightReveal(tasting)
     })
   }
@@ -38,7 +39,7 @@ export class Tasting extends Service<TastingDto> {
         if (tasting.revealAfter === 'always') {
           x.revealedName = x.name
         } else {
-          x.name = `${i}.${wineIndex}`
+          x.name = `${i + 1}.${wineIndex + 1}`
         }
       })
     }

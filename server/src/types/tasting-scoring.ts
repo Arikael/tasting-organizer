@@ -1,11 +1,12 @@
-import {ScoreDto} from './index'
+import {ScoreDto, transformMongoIdToString} from './index'
 import {IScoreUser} from './common'
-import {Expose, Type} from 'class-transformer'
+import {Expose, Transform, Type} from 'class-transformer'
 
 export type RevealAfter = 'flight' | 'never' | 'always'
 
 export class TastingDto {
   @Expose({name: '_id'})
+  @Transform(transformMongoIdToString)
     id = ''
   publicId = ''
   @Type(() => ScoringScale)
@@ -22,6 +23,7 @@ export class TastingDto {
 
 export class FlightDto {
   @Expose({name: '_id'})
+  @Transform(transformMongoIdToString)
     id = ''
   name = ''
   @Type(() => BaseWineDto)
@@ -55,6 +57,7 @@ export interface IScoringScale {
 
 export class ScoringScale implements IScoringScale {
   @Expose({name: '_id'})
+  @Transform(transformMongoIdToString)
     id = ''
   name = ''
   min = 0
