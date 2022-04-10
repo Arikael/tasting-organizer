@@ -9,17 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Build Vue
+      - name: Build Frontend
+        working-directory: ./client
         run: |
               npm ci
               npm run build
-      - name: Deploy Vue
-        run: |
-              cd dist
-              git init
-              git add -A
-              git config --global user.email "arikael@mailbox.org"
-              git config --global user.name "Arikael"
-              git commit -m 'deploy'
-              git push -f https://arikael:${{ secrets.GITHUB_TOKEN }}@github.com/arikael/tasting-organizer.git master:gh-pages
+      - name: Deploy Frontend
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: netlify deploy --dir=public --prod
 
