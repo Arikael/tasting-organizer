@@ -1,0 +1,33 @@
+@import './quasar.variables.scss';
+@import "~quasar/dist/quasar";
+@import "mixins";
+// @import '~quasar-addon-styl';
+
+.content-box {
+  background: white;
+  border-top: 1px solid $grey-5;
+  border-bottom: 1px solid $grey-5;
+  margin-bottom: map-get($space-lg, 'y');
+}
+
+.content-box__title {
+  margin: 0;
+  line-height: 1;
+}
+
+.content-box--padding {
+  @include default-content-padding;
+}
+
+.content-box_header {
+  padding: map-get($space-sm, 'y') map-get($space-md, 'x');
+}
+
+.content-box_header {
+  background: $grey-7;
+  color: white;
+}
+
+ul.no-list-style-type {
+  list-style-type: none;
+}

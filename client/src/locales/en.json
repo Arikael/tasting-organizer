@@ -1,0 +1,24 @@
+{
+  "noPidError": "you need to add the publish id of a published google spreadsheet as query parameter like \"pid=[the pid]\" ",
+  "tastingTitle": "Tasting Organizer",
+  "tastingInfoTitle": "Click on a row to display all scores for a wine.",
+  "tastingInfoLowDesc": "denotes the lowest score of a column",
+  "tastingInfoHighDesc": "denotes the highest score of a column",
+  "orange": "Orange",
+  "green": "Green",
+  "Rank": "rank",
+  "Wine": "wine",
+  "WineNr": "wineNr",
+  "Avg": "avg",
+  "Median": "median",
+  "Min": "min",
+  "Max": "max",
+  "Stddev": "Stddev",
+  "AllScores": "All scores",
+  "yourUsername": "Your name",
+  "scoreAlreadySubmitted": "You have already submitted your scores",
+  "MyScore": "My score",
+  "ScoringScaleMinMaxDesc": "You can award points between {min} and {max} for every wine",
+  "ScoringNotInRangeError": "Die Bewertung muss zwischen {min} und {max} liegen"
+
+}

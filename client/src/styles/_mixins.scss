@@ -1,0 +1,5 @@
+@import './quasar.variables.scss';
+
+@mixin default-content-padding {
+  padding: map-get($space-md, 'y') map-get($space-md, 'x');
+}

@@ -1,0 +1,91 @@
+<template>
+  <div>
+    <q-layout view="lHh Lpr lFf">
+      <q-header elevated>
+        <q-toolbar>
+          <q-toolbar-title>{{ $t('tastingTitle') }}</q-toolbar-title>
+          <q-btn flat round dense icon="language">
+            <q-menu auto-close>
+              <q-list>
+                <q-item clickable>
+                  <q-item-section v-on:click="changeLanguage('de')">DE</q-item-section>
+                </q-item>
+                <q-item clickable>
+                  <q-item-section v-on:click="changeLanguage('en-US')">EN</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
+        </q-toolbar>
+      </q-header>
+      <q-page-container>
+        <q-page class="bg-blue-grey-1">
+          <router-view></router-view>
+        </q-page>
+      </q-page-container>
+    </q-layout>
+  </div>
+</template>
+
+<script lang="ts">
+import {defineComponent, getCurrentInstance, ref, watch} from 'vue';
+import {
+  QBtn,
+  QHeader,
+  QItem, QItemSection,
+  QLayout,
+  QList,
+  QMenu,
+  QPage,
+  QPageContainer,
+  QToolbar,
+  QToolbarTitle,
+  useQuasar
+} from "quasar";
+
+export default defineComponent({
+  name: 'LayoutDefault',
+  components: {
+    QLayout,
+    QHeader,
+    QToolbar,
+    QToolbarTitle,
+    QBtn,
+    QMenu,
+    QItem,
+    QList,
+    QPageContainer,
+    QPage,
+    QItemSection
+  },
+  setup() {
+    const $q = useQuasar()
+    const lang = ref($q.lang.isoName)
+    const i18n = getCurrentInstance()?.appContext?.config?.globalProperties?.$i18n
+
+    watch(lang, val => {
+      i18n.locale = val.toLowerCase().split('-')[0]
+
+      // dynamic import, so loading on demand only
+      import(
+          /* webpackInclude: /(de|en-US)\.js$/ */
+      'quasar/lang/' + val
+          ).then(lang => {
+        $q.lang.set(lang.default)
+      })
+    })
+
+    return {
+      lang
+    }
+  },
+  mounted() {
+    this.lang = navigator.language
+  },
+  methods: {
+    changeLanguage(key: string) {
+      this.lang = key
+    }
+  }
+});
+</script>

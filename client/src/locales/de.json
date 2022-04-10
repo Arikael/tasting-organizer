@@ -1,0 +1,23 @@
+{
+  "noPidError": "Du musst die Publish ID eines publizierten Google Spreedsheets als Query Parameter angeben\nz.b. \"pid=[die pid]\" ",
+  "tastingTitle": "Tasting Organizer",
+  "tastingInfoTitle": "Auf eine Zeile klicken, um alle Bewertungen eines Weines zu sehen.",
+  "tastingInfoLowDesc": "zeigt den tiefsten Wert einer Spalte an",
+  "tastingInfoHighDesc": "zeigt den höchsten Wert einer Spalte an",
+  "orange": "Orange",
+  "green": "Grün",
+  "Rank": "Rang",
+  "Wine": "Wein",
+  "WineNr": "WeinNr",
+  "Avg": "Avg",
+  "Median": "Median",
+  "Min": "Min",
+  "Max": "Max",
+  "Stddev": "Stddev",
+  "AllScores": "Alle Bewertungen",
+  "yourUsername": "Dein Name",
+  "scoreAlreadySubmitted": "Du hast deine Bewertungen bereits abgegeben",
+  "MyScore": "Meine Bewertung",
+  "ScoringScaleMinMaxDesc": "Ihr könnt für jeden Wein eine Punktzahl zwischen {min} und {max} vergeben",
+  "ScoringNotInRangeError": "Your score must be between {min} and {max}"
+}
