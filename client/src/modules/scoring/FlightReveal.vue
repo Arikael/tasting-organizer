@@ -12,12 +12,12 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, inject} from "vue";
+import {defineComponent} from "vue";
 import {store} from "@/store";
 
 export default defineComponent({
   name: "FlightReveal",
-  setup(props) {
+  setup() {
     return {
       currentRevealedWines: store.getters.currentRevealedWines
     }

@@ -10,8 +10,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build Frontend
-        working-directory: ./client
         run: |
+              cd ./client
               npm ci
               npm run build
       - name: Deploy Frontend
