@@ -1,6 +1,6 @@
 {
-  "name": "tasting-organizer",
-  "version": "0.1.0",
+  "name": "@tasting-organizer/client",
+  "version": "0.4.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
