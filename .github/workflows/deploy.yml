@@ -1,11 +1,11 @@
-name: Deploy to GitHub pages
+name: Deploy Application
 
 on:
   push:
     branches: [ master ]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -23,5 +23,5 @@ jobs:
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        run: netlify deploy --dir=dist --prod
+        run: netlify deploy --dir=./client/dist --prod
 
