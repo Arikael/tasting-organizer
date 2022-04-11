@@ -1,0 +1,5 @@
+{
+  "host": "BACKEND_HOST",
+  "port": "BACKEND_PORT",
+  "mongodb": "MONGODB_CONNECTION"
+}

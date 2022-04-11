@@ -11,17 +11,31 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build Backend
         run: |
-              cd ./server
-              npm ci
-              npm run compile
+          cd ./server
+          npm ci
+          npm run compile
       - name: Build Frontend
         run: |
-              cd ./client
-              npm ci
-              npm run build
+          cd ./client
+          touch .env.production
+          echo "VUE_APP_BACKEND_URL=${{ secrets.BACKEND_URL }}" >> .env.production
+          npm ci
+          npm run build
       - name: Deploy Frontend
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          VUE_APP_BACKEND_URL: "https://tasting-organizer.herokuapp.com:3030"
         run: netlify deploy --dir=./client/dist --prod
+      - name: Deploy Backend
+        uses: AkhileshNS/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "tasting-organizer"
+          heroku_email: "mhaeberle@mailbox.org"
+          appdir: "./server"
+        env:
+          HD_MONOGDB_CONNECTION: ${{ secrets.MONGODB_CONNECTION }}
+          HD_HOST: ${{ secrets.VUE_APP_BACKEND_URL }}
+          HD_PORT: ${{ secrets.BACKEND_PORT }}
 
