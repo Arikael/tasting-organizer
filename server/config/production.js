@@ -6,5 +6,5 @@ module.exports = {
     'default': 10,
     'max': 50
   },
-  'mongodb': 'MONGO_CONNECTION'
+  'mongodb': 'MONGODB_CONNECTION'
 }
