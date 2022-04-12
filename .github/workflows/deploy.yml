@@ -25,7 +25,7 @@ jobs:
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          VUE_APP_BACKEND_URL: "https://tasting-organizer.herokuapp.com:3030"
+          VUE_APP_BACKEND_URL:  ${{ secrets.VUE_APP_BACKEND_URL }}
         run: netlify deploy --dir=./client/dist --prod
       - name: Deploy Backend
         uses: AkhileshNS/heroku-deploy@v3.12.12
