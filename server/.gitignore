@@ -109,3 +109,5 @@ $RECYCLE.BIN/
 
 # Others
 data/
+lib/
+tsconfig.tsbuildinfo

@@ -35,7 +35,7 @@ jobs:
           heroku_email: "mhaeberle@mailbox.org"
           appdir: "./server"
         env:
-          HD_MONOGDB_CONNECTION: ${{ secrets.MONGODB_CONNECTION }}
+          HD_MONGODB_CONNECTION: ${{ secrets.MONGODB_CONNECTION }}
           HD_HOST: ${{ secrets.BACKEND_HOST }}
           HD_PORT: ${{ secrets.BACKEND_PORT }}
           HD_NODE_ENV: "production"
