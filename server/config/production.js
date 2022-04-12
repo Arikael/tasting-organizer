@@ -1,5 +1,5 @@
 module.exports = {
-  'host': 'BACKEND_HOST',
+  'host': 'HOST',
   'port': 'PORT',
   'public': '../public/',
   'paginate': {
