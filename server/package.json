@@ -27,8 +27,10 @@
     "test": "npm run lint && npm run compile && npm run mocha",
     "lint": "eslint src/. test/. --config .eslintrc.json --ext .ts --fix",
     "dev": "ts-node-dev --no-notify src/",
+    "build": "npm run clean && npm run compile",
     "heroku-postbuild": "npm run compile",
-    "start": "node ./dist/",
+    "clean": "shx rm -rf ./lib/",
+    "start": "node ./lib/",
     "mocha": "ts-mocha \"test/**/*.ts\" --recursive --exit",
     "compile": "tsc"
   },
@@ -38,7 +40,7 @@
     ],
     "ignore": []
   },
-  "types": "dist/",
+  "types": "lib/",
   "dependencies": {
     "@feathersjs/configuration": "^4.5.11",
     "@feathersjs/errors": "^4.5.11",

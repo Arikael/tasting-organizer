@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2018",
     "module": "commonjs",
-    "outDir": "./dist",
+    "outDir": "./lib",
     "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
@@ -11,6 +11,6 @@
   },
   "exclude": [
     "test",
-    "dist"
+    "lib"
   ]
 }
