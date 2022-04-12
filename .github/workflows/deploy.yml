@@ -36,7 +36,7 @@ jobs:
           appdir: "./server"
         env:
           HD_MONOGDB_CONNECTION: ${{ secrets.MONGODB_CONNECTION }}
-          HD_HOST: ${{ secrets.VUE_APP_BACKEND_URL }}
+          HD_HOST: ${{ secrets.BACKEND_HOST }}
           HD_PORT: ${{ secrets.BACKEND_PORT }}
           HD_NODE_ENV: "production"
 

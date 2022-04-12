@@ -28,8 +28,8 @@
     "lint": "eslint src/. test/. --config .eslintrc.json --ext .ts --fix",
     "dev": "ts-node-dev --no-notify src/",
     "build": "npm run clean && npm run compile",
-    "heroku-postbuild": "npm run clean && npm run compile",
-    "clean": "shx rm -rf ./lib/",
+    "heroku-postbuild": "npm run compile",
+    "clean": "shx rm -rf ./lib/*",
     "start": "node ./lib/",
     "mocha": "ts-mocha \"test/**/*.ts\" --recursive --exit",
     "compile": "tsc"
