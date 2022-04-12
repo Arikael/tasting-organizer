@@ -30,7 +30,7 @@
     "heroku-postbuild": "npm run compile",
     "start": "node ./dist/",
     "mocha": "ts-mocha \"test/**/*.ts\" --recursive --exit",
-    "compile": "shx rm -rf ./dist/* && tsc"
+    "compile": "tsc"
   },
   "standard": {
     "env": [
