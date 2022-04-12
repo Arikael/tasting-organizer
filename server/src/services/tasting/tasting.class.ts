@@ -18,11 +18,9 @@ export class Tasting extends Service<TastingDto> {
   }
 
   get(id: Id, params?: Params): Promise<TastingDto> {
-    console.log('params:' + params)
     const tastings = super.find(params)
 
     return tastings.then((results: any) => {
-      console.log(results)
       if (results.length === 0) {
         // TODO doesn't return 404
         return Promise.reject(new NotFound())

@@ -32,7 +32,7 @@ jobs:
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "tasting-organizer"
-          heroku_email: "mhaeberle@mailbox.org"
+          heroku_email: ${{secrets.HEROKU_EMAIL }}
           appdir: "./server"
         env:
           HD_MONGODB_CONNECTION: ${{ secrets.MONGODB_CONNECTION }}

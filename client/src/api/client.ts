@@ -7,6 +7,7 @@ export function useApiClient(): feathers.Application<ServiceTypes> {
     let client: feathers.Application<ServiceTypes> | undefined
 
     function createClient(): feathers.Application<ServiceTypes> {
+        console.log('backend:' + process.env.VUE_APP_BACKEND_URL)
         const socket = io(process.env.VUE_APP_BACKEND_URL as string);
         const client = feathers();
         client.configure(socketio(socket))
