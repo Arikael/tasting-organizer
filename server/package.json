@@ -15,7 +15,7 @@
   "contributors": [],
   "bugs": {},
   "directories": {
-    "lib": "lib",
+    "lib": "src",
     "test": "test/",
     "config": "config/"
   },
@@ -28,9 +28,9 @@
     "lint": "eslint src/. test/. --config .eslintrc.json --ext .ts --fix",
     "dev": "ts-node-dev --no-notify src/",
     "heroku-postbuild": "npm run compile",
-    "start": "node lib/",
+    "start": "node ./lib/",
     "mocha": "ts-mocha \"test/**/*.ts\" --recursive --exit",
-    "compile": "shx rm -rf lib/ && tsc"
+    "compile": "shx rm -rf ./lib/ && tsc"
   },
   "standard": {
     "env": [
