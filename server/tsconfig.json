@@ -10,6 +10,7 @@
     "experimentalDecorators": true
   },
   "exclude": [
-    "test"
+    "test",
+    "lib"
   ]
 }
