@@ -18,6 +18,7 @@ export class Tasting extends Service<TastingDto> {
   }
 
   get(id: Id, params?: Params): Promise<TastingDto> {
+    console.log(params)
     const tastings = super.find(params)
 
     return tastings.then((results: any) => {
