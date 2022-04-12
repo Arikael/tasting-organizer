@@ -15,7 +15,7 @@
   "contributors": [],
   "bugs": {},
   "directories": {
-    "lib": "src",
+    "lib": "lib",
     "test": "test/",
     "config": "config/"
   },
