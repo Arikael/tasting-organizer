@@ -1,7 +1,7 @@
 <template>
   <div class="content-box">
     <div class="flight-header content-box_header">
-      FlightReveal
+      {{$t('flightReveal')}}
     </div>
     <ul>
       <li v-for="(wine) in currentRevealedWines" v-bind:key="wine">

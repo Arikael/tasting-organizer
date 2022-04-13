@@ -19,5 +19,11 @@
   "scoreAlreadySubmitted": "Du hast deine Bewertungen bereits abgegeben",
   "MyScore": "Meine Bewertung",
   "ScoringScaleMinMaxDesc": "Ihr könnt für jeden Wein eine Punktzahl zwischen {min} und {max} vergeben",
-  "ScoringNotInRangeError": "Your score must be between {min} and {max}"
+  "ScoringNotInRangeError": "Your score must be between {min} and {max}",
+  "submit": "Absenden",
+  "next": "weiter",
+  "back": "zurück",
+  "flightReveal": "Flight-Auflösung",
+  "scoringThanks": "Danke fürs teilnehmen",
+  "gotoResults": "go to results"
 }

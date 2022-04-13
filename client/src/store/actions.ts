@@ -7,6 +7,7 @@ import {useApiClient} from '@/api/client';
 import {TastingDto, TastingResultDto, UserScoresDto} from '@/api/types'
 import {useUtils} from "@/common/useUtils";
 import {plainToInstance} from "class-transformer";
+import {store} from "@/store/index";
 
 async function moveUi(step: UiStep): Promise<boolean> {
     let index = getters.currentStepIndex.value
@@ -33,6 +34,14 @@ async function moveUi(step: UiStep): Promise<boolean> {
     return false
 }
 
+function moveToEnd() {
+    const endStep = state.ui.steps.find(x => x.type === 'end')
+
+    if (endStep) {
+        setters.setCurrentStep(endStep)
+    }
+}
+
 async function loadTastingForScoring(): Promise<boolean> {
     const id = useUtils().loadTastingIdFromBrowser();
     const client = useApiClient()
@@ -57,6 +66,10 @@ async function loadTastingForScoring(): Promise<boolean> {
 
     return await Promise.all([tasting$, scoring$]).then((values) => {
         setters.setUiSteps(values[0])
+
+        if (store.state.scoreData.isFinished) {
+            moveToEnd()
+        }
 
         return true
     }).catch(() => false)
