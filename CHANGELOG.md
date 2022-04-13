@@ -5,3 +5,4 @@
 - fix handling of unknown language.
 - add missing translations
 - fix displaying of thank you page
+- fix wrong querying of tasting

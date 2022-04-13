@@ -18,6 +18,11 @@ export class Tasting extends Service<TastingDto> {
   }
 
   get(id: Id, params?: Params): Promise<TastingDto> {
+    if(!params) {
+      params = {}
+    }
+
+    params.query = {publicId: id}
     const tastings = super.find(params)
 
     return tastings.then((results: any) => {
