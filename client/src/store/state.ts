@@ -8,6 +8,7 @@ import {
 
 // separate state by module
 export class State {
+    language = ''
     tasting = new TastingDto()
     tastingId = ''
     tastingResults = new TastingResultDto()

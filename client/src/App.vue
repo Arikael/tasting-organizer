@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, getCurrentInstance, ref, watch} from 'vue';
+import {defineComponent, getCurrentInstance, onMounted, watch} from 'vue';
 import {
   QBtn,
   QHeader,
@@ -42,6 +42,7 @@ import {
   QToolbarTitle,
   useQuasar
 } from "quasar";
+import {store} from "@/store";
 
 export default defineComponent({
   name: 'LayoutDefault',
@@ -60,11 +61,14 @@ export default defineComponent({
   },
   setup() {
     const $q = useQuasar()
-    const lang = ref($q.lang.isoName)
     const i18n = getCurrentInstance()?.appContext?.config?.globalProperties?.$i18n
 
-    watch(lang, val => {
-      i18n.locale = val.toLowerCase().split('-')[0]
+    onMounted(() => {
+      store.setters.setLanguage(navigator.language)
+    })
+
+    watch(() => store.state.language, (val, oldVal) => {
+      i18n.locale = val.split('-')[0]
 
       // dynamic import, so loading on demand only
       import(
@@ -76,15 +80,9 @@ export default defineComponent({
     })
 
     return {
-      lang
-    }
-  },
-  mounted() {
-    this.lang = navigator.language
-  },
-  methods: {
-    changeLanguage(key: string) {
-      this.lang = key
+      changeLanguage(key: string) {
+        store.setters.setLanguage(key)
+      }
     }
   }
 });

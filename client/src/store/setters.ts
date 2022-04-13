@@ -5,6 +5,7 @@ import getters from '@/store/getters';
 import {TastingDto, UserScoresDto} from '@/api/types'
 import {Step} from "@/store/UiSteps";
 import {useScoringValidators} from "@/modules/scoring/useScoringValidators";
+import {store} from "@/store/index";
 
 // TODO move all setters to actions
 
@@ -30,7 +31,7 @@ async function setScore(wineId: string, score: number): Promise<UserScoresDto | 
 
     const result = useScoringValidators().isInValidRange(score)
 
-    if(!result) {
+    if (!result) {
         return false
     }
 
@@ -90,10 +91,19 @@ function createLocalTastingData() {
     window.localStorage.setItem('tasting-organizer', JSON.stringify(localData))
 }
 
+function setLanguage(lang: string) {
+    if (lang != 'de' && lang != 'en-US') {
+        lang = 'en-US'
+    }
+
+    store.state.language = lang
+}
+
 export default {
     setScore,
     setCurrentStep,
     setUser,
     setUiSteps,
-    finishScoring
+    finishScoring,
+    setLanguage
 }
