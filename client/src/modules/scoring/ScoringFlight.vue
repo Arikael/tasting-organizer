@@ -22,9 +22,6 @@ export default defineComponent({
     return {
       flight: store.getters.currentFlight
     }
-  },
-  computed: {
-
   }
 })
 </script>

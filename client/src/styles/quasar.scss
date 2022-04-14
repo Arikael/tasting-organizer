@@ -3,16 +3,28 @@
 @import "mixins";
 // @import '~quasar-addon-styl';
 
-.content-box {
+.content-box,
+.message-box {
   background: white;
   border-top: 1px solid $grey-5;
   border-bottom: 1px solid $grey-5;
   margin-bottom: map-get($space-lg, 'y');
 }
 
+.content-box--all-border,
+.message-box {
+  border-left: 1px solid $grey-5;
+  border-right: 1px solid $grey-5;
+}
+
 .content-box__title {
   margin: 0;
   line-height: 1;
+}
+
+.message-box {
+  @include default-content-padding;
+  border-radius: $generic-border-radius;
 }
 
 .content-box--padding {

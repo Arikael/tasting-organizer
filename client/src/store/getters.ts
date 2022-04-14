@@ -2,8 +2,13 @@ import {UnwrapNestedRefs} from '@vue/reactivity';
 import {FlightDto, ScoreDto, ScoringScale, TastingDto} from '@/api/types';
 import {state} from './state';
 import {computed} from 'vue';
-import {Step} from './UiSteps';
-import {useUtils} from "@/common/useUtils";
+import {Step, StepTypes} from './UiSteps';
+import {useUtils} from "@/lib/useUtils";
+import {useErrorHandling} from "@/lib/useErrorHandling";
+
+function isStepTypeMatch(step: Step | undefined, type: StepTypes) {
+    return step !== undefined && step.type === type
+}
 
 function currentUser(): string {
     return useUtils().readUserIdFromBrowser(state.tastingId)
@@ -54,7 +59,7 @@ function getCurrentScoreScale(): ScoringScale {
 function isOnFlightRevealStep(): boolean {
     const step = getCurrentStep()
 
-    return step !== undefined && step.type === 'reveal'
+    return isStepTypeMatch(step, 'reveal')
 }
 
 function getCurrentRevealedWines(): string[] {
@@ -67,12 +72,25 @@ function isOnFirstStep(): boolean {
     return getCurrentStepIndex() <= 0
 }
 
+function isOnLastStepBeforeEndStep(): boolean {
+    const currentIndex = getCurrentStepIndex()
+    const endStepIndex = state.ui.steps.findIndex(x => x.type === 'end')
+
+    return currentIndex + 1 === endStepIndex;
+}
+
+function isOnEndStep(): boolean {
+    const step = getCurrentStep()
+
+    return isStepTypeMatch(step, 'end')
+}
+
 function isOnLastStep(): boolean {
     return getCurrentStepIndex() >= state.ui.steps.length - 1
 }
 
 function canMoveForward(): boolean {
-    return !isOnLastStep()
+    return !isOnLastStepBeforeEndStep()
 }
 
 function canMoveBack(): boolean {
@@ -85,6 +103,8 @@ function isTastingResultLoaded(): boolean {
 
 export default {
     isTastingResultLoaded: computed(() => isTastingResultLoaded()),
+    isOnEndStep: computed(() => isOnEndStep()),
+    isOnLastStepBeforeEndStep: computed(() => isOnLastStepBeforeEndStep()),
     isOnLastStep: computed(() => isOnLastStep()),
     isOnFirstStep: computed(() => isOnFirstStep()),
     canMoveBack: computed(() => canMoveBack()),
@@ -97,5 +117,6 @@ export default {
     currentFlight: computed(() => getCurrentFlight()),
     currentRevealedWines: computed(() => getCurrentRevealedWines()),
     currentUser: computed(() => currentUser()),
-    currentScoreScale: computed(() => getCurrentScoreScale())
+    currentScoreScale: computed(() => getCurrentScoreScale()),
+    ...useErrorHandling().getters
 }

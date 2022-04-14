@@ -1,7 +1,7 @@
 <template>
   <q-input class="q-mt-sm q-mb-md" filled v-model="score"
            :error="!scoreStatus.ok"
-           debounce="200"
+           debounce="350"
            :hint="displayScaleDescription"
            mask="###"
            :error-message="$t('ScoringNotInRangeError', {min: currentScale.min, max: currentScale.max})"

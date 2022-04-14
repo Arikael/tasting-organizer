@@ -7,8 +7,7 @@
     </template>
     <br/>
     <div>
-    <template>gugus</template>
-    {{ $t('MyScore') }}: {{ myScore }}
+      {{ $t('MyScore') }}: {{ myScore }}
     </div>
   </div>
 </template>
@@ -34,7 +33,7 @@ export default defineComponent({
       myScore: computed(() => {
         const score = props.scores.find(x => x.userId === store.getters.currentUser.value)
 
-        if(score) {
+        if (score) {
           return score.score
         }
 

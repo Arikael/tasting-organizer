@@ -4,9 +4,11 @@ import {state} from '@/store/state';
 import setters from '@//store/setters';
 import {mapApiDataToTasting} from '@/api/mappings';
 import {useApiClient} from '@/api/client';
-import {TastingDto, TastingResultDto, UserScoresDto} from '@/api/types'
-import {useUtils} from "@/common/useUtils";
+import {BaseWineDto, TastingDto, TastingResultDto, UserScoresDto} from '@/api/types'
+import {useUtils} from "@/lib/useUtils";
 import {plainToInstance} from "class-transformer";
+import {store} from "@/store/index";
+import {useErrorHandling} from "@/lib/useErrorHandling";
 
 async function moveUi(step: UiStep): Promise<boolean> {
     let index = getters.currentStepIndex.value
@@ -31,6 +33,14 @@ async function moveUi(step: UiStep): Promise<boolean> {
     }
 
     return false
+}
+
+function moveToEnd() {
+    const endStep = state.ui.steps.find(x => x.type === 'end')
+
+    if (endStep) {
+        setters.setCurrentStep(endStep)
+    }
 }
 
 async function loadTastingForScoring(): Promise<boolean> {
@@ -58,14 +68,22 @@ async function loadTastingForScoring(): Promise<boolean> {
     return await Promise.all([tasting$, scoring$]).then((values) => {
         setters.setUiSteps(values[0])
 
+        if (store.state.scoreData.isFinished) {
+            moveToEnd()
+        }
+
         return true
-    }).catch(() => false)
+    }).catch(err => {
+        console.log(err)
+        useErrorHandling().actions.setError(err?.code, 'unableToLoadTasting', err?.stack)
+        return false
+    })
 }
 
 async function loadCurrentRevealedWines() {
     const flight = getters.currentFlight?.value
 
-    if (flight.wines.every(x => x.revealedName)) {
+    if (flight.wines.every((x: BaseWineDto) => x.revealedName)) {
         return
     }
 
