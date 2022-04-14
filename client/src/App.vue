@@ -20,7 +20,8 @@
       </q-header>
       <q-page-container>
         <q-page class="bg-blue-grey-1">
-          <router-view></router-view>
+          <error v-if="hasError"></error>
+          <router-view v-else></router-view>
         </q-page>
       </q-page-container>
     </q-layout>
@@ -43,10 +44,12 @@ import {
   useQuasar
 } from "quasar";
 import {store} from "@/store";
+import Error from "@/modules/error/Error.vue";
 
 export default defineComponent({
   name: 'LayoutDefault',
   components: {
+    Error,
     QLayout,
     QHeader,
     QToolbar,
@@ -80,6 +83,7 @@ export default defineComponent({
     })
 
     return {
+      hasError: store.getters.hasError,
       changeLanguage(key: string) {
         store.setters.setLanguage(key)
       }

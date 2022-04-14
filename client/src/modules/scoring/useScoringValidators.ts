@@ -1,6 +1,6 @@
 import {store} from "@/store";
 import {computed, ref, WritableComputedRef} from "vue";
-import {FormFieldState} from "@/common/types";
+import {FormFieldState} from "@/lib/types";
 import {UserScoresDto} from '@/api/types'
 
 export function useScoringValidators() {

@@ -3,7 +3,8 @@ import {FlightDto, ScoreDto, ScoringScale, TastingDto} from '@/api/types';
 import {state} from './state';
 import {computed} from 'vue';
 import {Step, StepTypes} from './UiSteps';
-import {useUtils} from "@/common/useUtils";
+import {useUtils} from "@/lib/useUtils";
+import {useErrorHandling} from "@/lib/useErrorHandling";
 
 function isStepTypeMatch(step: Step | undefined, type: StepTypes) {
     return step !== undefined && step.type === type
@@ -116,5 +117,6 @@ export default {
     currentFlight: computed(() => getCurrentFlight()),
     currentRevealedWines: computed(() => getCurrentRevealedWines()),
     currentUser: computed(() => currentUser()),
-    currentScoreScale: computed(() => getCurrentScoreScale())
+    currentScoreScale: computed(() => getCurrentScoreScale()),
+    ...useErrorHandling().getters
 }

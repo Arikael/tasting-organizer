@@ -25,5 +25,6 @@
   "back": "back",
   "flightReveal": "Flight reveal",
   "scoringThanks": "Thanks for participating",
-  "gotoResults": "zu den Resultaten"
+  "gotoResults": "go to results",
+  "unableToLoadTasting": "Sorry, I was unable to load the requested tasting"
 }

@@ -1,7 +1,6 @@
 import {useRoute} from "vue-router";
 
 export function useUtils() {
-
     return {
         loadTastingIdFromBrowser: () => {
             const route = useRoute()
