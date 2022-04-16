@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-layout view="lHh Lpr lFf">
-      <q-header elevated>
+      <q-header elevated class="primary">
         <q-toolbar>
           <q-toolbar-title>{{ $t('tastingTitle') }}</q-toolbar-title>
           <q-btn flat round dense icon="language">

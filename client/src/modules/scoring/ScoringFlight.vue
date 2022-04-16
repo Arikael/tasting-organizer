@@ -1,5 +1,5 @@
 <template>
-  <div class="content-box">
+  <div class="content-box content-box--no-top-border">
     <div class="flight-header content-box_header">
       {{ flight.name }}
     </div>

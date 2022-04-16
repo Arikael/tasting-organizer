@@ -1,5 +1,5 @@
 import {store} from "@/store";
-import {computed, ref, WritableComputedRef} from "vue";
+import {computed, ref, watch, WritableComputedRef} from "vue";
 import {FormFieldState} from "@/lib/types";
 import {UserScoresDto} from '@/api/types'
 
@@ -22,7 +22,10 @@ export function useScoringForWine(id: string) {
         }
     }
 
+    watch(scoreStatus, (val, oldVal) => console.log(val.value, oldVal.value))
+
     const setScore = (value: number) => {
+        console.log('val: ' + value + " local-state: " + scoreStatus.value.value + " state: " + store.getters.getScore(id)?.score)
         const score = parseInt(value.toString(10), 10)
 
         if (!isNaN(score) && id) {
@@ -32,27 +35,33 @@ export function useScoringForWine(id: string) {
                     scoreStatus.value.ok = false
                 } else {
                     scoreStatus.value.ok = true
-
+                    console.log('score set')
                     setLocalScoreFromState(id, score)
                 }
+                console.log('val: ' + value + " local-state: " + scoreStatus.value.value + " state: " + store.getters.getScore(id)?.score)
+                console.log('--------')
             })
         } else {
             scoreStatus.value.ok = false
         }
+
     }
 
-    const score: WritableComputedRef<number> = computed({
-            get(): number {
-                return scoreStatus.value.value
-            },
-            set(value: number): void {
-                setScore(value)
-            }
-        }
-    )
+    // const score: WritableComputedRef<number> = computed({
+    //         get(): number {
+    //             return scoreStatus.value.value
+    //         },
+    //         set(value: number): void {
+    //             setScore(value)
+    //         }
+    //     }
+    // )
+
+    const score = computed(() => scoreStatus.value.value)
 
     return {
         setLocalScoreFromState,
+        setScore,
         currentScale: store.getters.currentScoreScale,
         scoreStatus: computed(() => scoreStatus.value),
         score

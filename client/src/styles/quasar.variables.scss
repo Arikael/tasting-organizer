@@ -2,9 +2,15 @@
 // to match your app's branding.
 @import "~quasar/src/css/variables";
 
-$primary   : #027BE3;
-$secondary : #26A69A;
+$primary   : #7d0f0f;
+// analogous
+//$secondary : #7D460F; //#7D0F46
+// complementary
+$secondary : $grey-7;
 $accent    : #9C27B0;
+//$accent : #7D460F; //#7D0F46
+// complementary
+$accent : #0F7D7D;
 
 $dark      : #1D1D1D;
 

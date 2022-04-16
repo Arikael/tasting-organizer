@@ -1,5 +1,5 @@
 <template>
-  <q-input class="q-mt-sm q-mb-md" filled v-model="score"
+  <q-input class="q-mt-sm q-mb-md" color="accent" :model-value="score" @update:model-value="setScore"
            :error="!scoreStatus.ok"
            debounce="350"
            :hint="displayScaleDescription"
@@ -26,7 +26,6 @@ export default defineComponent({
   setup(props) {
     const i18n = useI18n({useScope: 'global'})
     const scoringForWine = useScoringForWine(props.wine?.id ?? '')
-
 
     onMounted(() => {
       scoringForWine.setLocalScoreFromState(props.wine?.id ?? '')

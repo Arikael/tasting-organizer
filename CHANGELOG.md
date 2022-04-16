@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.4.1
+## 0.4.2
+
+## 0.4.1 - 14.04.2022
 - use store/state for language
 - fix handling of unknown language.
 - add missing translations
