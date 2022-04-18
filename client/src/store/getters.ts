@@ -52,8 +52,33 @@ function getCurrentFlight(): FlightDto {
     return new FlightDto()
 }
 
+function getCurrentFlightIndex(): number {
+    const currentFlight = getCurrentFlight()
+
+    if (!currentFlight) {
+        return -1
+    }
+
+    return state.tasting.flights.findIndex(x => x.id === currentFlight.id)
+}
+
 function getCurrentScoreScale(): ScoringScale {
     return state.tasting.scoringScale
+}
+
+function getCurrentScoreScaleMarkerSteps(): {value: number, label: string}[] {
+    const config = []
+    const currentScoreScale = getCurrentScoreScale()
+
+    const range = (currentScoreScale.max - currentScoreScale.min) / currentScoreScale.markerStepsEvery
+
+    for(let r = 0; r < range; r++) {
+        config[r+1] = {value: r * range + currentScoreScale.min, label: (r * range + currentScoreScale.min).toFixed(0)}
+    }
+
+    config[config.length] = {value: currentScoreScale.max, label: currentScoreScale.max.toFixed(0)}
+
+    return config
 }
 
 function isOnFlightRevealStep(): boolean {
@@ -118,5 +143,7 @@ export default {
     currentRevealedWines: computed(() => getCurrentRevealedWines()),
     currentUser: computed(() => currentUser()),
     currentScoreScale: computed(() => getCurrentScoreScale()),
-    ...useErrorHandling().getters
+    ...useErrorHandling().getters,
+    currentFlightIndex: computed(() => getCurrentFlightIndex()),
+    currentScoreScaleMarkerSteps: computed(() => getCurrentScoreScaleMarkerSteps())
 }

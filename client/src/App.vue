@@ -19,7 +19,7 @@
         </q-toolbar>
       </q-header>
       <q-page-container>
-        <q-page class="bg-blue-grey-1">
+        <q-page class="bg-blue-grey-1 q-px-sm q-py-md">
           <error v-if="hasError"></error>
           <router-view v-else></router-view>
         </q-page>

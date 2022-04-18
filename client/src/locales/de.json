@@ -23,7 +23,8 @@
   "submit": "Absenden",
   "next": "weiter",
   "back": "zurück",
-  "flightReveal": "Flight-Auflösung",
+  "Flight": "Flight",
+  "reveal": "Auflösung",
   "scoringThanks": "Danke fürs teilnehmen",
   "gotoResults": "Zu den Resultaten",
   "unableToLoadTasting": "Sorry, Ich konnte das gewünschte Tasting nicht laden"

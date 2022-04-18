@@ -3,20 +3,17 @@
 @import "mixins";
 // @import '~quasar-addon-styl';
 
-.text-brand {
-  color: #7d0f0f !important;
+.main-title {
+  margin: 0;
+  line-height: 1;
+  padding: map-get($space-sm, 'y') map-get($space-md, 'x') map-get($space-md, 'y') map-get($space-md, 'x');
 }
-.bg-brand {
-  background: #7d0f0f !important;
-}
-
-$secondary: yellow;
 
 .content-box,
 .message-box {
   background: white;
-  border-top: 1px solid $grey-6;
-  border-bottom: 1px solid $grey-6;
+  border-radius: 3px;
+  border: 1px solid $grey-6;
   margin-bottom: map-get($space-lg, 'y');
 }
 
@@ -47,11 +44,8 @@ $secondary: yellow;
 .content-box_header {
   padding: map-get($space-sm, 'y') map-get($space-md, 'x');
   border-bottom: 1px solid $grey-6;
-}
-
-.content-box_header {
-  background: $grey-5;
-  color: $grey-10;
+  color: white;
+  background-color: $secondary;
 }
 
 ul.no-list-style-type {

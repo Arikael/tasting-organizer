@@ -1,14 +1,8 @@
 <template>
-  <div class="content-box content-box--no-top-border">
-    <div class="flight-header content-box_header">
-      {{ flight.name }}
-    </div>
-    <div class="flight-wines">
-      <wine-score :wine="wine"
-                  v-for="(wine) in flight.wines" v-bind:key="wine.id"></wine-score>
-    </div>
-  </div>
+  <h2 class="text-h6 main-title">{{ $t('Flight') }} {{ flightIndex + 1 }}</h2>
+  <wine-score :wine="wine" v-for="(wine) in flight.wines" v-bind:key="wine.id"></wine-score>
 </template>
+
 
 <script lang="ts">
 import {defineComponent} from 'vue'
@@ -20,6 +14,7 @@ export default defineComponent({
   components: {WineScore},
   setup() {
     return {
+      flightIndex: store.getters.currentFlightIndex,
       flight: store.getters.currentFlight
     }
   }

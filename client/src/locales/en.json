@@ -23,7 +23,8 @@
   "submit": "submit",
   "next": "next",
   "back": "back",
-  "flightReveal": "Flight reveal",
+  "Flight": "flight",
+  "reveal": "reveal",
   "scoringThanks": "Thanks for participating",
   "gotoResults": "go to results",
   "unableToLoadTasting": "Sorry, I was unable to load the requested tasting"

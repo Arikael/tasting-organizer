@@ -1,5 +1,5 @@
 import {store} from "@/store";
-import {computed, ref, watch, WritableComputedRef} from "vue";
+import {computed, ref, watch} from "vue";
 import {FormFieldState} from "@/lib/types";
 import {UserScoresDto} from '@/api/types'
 
@@ -14,9 +14,11 @@ export function useScoringValidators() {
 }
 
 export function useScoringForWine(id: string) {
-    const scoreStatus = ref<FormFieldState<number>>(new FormFieldState<number>(0))
+    const currentScale = store.getters.currentScoreScale
+    const d = Math.round((currentScale.value.max - currentScale.value.min) / 2) + currentScale.value.min
+    const scoreStatus = ref<FormFieldState<number>>(new FormFieldState<number>(d))
 
-    const setLocalScoreFromState = (wineId: string, defaultValue = 0) => {
+    const setLocalScoreFromState = (wineId: string, defaultValue = d) => {
         if (wineId) {
             scoreStatus.value.value = store.getters.getScore(wineId)?.score ?? defaultValue
         }
@@ -25,7 +27,6 @@ export function useScoringForWine(id: string) {
     watch(scoreStatus, (val, oldVal) => console.log(val.value, oldVal.value))
 
     const setScore = (value: number) => {
-        console.log('val: ' + value + " local-state: " + scoreStatus.value.value + " state: " + store.getters.getScore(id)?.score)
         const score = parseInt(value.toString(10), 10)
 
         if (!isNaN(score) && id) {
@@ -44,7 +45,6 @@ export function useScoringForWine(id: string) {
         } else {
             scoreStatus.value.ok = false
         }
-
     }
 
     // const score: WritableComputedRef<number> = computed({

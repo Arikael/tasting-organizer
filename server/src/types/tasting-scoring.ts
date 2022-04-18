@@ -62,6 +62,7 @@ export class ScoringScale implements IScoringScale {
   name = ''
   min = 0
   max = 0
+  markerStepsEvery = 0
   @Type(() => ScoringScaleItem)
     items: ScoringScaleItem[] = []
 }
