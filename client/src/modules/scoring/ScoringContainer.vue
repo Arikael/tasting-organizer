@@ -6,7 +6,7 @@
     <scoring-end v-if="state.ui.currentStep.type === 'end'"></scoring-end>
   </div>
   <div class="flight-navigation" v-if="!isOnEndStep">
-    <q-btn color="primary" class="q-mr-md" v-if="canMoveBack" @click="moveBack()" :label="$t('back')"/>
+    <q-btn color="secondary" class="q-mr-md" v-if="canMoveBack" @click="moveBack()" :label="$t('back')"/>
     <q-btn color="primary" v-if="canMoveForward" @click="moveForward()" :label="$t('next')"/>
     <q-btn color="primary" class="q-ml-md" v-if="isOnLastStepBeforeEndStep" @click="finishScoring()"
            :label="$t('submit')"/>

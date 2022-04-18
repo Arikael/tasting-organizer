@@ -1,24 +1,33 @@
 <template>
-  <q-input class="q-mt-sm q-mb-md" filled v-model="score"
-           :error="!scoreStatus.ok"
-           debounce="350"
-           :hint="displayScaleDescription"
-           mask="###"
-           :error-message="$t('ScoringNotInRangeError', {min: currentScale.min, max: currentScale.max})"
-           :label="label"></q-input>
+  <div class="wine-score">
+    <div class="wine-score__label">{{ label }}: <span class="wine-score__label-value">{{ score }}</span></div>
+    <div class="wine-score__control">
+      <q-slider color="accent" :model-value="score" @change="setScore"
+                :error="!scoreStatus.ok"
+                :hint="displayScaleDescription"
+                markers
+                marker-labels-class="wine-score__markers"
+                :marker-labels="markerLabels"
+                :min="currentScale.min"
+                :max="currentScale.max"
+                :error-message="$t('ScoringNotInRangeError', {min: currentScale.min, max: currentScale.max})"
+                label>
+      </q-slider>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import {computed, defineComponent, onMounted} from 'vue';
 import {BaseWineDto, ScoringScaleItem} from '@/api/types'
-import {QInput} from 'quasar';
+import {QSlider} from 'quasar';
 import {store} from "@/store";
 import {useI18n} from "vue-i18n";
 import {useScoringForWine} from "@/modules/scoring/useScoringValidators";
 
 export default defineComponent({
   name: 'WineScore',
-  components: {QInput},
+  components: {QSlider},
   props: {
     wine: BaseWineDto,
     default: () => new BaseWineDto()
@@ -27,13 +36,12 @@ export default defineComponent({
     const i18n = useI18n({useScope: 'global'})
     const scoringForWine = useScoringForWine(props.wine?.id ?? '')
 
-
     onMounted(() => {
       scoringForWine.setLocalScoreFromState(props.wine?.id ?? '')
     })
 
-
     return {
+      markerLabels: store.getters.currentScoreScaleMarkerSteps,
       store,
       ...scoringForWine,
       wineName: props.wine?.name ?? '',
@@ -60,6 +68,23 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style lang="scss">
+@import "../../styles/quasar.variables";
 
+.wine-score__markers {
+  font-size: 12px;
+}
+
+.wine-score {
+  background: white;
+  border: 1px solid $grey-6;
+  border-radius: 3px;
+  margin-bottom: map-get($space-md, 'y');
+  padding: 0 map-get($space-md, 'x');
+  padding-top: map-get($space-md, 'y');
+}
+
+.wine-score__label {
+  //padding-bottom: map-get($space-sm, 'y');
+}
 </style>
