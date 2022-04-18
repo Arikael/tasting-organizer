@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.4.2
+## 0.4.2 - 18.04.2022
+- use better colors
+- use QSlide for scoring
 
 ## 0.4.1 - 14.04.2022
 - use store/state for language
