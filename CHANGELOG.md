@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.3 - unreleased
+- fix error on submitting scores
+- re-add scale description to WineScore
+- improve UI of WineScore
+- add price to wine
+
 ## 0.4.2 - 18.04.2022
 - use better colors
 - use QSlide for scoring
