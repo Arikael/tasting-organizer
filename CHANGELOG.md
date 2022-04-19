@@ -1,10 +1,15 @@
 # Changelog
 
-## 0.4.3 - unreleased
-- fix error on submitting scores
+## 0.4.4 - unreleased
 - re-add scale description to WineScore
 - improve UI of WineScore
 - add price to wine
+- add loading spinner
+- handle all errors and set error
+
+## 0.4.3 - 19.04.2022
+- fix error on submitting scores
+- add error details to error page
 
 ## 0.4.2 - 18.04.2022
 - use better colors
