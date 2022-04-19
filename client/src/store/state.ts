@@ -15,11 +15,13 @@ export class State {
     tastingResults = new TastingResultDto()
     scoreData = new UserScoresDto()
     ui: {
+        isFinishedOnLoading: boolean
         applicationError: ApplicationError | undefined,
         globalIsLoading: boolean,
         currentStep: Pick<Step, 'id' | 'type'>,
         steps: Step[]
     } = {
+        isFinishedOnLoading: false,
         applicationError: undefined,
         globalIsLoading: false,
         currentStep: {id: 'intro', type: 'intro'},

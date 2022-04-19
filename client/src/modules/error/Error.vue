@@ -5,6 +5,17 @@
       <br/>
       {{ $t(applicationError?.messageKey) }}
     </div>
+    <div class="content-box content-box--padding q-mt-md">
+      <p>
+        Code: <code>{{ applicationError?.code }}</code>
+      </p>
+      <p>
+        Detail:<br />
+        <code>
+          {{ applicationError?.detail }}
+        </code>
+      </p>
+    </div>
   </div>
 </template>
 
@@ -27,6 +38,7 @@ export default defineComponent({
 .text-center {
   text-align: center;
 }
+
 .error-box {
   margin: 0 auto;
   width: 75%;
