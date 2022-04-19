@@ -69,12 +69,12 @@ async function loadTastingForScoring(): Promise<boolean> {
         setters.setUiSteps(values[0])
 
         if (store.state.scoreData.isFinished) {
+            store.state.ui.isFinishedOnLoading = true
             moveToEnd()
         }
 
         return true
     }).catch(err => {
-        console.log(err)
         useErrorHandling().actions.setError(err?.code, 'unableToLoadTasting', err?.stack)
         return false
     })
@@ -123,5 +123,6 @@ export default {
     loadTastingForScoring,
     loadTastingResults,
     loadCurrentRevealedWines,
-    moveUi
+    moveUi,
+    moveToEnd
 }

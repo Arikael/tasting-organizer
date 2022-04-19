@@ -50,7 +50,10 @@ async function setScore(wineId: string, score: number): Promise<UserScoresDto | 
 async function finishScoring(): Promise<UserScoresDto> {
     state.scoreData.isFinished = true
 
-    return updateScores()
+    const scores = await updateScores()
+    store.actions.moveToEnd()
+
+    return scores
 }
 
 async function updateScores(): Promise<UserScoresDto> {
