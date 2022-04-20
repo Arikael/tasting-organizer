@@ -8,7 +8,7 @@
     <scoring-scale-description></scoring-scale-description>
   </div>
   <div class="content-box content-box--padding" v-if="state.ui.currentStep.type === 'intro'">
-    <q-input class="q-my-sm" :model-value="state.scoreData.userName" @change="setUser"
+    <q-input class="q-my-sm" color="accent" :model-value="state.scoreData.userName" @change="setUser"
              :label="$t('yourUsername')"></q-input>
   </div>
 </template>
