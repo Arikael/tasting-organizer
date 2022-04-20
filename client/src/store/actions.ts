@@ -44,6 +44,7 @@ function moveToEnd() {
 }
 
 async function loadTastingForScoring(): Promise<boolean> {
+    store.state.ui.globalIsLoading = true
     const id = useUtils().loadTastingIdFromBrowser();
     const client = useApiClient()
     const tasting$ = client.service('tasting').get(id).then((result: Partial<TastingDto>) => {
@@ -72,6 +73,8 @@ async function loadTastingForScoring(): Promise<boolean> {
             store.state.ui.scoringIsFinishedOnLoading = true
             moveToEnd()
         }
+
+        store.state.ui.globalIsLoading = false
 
         return true
     }).catch(err => {

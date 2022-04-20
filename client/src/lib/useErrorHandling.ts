@@ -21,6 +21,7 @@ export function useErrorHandling() {
         actions: {
             setError(code: number, message: string, detail = '') {
                 store.state.ui.applicationError = new ApplicationError(code, message, detail)
+                store.state.ui.globalIsLoading = false
 
                 if (process.env.VUE_APP_NODE_ENV && process.env.VUE_APP_NODE_ENV === 'develop') {
                     console.log('', 'code: ', code, '\n', 'message: ', message, '\n', 'detail: ', detail)
