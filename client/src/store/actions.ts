@@ -69,7 +69,7 @@ async function loadTastingForScoring(): Promise<boolean> {
         setters.setUiSteps(values[0])
 
         if (store.state.scoreData.isFinished) {
-            store.state.ui.isFinishedOnLoading = true
+            store.state.ui.scoringIsFinishedOnLoading = true
             moveToEnd()
         }
 
