@@ -1,4 +1,4 @@
-import { HooksObject } from '@feathersjs/feathers';
+import { HooksObject } from '@feathersjs/feathers'
 
 export default {
   before: {
@@ -30,4 +30,4 @@ export default {
     patch: [],
     remove: []
   }
-};
+}
