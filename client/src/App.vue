@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, getCurrentInstance, onMounted, watch} from 'vue';
+import {computed, defineComponent, getCurrentInstance, onMounted, watch} from 'vue';
 import {
   QBtn,
   QHeader,
@@ -94,7 +94,8 @@ export default defineComponent({
     })
 
     return {
-      isLoading: store.state.ui.globalIsLoading,
+      store,
+      isLoading: computed(() => store.state.ui.globalIsLoading),
       hasError: store.getters.hasError,
       changeLanguage(key: string) {
         store.setters.setLanguage(key)
