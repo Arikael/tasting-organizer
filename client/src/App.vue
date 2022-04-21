@@ -18,8 +18,8 @@
           </q-btn>
         </q-toolbar>
       </q-header>
-      <q-page-container>
-        <q-page class="bg-blue-grey-1 q-px-sm q-py-md">
+      <q-page-container class="bg-blue-grey-1">
+        <q-page class="q-px-sm q-py-md page">
           <q-inner-loading
               :showing="isLoading"
               label="Loading"
@@ -103,3 +103,9 @@ export default defineComponent({
   }
 });
 </script>
+<style scoped lang="scss">
+  .page {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+</style>

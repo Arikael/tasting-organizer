@@ -6,6 +6,7 @@
 - add price to wine
 - add loading spinner
 - handle all errors and set error
+- added max-width, so it doesn't stretch too wide on a desktop.
 
 ## 0.4.3 - 19.04.2022
 - fix error on submitting scores
