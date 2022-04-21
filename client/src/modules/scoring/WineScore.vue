@@ -1,18 +1,34 @@
 <template>
+
   <div class="wine-score">
-    <div class="wine-score__label">{{ label }}: <span class="wine-score__label-value">{{ score }}</span></div>
-    <div class="wine-score__control">
-      <q-slider color="accent" :model-value="score" @change="setScore"
-                :error="!scoreStatus.ok"
-                :hint="displayScaleDescription"
-                markers
-                marker-labels-class="wine-score__markers"
-                :marker-labels="markerLabels"
-                :min="currentScale.min"
-                :max="currentScale.max"
-                :error-message="$t('ScoringNotInRangeError', {min: currentScale.min, max: currentScale.max})"
-                label>
-      </q-slider>
+    <div class="wine-score__title bg-grey-3 text-grey-9">{{ label }}</div>
+    <div class="wine-score__content">
+      <div class="wine-score__control">
+        <div class="fit row">
+          <q-input v-model="score" color="accent" class="wine-score__input" outlined dense style="width:66px"
+                   :error="!scoreStatus.ok"
+                   debounce="350"
+                   mask="###"
+                   :error-message="$t('ScoringNotInRangeError', {min: currentScale.min, max: currentScale.max})">
+            <template v-slot:append>
+            </template>
+          </q-input>
+          <div class="col-grow wine-score__scale-desc self-center">
+            <span class="text-grey-8 text-caption">{{ displayScaleDescription }}</span>
+            <!--        <q-badge color="grey-4" class="text-grey-8">{{displayScaleDescription}}</q-badge>-->
+          </div>
+        </div>
+        <q-slider color="accent" :model-value="score" @change="setScore"
+                  :error="!scoreStatus.ok"
+                  markers
+                  marker-labels-class="wine-score__markers"
+                  :marker-labels="markerLabels"
+                  :min="currentScale.min"
+                  :max="currentScale.max"
+                  :error-message="$t('ScoringNotInRangeError', {min: currentScale.min, max: currentScale.max})"
+                  label>
+        </q-slider>
+      </div>
     </div>
   </div>
 </template>
@@ -77,9 +93,27 @@ export default defineComponent({
 
 .wine-score {
   background: white;
-  border: 1px solid $grey-6;
-  border-radius: 3px;
-  margin-bottom: map-get($space-md, 'y');
+  border: 1px solid $grey-5;
+  margin-bottom: map-get($space-lg, 'y');
+  border-radius: 6px;
+}
+
+.wine-score__title {
+  border-bottom: 1px solid $grey-5;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  padding: map-get($space-sm, 'y') map-get($space-md, 'x');
+}
+
+.wine-score__scale-desc {
+  text-align: right;
+}
+
+.wine-score__input {
+  padding-bottom: 0;
+}
+
+.wine-score__content {
   padding: 0 map-get($space-md, 'x');
   padding-top: map-get($space-md, 'y');
 }
