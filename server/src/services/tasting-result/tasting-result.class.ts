@@ -90,6 +90,7 @@ export class TastingResult extends Service<TastingResultDto> {
                   'name': '$flights.wines.name',
                   'flight': '$flights.name',
                   'id': '$flights.wines.id',
+                  'price': '$flights.wines.price',
                   'wineNr': { $concat: [{$toString: {$add: ['$flightIndex', 1]}}, '.', {$toString: {$add: ['$index', 1]}}]}
                 }
               }

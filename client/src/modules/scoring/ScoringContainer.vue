@@ -1,18 +1,18 @@
 <template>
-  <div>
+  <div class="scoring-container">
     <scoring-intro v-if="state.ui.currentStep.type === 'intro'"></scoring-intro>
     <scoring-flight v-if="state.ui.currentStep.type === 'flight'"></scoring-flight>
     <flight-reveal v-if="state.ui.currentStep.type === 'reveal'"></flight-reveal>
     <scoring-end v-if="state.ui.currentStep.type === 'end'"></scoring-end>
-  </div>
-  <div class="flight-navigation" v-if="!isOnEndStep">
-    <q-btn color="secondary" class="q-mr-md" v-if="canMoveBack" :disabled="!currentStepModelValid" @click="moveBack()"
-           :label="$t('back')"/>
-    <q-btn color="primary" v-if="canMoveForward" @click="saveAndMoveForward()" :disable="!currentStepModelValid"
-           :label="$t('next')"/>
-    <q-btn color="primary" class="q-ml-md" v-if="isOnLastStepBeforeEndStep" :disabled="!isModelValid"
-           @click="finishScoring()"
-           :label="$t('submit')"/>
+    <div class="flight-navigation" v-if="!isOnEndStep">
+      <q-btn color="secondary" class="q-mr-md" v-if="canMoveBack" :disabled="!currentStepModelValid" @click="moveBack()"
+             :label="$t('back')"/>
+      <q-btn color="primary" v-if="canMoveForward" @click="saveAndMoveForward()" :disable="!currentStepModelValid"
+             :label="$t('next')"/>
+      <q-btn color="primary" class="q-ml-md" v-if="isOnLastStepBeforeEndStep" :disabled="!isModelValid"
+             @click="finishScoring()"
+             :label="$t('submit')"/>
+    </div>
   </div>
 </template>
 
@@ -57,5 +57,10 @@ export default defineComponent({
 
 .flight-navigation {
   padding: 0 map-get($space-md, 'x');
+}
+
+.scoring-container {
+  margin: 0 auto;
+  max-width: 600px;
 }
 </style>

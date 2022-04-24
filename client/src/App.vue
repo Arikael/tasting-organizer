@@ -106,7 +106,6 @@ export default defineComponent({
 </script>
 <style scoped lang="scss">
   .page {
-    max-width: 600px;
     margin: 0 auto;
   }
 </style>

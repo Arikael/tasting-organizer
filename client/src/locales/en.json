@@ -28,5 +28,6 @@
   "reveal": "reveal",
   "scoringThanks": "Thanks for participating",
   "gotoResults": "go to results",
-  "unableToLoadTasting": "Sorry, I was unable to load the requested tasting"
+  "unableToLoadTasting": "Sorry, I was unable to load the requested tasting",
+  "price": "price"
 }
