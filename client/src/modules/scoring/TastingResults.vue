@@ -141,6 +141,12 @@ export default defineComponent({
           label: i18n.t('Stddev'),
           sortable: true,
           format: (val: number) => Math.round(val)
+        },
+        {
+          name: 'price',
+          field: ((row: SingleTastingResultDto) => row.wine.price),
+          label: i18n.t('price'),
+          sortable: true
         }
       ],
     }

@@ -24,6 +24,7 @@ export class ResultWineDto {
   name = ''
   id = ''
   wineNr = ''
+  price = 0
 }
 
 export class SingleTastingResultDto {

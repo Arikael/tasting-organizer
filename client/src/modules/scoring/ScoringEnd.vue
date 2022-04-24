@@ -21,7 +21,7 @@ export default defineComponent({
     const i18n = useI18n({useScope: 'global'})
 
     return {
-      endTitle: i18n.t(store.state.ui.isFinishedOnLoading ? 'scoreAlreadySubmitted' : 'scoringThanks'),
+      endTitle: i18n.t(store.state.ui.scoringIsFinishedOnLoading ? 'scoreAlreadySubmitted' : 'scoringThanks'),
       store: store,
       linkToResults: '/results/' + store.state.tasting.publicId
     }

@@ -18,10 +18,19 @@
           </q-btn>
         </q-toolbar>
       </q-header>
-      <q-page-container>
-        <q-page class="bg-blue-grey-1 q-px-sm q-py-md">
+      <q-page-container class="bg-blue-grey-1">
+        <q-page class="q-px-sm q-py-md page">
+          <q-inner-loading
+              :showing="isLoading"
+              label="Loading"
+              color="primary"
+              label-class="text-primary"
+              size="4rem">
+          </q-inner-loading>
           <error v-if="hasError"></error>
-          <router-view v-else></router-view>
+          <div v-else v-bind:class="{'invisible': isLoading}">
+            <router-view></router-view>
+          </div>
         </q-page>
       </q-page-container>
     </q-layout>
@@ -29,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, getCurrentInstance, onMounted, watch} from 'vue';
+import {computed, defineComponent, getCurrentInstance, onMounted, watch} from 'vue';
 import {
   QBtn,
   QHeader,
@@ -41,6 +50,7 @@ import {
   QPageContainer,
   QToolbar,
   QToolbarTitle,
+  QInnerLoading,
   useQuasar
 } from "quasar";
 import {store} from "@/store";
@@ -60,7 +70,8 @@ export default defineComponent({
     QList,
     QPageContainer,
     QPage,
-    QItemSection
+    QItemSection,
+    QInnerLoading
   },
   setup() {
     const $q = useQuasar()
@@ -83,6 +94,8 @@ export default defineComponent({
     })
 
     return {
+      store,
+      isLoading: computed(() => store.state.ui.globalIsLoading),
       hasError: store.getters.hasError,
       changeLanguage(key: string) {
         store.setters.setLanguage(key)
@@ -91,3 +104,8 @@ export default defineComponent({
   }
 });
 </script>
+<style scoped lang="scss">
+  .page {
+    margin: 0 auto;
+  }
+</style>

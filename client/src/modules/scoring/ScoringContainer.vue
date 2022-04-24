@@ -1,20 +1,23 @@
 <template>
-  <div>
+  <div class="scoring-container">
     <scoring-intro v-if="state.ui.currentStep.type === 'intro'"></scoring-intro>
     <scoring-flight v-if="state.ui.currentStep.type === 'flight'"></scoring-flight>
     <flight-reveal v-if="state.ui.currentStep.type === 'reveal'"></flight-reveal>
     <scoring-end v-if="state.ui.currentStep.type === 'end'"></scoring-end>
-  </div>
-  <div class="flight-navigation" v-if="!isOnEndStep">
-    <q-btn color="secondary" class="q-mr-md" v-if="canMoveBack" @click="moveBack()" :label="$t('back')"/>
-    <q-btn color="primary" v-if="canMoveForward" @click="moveForward()" :label="$t('next')"/>
-    <q-btn color="primary" class="q-ml-md" v-if="isOnLastStepBeforeEndStep" @click="finishScoring()"
-           :label="$t('submit')"/>
+    <div class="flight-navigation" v-if="!isOnEndStep">
+      <q-btn color="secondary" class="q-mr-md" v-if="canMoveBack" :disabled="!currentStepModelValid" @click="moveBack()"
+             :label="$t('back')"/>
+      <q-btn color="primary" v-if="canMoveForward" @click="saveAndMoveForward()" :disable="!currentStepModelValid"
+             :label="$t('next')"/>
+      <q-btn color="primary" class="q-ml-md" v-if="isOnLastStepBeforeEndStep" :disabled="!isModelValid"
+             @click="finishScoring()"
+             :label="$t('submit')"/>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted} from "vue";
+import {computed, defineComponent, onMounted} from "vue";
 import ScoringFlight from "@/modules/scoring/ScoringFlight.vue";
 import FlightReveal from "@/modules/scoring/FlightReveal.vue";
 import {QBtn} from "quasar"
@@ -32,14 +35,18 @@ export default defineComponent({
 
     return {
       state: store.state,
+      modelIsValid: computed(() => store.state.ui.modelIsValid),
       isOnFlightRevealStep: store.getters.isOnFlightRevealStep,
       canMoveForward: store.getters.canMoveForward,
       canMoveBack: store.getters.canMoveBack,
       isOnEndStep: store.getters.isOnEndStep,
       isOnLastStepBeforeEndStep: store.getters.isOnLastStepBeforeEndStep,
-      finishScoring: store.setters.finishScoring,
+      currentStepModelValid: store.getters.currentStepModelValid,
+      isModelValid: store.getters.isModelValid,
+      finishScoring: store.actions.finishScoring,
       moveForward: () => store.actions.moveUi('next'),
-      moveBack: () => store.actions.moveUi('prev')
+      moveBack: () => store.actions.moveUi('prev'),
+      saveAndMoveForward: () => store.actions.saveAndMoveForward()
     }
   }
 })
@@ -50,5 +57,10 @@ export default defineComponent({
 
 .flight-navigation {
   padding: 0 map-get($space-md, 'x');
+}
+
+.scoring-container {
+  margin: 0 auto;
+  max-width: 600px;
 }
 </style>
