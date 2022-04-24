@@ -16,6 +16,7 @@
   "Stddev": "Stddev",
   "AllScores": "Alle Bewertungen",
   "yourUsername": "Dein Name",
+  "userNameMayNotBeEmpty": "Dein Name darf nicht leer sein",
   "scoreAlreadySubmitted": "Du hast deine Bewertungen bereits abgegeben",
   "MyScore": "Meine Bewertung",
   "ScoringScaleMinMaxDesc": "Ihr könnt für jeden Wein eine Punktzahl zwischen {min} und {max} vergeben",

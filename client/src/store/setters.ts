@@ -1,39 +1,35 @@
 import {state} from '@/store/state';
 import {createId} from '@/helpers';
-import {useApiClient} from '@/api/client';
 import getters from '@/store/getters';
-import {TastingDto, UserScoresDto} from '@/api/types'
+import {TastingDto} from '@/api/types'
 import {Step} from "@/store/UiSteps";
-import {useScoringValidators} from "@/modules/scoring/useScoringValidators";
+import {useValidators} from "@/modules/scoring/useValidators";
 import {store} from "@/store/index";
 
 // TODO move all setters to actions
-
 function setCurrentStep(step: Step) {
     state.ui.currentStep = step
 }
 
-function setUser(userName: string): void {
+function setUser(userName: string): boolean {
+    const valid = useValidators().isUsernameValid(userName)
+    setStepModelValidity(valid)
+
     state.scoreData.userName = userName
 
     if (!state.scoreData.userId) {
         state.scoreData.userId = createId(4)
     }
 
-    const service = useApiClient().service('scoring')
-    service.update(state.tasting.id, state.scoreData).then((x: any) => console.log(x))
-
     createLocalTastingData()
+
+    return valid
 }
 
-async function setScore(wineId: string, score: number): Promise<UserScoresDto | boolean> {
+function setScore(wineId: string, score: number): boolean {
     const scoreData = getters.getScore(wineId)
-
-    const result = useScoringValidators().isInValidRange(score)
-
-    if (!result) {
-        return false
-    }
+    const valid = useValidators().isScoreInValidRange(score)
+    setStepModelValidity(valid)
 
     if (scoreData) {
         scoreData.score = score
@@ -44,46 +40,36 @@ async function setScore(wineId: string, score: number): Promise<UserScoresDto | 
         })
     }
 
-    return updateScores()
-}
-
-async function finishScoring(): Promise<UserScoresDto> {
-    state.scoreData.isFinished = true
-
-    const scores = await updateScores()
-    store.actions.moveToEnd()
-
-    return scores
-}
-
-async function updateScores(): Promise<UserScoresDto> {
-    const service = useApiClient().service('scoring')
-    return await service.update(state.tasting.id, state.scoreData)
+    return valid
 }
 
 function setUiSteps(tasting: TastingDto) {
     state.ui.steps.push({
         id: 'intro',
-        type: 'intro'
+        type: 'intro',
+        modelIsValid: false,
     })
 
     for (const flight of tasting.flights) {
         state.ui.steps.push({
             id: `flight-${flight.id}`,
-            type: 'flight'
+            type: 'flight',
+            modelIsValid: true
         })
 
         if (tasting.revealAfter === 'flight') {
             state.ui.steps.push({
                 id: `reveal-${flight.id}`,
-                type: 'reveal'
+                type: 'reveal',
+                modelIsValid: true
             })
         }
     }
 
     state.ui.steps.push({
         id: 'end',
-        type: 'end'
+        type: 'end',
+        modelIsValid: true
     })
 }
 
@@ -102,11 +88,21 @@ function setLanguage(lang: string) {
     store.state.language = lang
 }
 
+function setStepModelValidity(valid: boolean) {
+    const currentStep = store.getters.currentStepState
+
+    if(!currentStep.value) {
+        return
+    }
+
+    currentStep.value.modelIsValid = valid
+}
+
 export default {
     setScore,
     setCurrentStep,
     setUser,
     setUiSteps,
-    finishScoring,
-    setLanguage
+    setLanguage,
+    setStepModelValidity
 }

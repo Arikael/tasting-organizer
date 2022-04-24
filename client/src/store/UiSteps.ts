@@ -5,6 +5,7 @@ export interface Step {
     id: string,
     type: StepTypes,
     stepState?: Record<string, unknown>
+    modelIsValid: boolean
 }
 
 function prop<T, K extends keyof T>(obj: T, key: K) {

@@ -9,6 +9,37 @@ import {useUtils} from "@/lib/useUtils";
 import {plainToInstance} from "class-transformer";
 import {store} from "@/store/index";
 import {useErrorHandling} from "@/lib/useErrorHandling";
+import {useValidators} from "@/modules/scoring/useValidators";
+
+async function finishScoring(): Promise<UserScoresDto> {
+    state.scoreData.isFinished = true
+
+    const scores = await updateScores()
+    store.actions.moveToEnd()
+
+    return scores
+}
+
+async function updateScores(): Promise<UserScoresDto> {
+    store.state.ui.isSaving = true
+    const service = useApiClient().service('scoring')
+    const newScores = await service.update(state.tasting.id, state.scoreData)
+    store.state.ui.isSaving = false
+
+    return newScores
+}
+
+async function saveAndMoveForward(): Promise<boolean> {
+    try
+    {
+        await updateScores()
+    } catch(error) {
+        console.log(error)
+        return false
+    }
+
+    return await moveUi('next')
+}
 
 async function moveUi(step: UiStep): Promise<boolean> {
     let index = getters.currentStepIndex.value
@@ -20,10 +51,10 @@ async function moveUi(step: UiStep): Promise<boolean> {
     const newIndex = step === 'next' ? index + 1 : index - 1
 
     if (newIndex >= 0 && newIndex <= state.ui.steps.length - 1) {
-        const step = state.ui.steps[newIndex]
+        const newStep = state.ui.steps[newIndex]
 
         // TODO make more dynamic and/or use Pinia
-        if (step.type === 'reveal') {
+        if (newStep.type === 'reveal') {
             await loadCurrentRevealedWines()
         }
 
@@ -76,6 +107,9 @@ async function loadTastingForScoring(): Promise<boolean> {
 
         store.state.ui.globalIsLoading = false
 
+        const valid = useValidators().isUsernameValid(values[1].userName)
+        setters.setStepModelValidity(valid)
+
         return true
     }).catch(err => {
         useErrorHandling().actions.setError(err?.code, 'unableToLoadTasting', err?.stack)
@@ -127,5 +161,7 @@ export default {
     loadTastingResults,
     loadCurrentRevealedWines,
     moveUi,
-    moveToEnd
+    moveToEnd,
+    finishScoring,
+    saveAndMoveForward
 }

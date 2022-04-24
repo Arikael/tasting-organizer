@@ -1,31 +1,34 @@
 <template>
 
-  <div class="wine-score">
-    <div class="wine-score__title bg-grey-3 text-grey-9">{{ label }}</div>
+  <div :class="{'wine-score': true, 'wine-score--error': !scoreStatus.ok }">
+    <div
+        :class="{'wine-score__title text-grey-9': true, 'bg-grey-3': scoreStatus.ok, 'wine-score__title--error': !scoreStatus.ok}">
+      {{ label }}
+    </div>
     <div class="wine-score__content">
       <div class="wine-score__control">
         <div class="fit row">
-          <q-input v-model="score" color="accent" class="wine-score__input" outlined dense style="width:66px"
-                   :error="!scoreStatus.ok"
-                   debounce="350"
+          <q-input v-model.number="score" type="number" max="100" min="75" color="accent"
+                   class="wine-score__input" outlined dense style="width:80px"
                    mask="###"
                    :error-message="$t('ScoringNotInRangeError', {min: currentScale.min, max: currentScale.max})">
-            <template v-slot:append>
-            </template>
           </q-input>
           <div class="col-grow wine-score__scale-desc self-center">
             <span class="text-grey-8 text-caption">{{ displayScaleDescription }}</span>
-            <!--        <q-badge color="grey-4" class="text-grey-8">{{displayScaleDescription}}</q-badge>-->
+            <span class="text-negative text-caption" v-if="!scoreStatus.ok"> {{
+                $t('ScoringNotInRangeError', {
+                  min: currentScale.min,
+                  max: currentScale.max
+                })
+              }}</span>
           </div>
         </div>
-        <q-slider color="accent" :model-value="score" @change="setScore"
-                  :error="!scoreStatus.ok"
+        <q-slider color="accent" v-model="score"
                   markers
                   marker-labels-class="wine-score__markers"
                   :marker-labels="markerLabels"
                   :min="currentScale.min"
                   :max="currentScale.max"
-                  :error-message="$t('ScoringNotInRangeError', {min: currentScale.min, max: currentScale.max})"
                   label>
         </q-slider>
       </div>
@@ -34,12 +37,12 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onMounted} from 'vue';
+import {computed, defineComponent} from 'vue';
 import {BaseWineDto, ScoringScaleItem} from '@/api/types'
 import {QSlider} from 'quasar';
 import {store} from "@/store";
 import {useI18n} from "vue-i18n";
-import {useScoringForWine} from "@/modules/scoring/useScoringValidators";
+import {useScoringForWine} from "@/modules/scoring/useScoringForWine";
 
 export default defineComponent({
   name: 'WineScore',
@@ -51,10 +54,6 @@ export default defineComponent({
   setup(props) {
     const i18n = useI18n({useScope: 'global'})
     const scoringForWine = useScoringForWine(props.wine?.id ?? '')
-
-    onMounted(() => {
-      scoringForWine.setLocalScoreFromState(props.wine?.id ?? '')
-    })
 
     return {
       markerLabels: store.getters.currentScoreScaleMarkerSteps,
@@ -70,7 +69,7 @@ export default defineComponent({
       }),
       displayScaleDescription: computed(() => {
         const scaleItem = store.getters.currentScoreScale.value.items.find((x: ScoringScaleItem) => {
-          return x.min <= scoringForWine.scoreStatus.value.value && scoringForWine.scoreStatus.value.value <= x.max
+          return x.min <= scoringForWine.score.value && scoringForWine.score.value <= x.max
         })
 
         if (scaleItem) {
@@ -116,6 +115,17 @@ export default defineComponent({
 .wine-score__content {
   padding: 0 map-get($space-md, 'x');
   padding-top: map-get($space-md, 'y');
+}
+
+.wine-score--error {
+  border: 1px solid $negative;
+  outline: 1px solid $negative;
+  transition: 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wine-score__title--error {
+  border-bottom: 2px solid $negative;
+  background: $red-2;
 }
 
 .wine-score__label {

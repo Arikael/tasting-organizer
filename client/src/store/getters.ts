@@ -126,6 +126,20 @@ function isTastingResultLoaded(): boolean {
     return !!state.tastingResults.tasting.publicId;
 }
 
+function isCurrentStepModelValid(): boolean {
+    const currentStep = getCurrentStep()
+
+    if(!currentStep) {
+        return false
+    }
+
+    return currentStep.modelIsValid
+}
+
+function isModelValid(): boolean {
+    return state.ui.steps.every(x => x.modelIsValid)
+}
+
 export default {
     isTastingResultLoaded: computed(() => isTastingResultLoaded()),
     isOnEndStep: computed(() => isOnEndStep()),
@@ -145,5 +159,7 @@ export default {
     currentScoreScale: computed(() => getCurrentScoreScale()),
     ...useErrorHandling().getters,
     currentFlightIndex: computed(() => getCurrentFlightIndex()),
-    currentScoreScaleMarkerSteps: computed(() => getCurrentScoreScaleMarkerSteps())
+    currentScoreScaleMarkerSteps: computed(() => getCurrentScoreScaleMarkerSteps()),
+    currentStepModelValid: computed(() => isCurrentStepModelValid()),
+    isModelValid: computed(() => isModelValid())
 }

@@ -7,7 +7,7 @@ import {
 } from "@/store/UiSteps";
 import {ApplicationError} from "@/lib/useErrorHandling";
 
-// separate state by module
+// TODO separate state by module
 export class State {
     language = ''
     tasting = new TastingDto()
@@ -15,12 +15,16 @@ export class State {
     tastingResults = new TastingResultDto()
     scoreData = new UserScoresDto()
     ui: {
+        modelIsValid: boolean,
+        isSaving: boolean
         scoringIsFinishedOnLoading: boolean
         applicationError: ApplicationError | undefined,
         globalIsLoading: boolean,
         currentStep: Pick<Step, 'id' | 'type'>,
         steps: Step[]
     } = {
+        modelIsValid: true,
+        isSaving: false,
         scoringIsFinishedOnLoading: false,
         applicationError: undefined,
         globalIsLoading: false,

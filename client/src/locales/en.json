@@ -16,6 +16,7 @@
   "Stddev": "Stddev",
   "AllScores": "All scores",
   "yourUsername": "Your name",
+  "userNameMayNotBeEmpty": "Your name may not be empty",
   "scoreAlreadySubmitted": "You have already submitted your scores",
   "MyScore": "My score",
   "ScoringScaleMinMaxDesc": "You can award points between {min} and {max} for every wine",
