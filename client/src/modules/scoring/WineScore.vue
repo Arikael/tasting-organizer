@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onMounted} from 'vue';
+import {computed, defineComponent} from 'vue';
 import {BaseWineDto, ScoringScaleItem} from '@/api/types'
 import {QSlider} from 'quasar';
 import {store} from "@/store";
@@ -54,12 +54,6 @@ export default defineComponent({
   setup(props) {
     const i18n = useI18n({useScope: 'global'})
     const scoringForWine = useScoringForWine(props.wine?.id ?? '')
-
-    // onMounted(() => {
-    //   if (scoringForWine.score.value === 0) {
-    //     scoringForWine.score.value = store.getters.currentDefaultScore.value
-    //   }
-    // })
 
     return {
       markerLabels: store.getters.currentScoreScaleMarkerSteps,

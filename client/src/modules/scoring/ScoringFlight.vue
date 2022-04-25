@@ -5,7 +5,7 @@
 
 
 <script lang="ts">
-import {defineComponent, onMounted} from 'vue'
+import {defineComponent} from 'vue'
 import WineScore from '@/modules/scoring/WineScore.vue'
 import {store} from '@/store'
 import {ScoreDto} from '@/api/types'
@@ -14,17 +14,16 @@ export default defineComponent({
   name: "ScoringFlight",
   components: {WineScore},
   setup() {
-    onMounted(() => {
-      for (let wine of store.getters.currentFlight.value.wines) {
-        const score = store.state.scoreData.scores.find(x => x.wineId = wine.id)
-        if (!score) {
-          const newScore = new ScoreDto()
-          newScore.score = store.getters.currentDefaultScore.value
-          newScore.wineId = wine.id
-          store.state.scoreData.scores.push(newScore)
-        }
+    for (let wine of store.getters.currentFlight.value.wines) {
+      const score = store.state.scoreData.scores.find(x => x.wineId === wine.id)
+
+      if (!score) {
+        const newScore = new ScoreDto()
+        newScore.score = store.getters.currentDefaultScore.value
+        newScore.wineId = wine.id
+        store.state.scoreData.scores.push(newScore)
       }
-    })
+    }
 
     return {
       flightIndex: store.getters.currentFlightIndex,

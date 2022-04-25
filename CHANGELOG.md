@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.4.5 - 25.04.2022
+- fix saving of unchanged scores (hotfix)
+
 ## 0.4.4 - 24.04.2022
 - re-add scale description to WineScore
 - improve UI of WineScore
