@@ -52,6 +52,7 @@ function getCurrentFlight(): FlightDto {
     return new FlightDto()
 }
 
+
 function getCurrentFlightIndex(): number {
     const currentFlight = getCurrentFlight()
 
@@ -64,6 +65,11 @@ function getCurrentFlightIndex(): number {
 
 function getCurrentScoreScale(): ScoringScale {
     return state.tasting.scoringScale
+}
+
+function getCurrentDefaultScore(): number {
+    const currentScale = getCurrentScoreScale()
+    return Math.round((currentScale.max - currentScale.min) / 2) + currentScale.min
 }
 
 function getCurrentScoreScaleMarkerSteps(): {value: number, label: string}[] {
@@ -161,5 +167,6 @@ export default {
     currentFlightIndex: computed(() => getCurrentFlightIndex()),
     currentScoreScaleMarkerSteps: computed(() => getCurrentScoreScaleMarkerSteps()),
     currentStepModelValid: computed(() => isCurrentStepModelValid()),
-    isModelValid: computed(() => isModelValid())
+    isModelValid: computed(() => isModelValid()),
+    currentDefaultScore: computed(() => getCurrentDefaultScore())
 }

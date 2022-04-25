@@ -30,10 +30,9 @@ async function updateScores(): Promise<UserScoresDto> {
 }
 
 async function saveAndMoveForward(): Promise<boolean> {
-    try
-    {
+    try {
         await updateScores()
-    } catch(error) {
+    } catch (error) {
         console.log(error)
         return false
     }
