@@ -140,11 +140,17 @@ async function loadCurrentRevealedWines() {
     }
 }
 
-async function loadTastingResults(): Promise<TastingResultDto> {
-    const id = useUtils().loadTastingIdFromBrowser();
+async function loadTastingResults(id: string, onlyMyScores: boolean): Promise<TastingResultDto> {
     const client = useApiClient()
 
-    return client.service('tasting-result').get(id).then((result: TastingResultDto) => {
+    let params = {}
+
+    if(onlyMyScores) {
+        const currentUser = store.getters.currentUser.value
+        params = {query: {userId: currentUser}}
+    }
+
+    return client.service('tasting-result').get(id, params).then((result: TastingResultDto) => {
         const tmp = plainToInstance(TastingResultDto, result)
         // this is an ugly workaround because the type annotation for date doesn't seem to work properly
         tmp.tasting.date = new Date(tmp.tasting.date);

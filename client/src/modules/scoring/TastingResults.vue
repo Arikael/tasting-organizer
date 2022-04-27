@@ -16,8 +16,11 @@
              :rows="store.state.tastingResults.wineResults"
              :dense="$q.screen.lt.md"
              row-key="wine"
-             table-header-class="table-header"
-    >
+             table-header-class="table-header">
+      <template v-slot:top v-if="hasCurrentUser">
+        <q-toggle v-model="filterMyScores" color="accent" class="text-caption"
+                  :label="$t('showOnlyMyScores')" @update:model-value="toggleMyScores"></q-toggle>
+      </template>
       <template v-slot:header="props">
         <q-tr :props="props">
           <q-th text class="text-right">
@@ -43,8 +46,7 @@
               v-for="col in props.cols"
               :key="col.name"
               :props="props"
-              @click="props.expand = !props.expand" :icon="props.expand ? 'remove' : 'add'"
-          >
+              @click="props.expand = !props.expand" :icon="props.expand ? 'remove' : 'add'">
             <tasting-result-cell v-if="typeof col.value == 'number'" :value="col.value"
                                  :name="col.name"></tasting-result-cell>
             <template v-else>{{ col.value }}</template>
@@ -63,13 +65,14 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onMounted} from 'vue';
+import {computed, defineComponent, onMounted, ref} from 'vue';
 import TastingResultCell from '@/modules/scoring/TastingResultCell.vue';
 import {store} from '@/store';
 import {QBadge, QIcon, QTable, QTd, QTh, QTr} from 'quasar';
 import {SingleTastingResultDto} from '@/api/types'
 import {useI18n} from "vue-i18n";
 import TastingResultDetailRow from "@/modules/scoring/TastingResultDetailRow.vue";
+import {useUtils} from "@/lib/useUtils";
 
 const resultOptions = {
   defaultSort: 'avg'
@@ -88,10 +91,19 @@ export default defineComponent({
     const i18n = useI18n({useScope: 'global'})
 
     onMounted(async () => {
-      await store.actions.loadTastingResults()
+      const id = useUtils().loadTastingIdFromBrowser();
+      await store.actions.loadTastingResults(id, false)
     })
 
+    let filterMyScores = ref(false)
+
     return {
+      hasCurrentUser: computed(() => store.getters.currentUser.value.length > 0),
+      filterMyScores,
+      toggleMyScores: (toggle: boolean, evt: any) => {
+        filterMyScores.value = toggle
+        store.actions.loadTastingResults(store.state.tastingResults.tasting.publicId, toggle).then()
+      },
       isTastingResultLoaded: store.getters.isTastingResultLoaded,
       tastingDate: computed(() => store.state.tastingResults.tasting.date.toDateString()),
       t: i18n,
