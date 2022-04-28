@@ -72,7 +72,7 @@ import {QBadge, QIcon, QTable, QTd, QTh, QTr} from 'quasar';
 import {SingleTastingResultDto} from '@/api/types'
 import {useI18n} from "vue-i18n";
 import TastingResultDetailRow from "@/modules/scoring/TastingResultDetailRow.vue";
-import {useUtils} from "@/lib/useUtils";
+import {useBrowserStorageUtils} from "@/lib/useBrowserStorageUtils";
 
 const resultOptions = {
   defaultSort: 'avg'
@@ -91,7 +91,7 @@ export default defineComponent({
     const i18n = useI18n({useScope: 'global'})
 
     onMounted(async () => {
-      const id = useUtils().loadTastingIdFromBrowser();
+      const id = useBrowserStorageUtils().loadTastingIdFromBrowser();
       await store.actions.loadTastingResults(id, false)
     })
 

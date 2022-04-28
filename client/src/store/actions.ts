@@ -5,7 +5,7 @@ import setters from '@//store/setters';
 import {mapApiDataToTasting} from '@/api/mappings';
 import {useApiClient} from '@/api/client';
 import {BaseWineDto, TastingDto, TastingResultDto, UserScoresDto} from '@/api/types'
-import {useUtils} from "@/lib/useUtils";
+import {useBrowserStorageUtils} from "@/lib/useBrowserStorageUtils";
 import {plainToInstance} from "class-transformer";
 import {store} from "@/store/index";
 import {useErrorHandling} from "@/lib/useErrorHandling";
@@ -75,7 +75,7 @@ function moveToEnd() {
 
 async function loadTastingForScoring(): Promise<boolean> {
     store.state.ui.globalIsLoading = true
-    const id = useUtils().loadTastingIdFromBrowser();
+    const id = useBrowserStorageUtils().loadTastingIdFromBrowser();
     const client = useApiClient()
     const tasting$ = client.service('tasting').get(id).then((result: Partial<TastingDto>) => {
         const tmp = plainToInstance(TastingDto, result)
@@ -89,7 +89,7 @@ async function loadTastingForScoring(): Promise<boolean> {
         resolve(new UserScoresDto())
     })
 
-    const userId = useUtils().readUserIdFromBrowser(id)
+    const userId = useBrowserStorageUtils().readUserIdFromBrowser(id)
 
     if (userId) {
         scoring$ = client.service('scoring').get(id, {query: {userId: userId}})

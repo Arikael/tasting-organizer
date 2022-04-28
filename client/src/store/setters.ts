@@ -5,6 +5,7 @@ import {TastingDto} from '@/api/types'
 import {Step} from "@/store/UiSteps";
 import {useValidators} from "@/modules/scoring/useValidators";
 import {store} from "@/store/index";
+import {useBrowserStorageUtils} from "@/lib/useBrowserStorageUtils";
 
 // TODO move all setters to actions
 function setCurrentStep(step: Step) {
@@ -21,7 +22,7 @@ function setUser(userName: string): boolean {
         state.scoreData.userId = createId(4)
     }
 
-    createLocalTastingData()
+    useBrowserStorageUtils().createLocalTastingData()
 
     return valid
 }
@@ -73,12 +74,7 @@ function setUiSteps(tasting: TastingDto) {
     })
 }
 
-function createLocalTastingData() {
-    const localData: any = {}
-    localData[state.tasting.publicId] = state.scoreData.userId
 
-    window.localStorage.setItem('tasting-organizer', JSON.stringify(localData))
-}
 
 function setLanguage(lang: string) {
     if (lang != 'de' && lang != 'en-US') {

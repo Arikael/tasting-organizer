@@ -3,7 +3,6 @@ import {computed, reactive, WritableComputedRef} from "vue";
 import {FormFieldState} from "@/lib/types";
 
 export function useScoringForWine(id: string) {
-    const defaultScore = store.getters.currentDefaultScore.value
     const scoreStatus = reactive<FormFieldState>(new FormFieldState())
 
     const setScore = (value: number) => {
