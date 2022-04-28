@@ -5,7 +5,7 @@ import setters from '@//store/setters';
 import {mapApiDataToTasting} from '@/api/mappings';
 import {useApiClient} from '@/api/client';
 import {BaseWineDto, TastingDto, TastingResultDto, UserScoresDto} from '@/api/types'
-import {useUtils} from "@/lib/useUtils";
+import {useBrowserStorageUtils} from "@/lib/useBrowserStorageUtils";
 import {plainToInstance} from "class-transformer";
 import {store} from "@/store/index";
 import {useErrorHandling} from "@/lib/useErrorHandling";
@@ -75,7 +75,7 @@ function moveToEnd() {
 
 async function loadTastingForScoring(): Promise<boolean> {
     store.state.ui.globalIsLoading = true
-    const id = useUtils().loadTastingIdFromBrowser();
+    const id = useBrowserStorageUtils().loadTastingIdFromBrowser();
     const client = useApiClient()
     const tasting$ = client.service('tasting').get(id).then((result: Partial<TastingDto>) => {
         const tmp = plainToInstance(TastingDto, result)
@@ -89,7 +89,7 @@ async function loadTastingForScoring(): Promise<boolean> {
         resolve(new UserScoresDto())
     })
 
-    const userId = useUtils().readUserIdFromBrowser(id)
+    const userId = useBrowserStorageUtils().readUserIdFromBrowser(id)
 
     if (userId) {
         scoring$ = client.service('scoring').get(id, {query: {userId: userId}})
@@ -140,11 +140,17 @@ async function loadCurrentRevealedWines() {
     }
 }
 
-async function loadTastingResults(): Promise<TastingResultDto> {
-    const id = useUtils().loadTastingIdFromBrowser();
+async function loadTastingResults(id: string, onlyMyScores: boolean): Promise<TastingResultDto> {
     const client = useApiClient()
 
-    return client.service('tasting-result').get(id).then((result: TastingResultDto) => {
+    let params = {}
+
+    if(onlyMyScores) {
+        const currentUser = store.getters.currentUser.value
+        params = {query: {userId: currentUser}}
+    }
+
+    return client.service('tasting-result').get(id, params).then((result: TastingResultDto) => {
         const tmp = plainToInstance(TastingResultDto, result)
         // this is an ugly workaround because the type annotation for date doesn't seem to work properly
         tmp.tasting.date = new Date(tmp.tasting.date);

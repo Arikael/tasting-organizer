@@ -29,5 +29,6 @@
   "scoringThanks": "Danke fürs teilnehmen",
   "gotoResults": "Zu den Resultaten",
   "unableToLoadTasting": "Sorry, Ich konnte das gewünschte Tasting nicht laden",
-  "price": "Preis"
+  "price": "Preis",
+  "showOnlyMyScores": "nur meine Ergebnisse"
 }

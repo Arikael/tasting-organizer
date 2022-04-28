@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.6 - 28.04.2022
+- added "show only my scores"
+- fix storing of tasting data in localStorage
+
 ## 0.4.5 - 25.04.2022
 - fix saving of unchanged scores (hotfix)
 

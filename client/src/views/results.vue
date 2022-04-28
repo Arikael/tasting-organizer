@@ -4,13 +4,13 @@
 
 <script lang="ts">
 import TastingResults from "@/modules/scoring/TastingResults.vue";
-import {useUtils} from "@/lib/useUtils";
+import {useBrowserStorageUtils} from "@/lib/useBrowserStorageUtils";
 
 export default {
   name: "results",
   components: {TastingResults},
   setup() {
-    const utils = useUtils()
+    const utils = useBrowserStorageUtils()
     const tastingId =utils.loadTastingIdFromBrowser()
 
     return {

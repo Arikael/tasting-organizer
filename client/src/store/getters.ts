@@ -3,7 +3,7 @@ import {FlightDto, ScoreDto, ScoringScale, TastingDto} from '@/api/types';
 import {state} from './state';
 import {computed} from 'vue';
 import {Step, StepTypes} from './UiSteps';
-import {useUtils} from "@/lib/useUtils";
+import {useBrowserStorageUtils} from "@/lib/useBrowserStorageUtils";
 import {useErrorHandling} from "@/lib/useErrorHandling";
 
 function isStepTypeMatch(step: Step | undefined, type: StepTypes) {
@@ -11,7 +11,7 @@ function isStepTypeMatch(step: Step | undefined, type: StepTypes) {
 }
 
 function currentUser(): string {
-    return useUtils().readUserIdFromBrowser(state.tastingId)
+    return useBrowserStorageUtils().readUserIdFromBrowser(state.tastingId)
 }
 
 function getCurrentStep(): Step | undefined {
