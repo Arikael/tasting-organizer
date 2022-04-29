@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.4.7 - 29.04.2022
+- fix display of long wine names in results
+
 ## 0.4.6 - 28.04.2022
 - added "show only my scores"
 - fix storing of tasting data in localStorage
