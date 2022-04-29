@@ -117,6 +117,8 @@ export default defineComponent({
         name: 'wine',
         field: ((row: SingleTastingResultDto) => row.wine.name),
         sortable: true,
+        classes: 'wine',
+        headerClasses: 'wine-header',
         label: i18n.t('Wine')
       },
         {
@@ -181,6 +183,18 @@ export default defineComponent({
 
 .rank-nr {
   color: indianred;
+}
+
+.wine,
+.wine-header {
+
+  max-width: 25%;
+  min-width: 25%;
+  text-align: left;
+}
+
+.wine {
+  white-space: inherit;
 }
 
 .message-box {
