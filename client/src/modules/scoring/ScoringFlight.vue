@@ -14,7 +14,7 @@ export default defineComponent({
   name: "ScoringFlight",
   components: {WineScore},
   setup() {
-    for (let wine of store.getters.currentFlight.value.wines) {
+    for (const wine of store.getters.currentFlight.value.wines) {
       const score = store.state.scoreData.scores.find(x => x.wineId === wine.id)
 
       if (!score) {

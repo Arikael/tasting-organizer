@@ -1,4 +1,4 @@
-import {UnwrapNestedRefs} from '@vue/reactivity';
+import {UnwrapNestedRefs} from 'vue';
 import {FlightDto, ScoreDto, ScoringScale, TastingDto} from '@/api/types';
 import {state} from './state';
 import {computed} from 'vue';

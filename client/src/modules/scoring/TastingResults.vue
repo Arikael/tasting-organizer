@@ -95,7 +95,7 @@ export default defineComponent({
       await store.actions.loadTastingResults(id, false)
     })
 
-    let filterMyScores = ref(false)
+    const filterMyScores = ref(false)
 
     return {
       hasCurrentUser: computed(() => store.getters.currentUser.value.length > 0),

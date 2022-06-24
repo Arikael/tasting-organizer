@@ -1,6 +1,6 @@
 import {TastingDto, TastingResultDto} from '../api/types'
 import {reactive} from "vue"
-import {UnwrapNestedRefs} from "@vue/reactivity"
+import {UnwrapNestedRefs} from 'vue'
 import {UserScoresDto} from '../api/types'
 import {
     Step

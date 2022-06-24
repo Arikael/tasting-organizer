@@ -25,7 +25,7 @@ export default {
   components: {ScoringScaleDescription, QInput, QIcon},
   setup() {
 
-    let usernameError = ref<boolean>(false)
+    const usernameError = ref<boolean>(false)
 
     return {
       userName: computed({
