@@ -28,7 +28,7 @@
     "lint": "eslint src/. test/. --config .eslintrc.json --ext .ts --fix",
     "dev": "ts-node-dev --no-notify src/",
     "build": "npm run clean && npm run compile",
-    "heroku-postbuild": "npm run compile",
+    "linux-server-build": "NODE_ENV=development && npm ci && NODE_ENV=production && npm run compile ",
     "clean": "shx rm -rf ./lib/*",
     "start": "node ./lib/",
     "mocha": "ts-mocha \"test/**/*.ts\" --recursive --exit",

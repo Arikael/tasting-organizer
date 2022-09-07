@@ -27,16 +27,3 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           VUE_APP_BACKEND_URL:  ${{ secrets.VUE_APP_BACKEND_URL }}
         run: netlify deploy --dir=./client/dist --prod
-      - name: Deploy Backend
-        uses: AkhileshNS/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "tasting-organizer"
-          heroku_email: ${{secrets.HEROKU_EMAIL }}
-          appdir: "./server"
-        env:
-          HD_MONGODB_CONNECTION: ${{ secrets.MONGODB_CONNECTION }}
-          HD_HOST: ${{ secrets.BACKEND_HOST }}
-          HD_PORT: ${{ secrets.BACKEND_PORT }}
-          HD_NODE_ENV: "production"
-
