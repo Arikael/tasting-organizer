@@ -82,6 +82,10 @@ export default defineComponent({
     })
 
     watch(() => store.state.language, (val, oldVal) => {
+      if (i18n === undefined) {
+        throw new Error('i18n is undefined')
+      }
+
       i18n.locale = val.split('-')[0]
 
       // dynamic import, so loading on demand only
@@ -105,7 +109,7 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
-  .page {
-    margin: 0 auto;
-  }
+.page {
+  margin: 0 auto;
+}
 </style>
