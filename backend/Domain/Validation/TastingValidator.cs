@@ -1,7 +1,7 @@
-using Domain.Entities;
 using FluentValidation;
+using TastingOrganizer.Domain.Entities;
 
-namespace Domain.Validation;
+namespace TastingOrganizer.Domain.Validation;
 
 public class TastingValidator: AbstractValidator<Tasting>
 {

@@ -1,7 +1,8 @@
-namespace Domain.Entities;
+namespace TastingOrganizer.Domain.Entities;
 
 public class Flight
 {
+    public int Id { get; set; }
     public Tasting Tasting { get; set; }
     public string? Title {get; set;}
     public string? Description {get; set;}

@@ -1,6 +1,6 @@
-using Domain.Entities;
+using TastingOrganizer.Domain.Entities;
 
-namespace Domain.UseCases;
+namespace TastingOrganizer.Domain.UseCases;
 
 public interface IPublishTasting
 {

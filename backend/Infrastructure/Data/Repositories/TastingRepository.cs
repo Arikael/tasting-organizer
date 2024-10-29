@@ -1,7 +1,7 @@
-using Domain.Entities;
-using Domain.Interfaces;
+using TastingOrganizer.Domain.Entities;
+using TastingOrganizer.Domain.Interfaces;
 
-namespace Database.Data.Repositories;
+namespace TastingOrganizer.Infrastructure.Data.Repositories;
 
 public class TastingRepository: ITastingRepository
 {

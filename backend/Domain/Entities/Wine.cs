@@ -1,7 +1,8 @@
-namespace Domain.Entities;
+namespace TastingOrganizer.Domain.Entities;
 
 public class Wine
 {
+    public int Id { get; set; }
     public string Name { get; set; }
     public string Producer { get; set; }
     public decimal Price { get; set; }

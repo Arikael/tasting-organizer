@@ -1,7 +1,8 @@
-namespace Domain.Entities;
+namespace TastingOrganizer.Domain.Entities;
 
 public class TastingParticipant
 {
+    public int Id { get; set; }
     public string Name { get; set; }
     public string? Email { get; set; }
     public bool NeedsToPay { get; set; } = true;

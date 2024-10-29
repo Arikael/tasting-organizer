@@ -1,4 +1,4 @@
-namespace Domain.Entities;
+namespace TastingOrganizer.Domain.Entities;
 
 public enum ScoringType
 {

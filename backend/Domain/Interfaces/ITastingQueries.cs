@@ -1,6 +1,6 @@
-using Domain.Entities;
+using TastingOrganizer.Domain.Entities;
 
-namespace Domain.Interfaces;
+namespace TastingOrganizer.Domain.Interfaces;
 
 public interface ITastingQueries
 {

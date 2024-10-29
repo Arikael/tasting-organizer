@@ -1,7 +1,7 @@
-using Domain.Entities;
-using Domain.Validation;
+using TastingOrganizer.Domain.Entities;
+using TastingOrganizer.Domain.Validation;
 
-namespace Domain.UseCases;
+namespace TastingOrganizer.Domain.UseCases;
 
 public class CreateTastingUseCase: ICreateTasting
 {

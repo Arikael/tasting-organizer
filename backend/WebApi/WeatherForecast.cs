@@ -1,4 +1,4 @@
-namespace WebApi;
+namespace TastingOrganizer.WebApi;
 
 public class WeatherForecast
 {
