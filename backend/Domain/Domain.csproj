@@ -10,10 +10,17 @@
 
     <ItemGroup>
       <PackageReference Include="FluentValidation" Version="11.10.0" />
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Lib\Lib.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+        <HintPath>..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.10\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

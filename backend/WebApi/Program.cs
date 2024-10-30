@@ -1,17 +1,23 @@
+using TastingOrganizer.Domain.Extensions;
 using TastingOrganizer.Infrastructure.Data;
+using TastingOrganizer.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+}
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 builder.Configuration.AddEnvironmentVariables();
-builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-builder.Services.AddDbContext(builder.Configuration.GetConnectionString("Default"));
+builder.Services.AddLogging();
+
+builder.Services.AddDbContext(builder.Configuration.GetConnectionString("postgres"));
+builder.Services.AddAllUseCases();
+builder.Services.AddAllValidators();
+builder.Services.AddAllRepositories();
 
 var app = builder.Build();
 

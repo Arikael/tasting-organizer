@@ -21,4 +21,18 @@ public class TastingRepository: ITastingRepository
     {
         return _context.Tastings.FirstOrDefault(x => x.Code == code);
     }
+
+    public async Task SaveTasting(Tasting tasting, CancellationToken cancellationToken = default)
+    {
+        if (tasting.Id == 0)
+        {
+            await _context.AddAsync(tasting, cancellationToken);
+        }
+        else
+        {
+            _context.Update(tasting);
+        }
+
+        await _context.SaveChangesAsync(cancellationToken);  
+    }
 }

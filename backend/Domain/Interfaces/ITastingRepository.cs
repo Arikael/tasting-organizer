@@ -6,4 +6,6 @@ public interface ITastingRepository
 {
     IEnumerable<Tasting> GetTastingsForUser(string user);
     Tasting? GetTasting(string code);
+    
+    Task SaveTasting(Tasting tasting, CancellationToken cancellationToken = default);
 }

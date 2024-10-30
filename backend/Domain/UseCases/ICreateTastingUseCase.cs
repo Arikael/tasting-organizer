@@ -2,7 +2,7 @@ using TastingOrganizer.Domain.Entities;
 
 namespace TastingOrganizer.Domain.UseCases;
 
-public interface ICreateTasting
+public interface ICreateTastingUseCase
 {
-    void CreateTasting(Tasting tasting);
+    void CreateTastingDraft();
 }

@@ -14,8 +14,8 @@ public class Tasting
     public string Place  { get; set; } = "";
     public string Creator { get; set; } = "";
     public string Organizers { get; set; } = "";
-    public ScoringType ScoringType { get; set; }
-    public RevealType RevealType { get; set; }
+    public ScoringType ScoringType { get; set; } = ScoringType.Hundred;
+    public RevealType RevealType { get; set; } = RevealType.AtEnd;
     public string Code { get; set; }
     public string? AccessCode { get; set; }
     public bool IsPublished { get; set; } = false;
