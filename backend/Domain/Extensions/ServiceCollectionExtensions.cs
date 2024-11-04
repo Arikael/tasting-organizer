@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using TastingOrganizer.Domain.UseCases;
+using TastingOrganizer.Domain.UseCases.CreateTastingDraft;
 using TastingOrganizer.Domain.Validation;
 
 namespace TastingOrganizer.Domain.Extensions;

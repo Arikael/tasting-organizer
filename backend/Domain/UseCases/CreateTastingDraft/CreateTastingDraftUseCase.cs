@@ -2,7 +2,7 @@ using TastingOrganizer.Domain.Entities;
 using TastingOrganizer.Domain.Interfaces;
 using TastingOrganizer.Domain.Validation;
 
-namespace TastingOrganizer.Domain.UseCases;
+namespace TastingOrganizer.Domain.UseCases.CreateTastingDraft;
 
 public class CreateTastingDraftUseCase: ICreateTastingUseCase
 {
@@ -15,11 +15,13 @@ public class CreateTastingDraftUseCase: ICreateTastingUseCase
         _tastingRepository = tastingRepository;
     }
     
-    public void CreateTastingDraft()
+    public Tasting CreateTastingDraft()
     {
         var tasting = new Tasting();
         tasting.IsPublished = false;
         _tastingValidator.Validate(tasting);
         _tastingRepository.SaveTasting(tasting);
+
+        return tasting;
     }
 }
