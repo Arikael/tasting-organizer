@@ -5,19 +5,19 @@ namespace TastingOrganizer.Domain.UseCases.SaveTasting;
 
 public class SaveTastingUseCase: ISaveTastingUseCase
 {
-    private AbstractValidator<SaveTastingDto> _saveTastingValidator;
+    private AbstractValidator<SaveTastingModel> _saveTastingValidator;
     private readonly ITastingRepository _tastingRepository;
 
-    public SaveTastingUseCase(AbstractValidator<SaveTastingDto> saveTastingValidator, ITastingRepository tastingRepository)
+    public SaveTastingUseCase(AbstractValidator<SaveTastingModel> saveTastingValidator, ITastingRepository tastingRepository)
     {
         _saveTastingValidator = saveTastingValidator;
         _tastingRepository = tastingRepository;
     }
     
-    public void SaveTasting(SaveTastingDto tastingDto)
+    public void SaveTasting(SaveTastingModel tastingModel)
     {
-        _saveTastingValidator.ValidateAndThrow(tastingDto);
-        var tasting = _tastingRepository.GetTasting(tastingDto.Code);
+        _saveTastingValidator.ValidateAndThrow(tastingModel);
+        var tasting = _tastingRepository.GetTastingByAdminCode(tastingModel.AdminCode);
 
         if (tasting is null)
         {

@@ -4,5 +4,5 @@ namespace TastingOrganizer.Domain.UseCases.SaveTasting;
 
 public interface ISaveTastingUseCase
 {
-    void SaveTasting(SaveTastingDto tasting);
+    void SaveTasting(SaveTastingModel tasting);
 }

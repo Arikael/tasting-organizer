@@ -6,10 +6,12 @@
 </script>
 
 <ParaglideJS {i18n}>
-	<header>
+	<header class="sticky top-0 z-10">
 		<AppBar>
 			Tasting Organizer
 		</AppBar>
 	</header>
-	<slot></slot>
+	<main class="p-4">
+		<slot></slot>
+	</main>
 </ParaglideJS>

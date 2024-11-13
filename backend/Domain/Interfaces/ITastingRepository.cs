@@ -5,7 +5,7 @@ namespace TastingOrganizer.Domain.Interfaces;
 public interface ITastingRepository
 {
     IEnumerable<Tasting> GetTastingsForUser(string user);
-    Tasting? GetTasting(string code);
+    Tasting? GetTastingByAdminCode(string adminCode);
     
     Task SaveTasting(Tasting tasting, CancellationToken cancellationToken = default);
 }

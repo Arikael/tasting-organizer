@@ -17,9 +17,9 @@ public class TastingRepository: ITastingRepository
         return _context.Tastings.Where(x => x.Creator == user);
     }
 
-    public Tasting? GetTasting(string code)
+    public Tasting? GetTastingByAdminCode(string adminCode)
     {
-        return _context.Tastings.FirstOrDefault(x => x.Code == code);
+        return _context.Tastings.FirstOrDefault(x => x.PublicCode == adminCode);
     }
 
     public async Task SaveTasting(Tasting tasting, CancellationToken cancellationToken = default)

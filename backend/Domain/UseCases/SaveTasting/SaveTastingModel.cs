@@ -2,7 +2,7 @@ using TastingOrganizer.Domain.Entities;
 
 namespace TastingOrganizer.Domain.UseCases.SaveTasting;
 
-public class SaveTastingDto
+public class SaveTastingModel
 {
     public int Id { get; set; }
     public DateTime From { get; set; }
@@ -16,7 +16,7 @@ public class SaveTastingDto
     public string Organizers { get; set; } = "";
     public ScoringType ScoringType { get; set; } // TODO check if ok
     public RevealType RevealType { get; set; }
-    public string Code { get; set; }
+    public string AdminCode { get; set; } = "";
     public string? AccessCode { get; set; }
     public bool IsPublished { get; set; }
 }
