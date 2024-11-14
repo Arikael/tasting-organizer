@@ -1,6 +1,7 @@
 using TastingOrganizer.Domain.Extensions;
 using TastingOrganizer.Infrastructure.Data;
 using TastingOrganizer.Infrastructure.Extensions;
+using TastingOrganizer.WebApi.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,10 @@ if (builder.Environment.IsDevelopment())
     builder.Services.AddSwaggerGen();
 }
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(o =>
+{
+    o.Filters.Add<ValidationExceptionFilter>();
+});
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddLogging();
 

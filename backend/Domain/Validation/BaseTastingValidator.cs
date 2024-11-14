@@ -10,6 +10,5 @@ public class BaseTastingValidator: AbstractValidator<Tasting>
         RuleFor(x => x.Title).NotEmpty();
         RuleFor(x => x.AdminCode).NotEmpty();
         RuleFor(x => x.PublicCode).NotEmpty();
-
     }
 }

@@ -1,3 +1,4 @@
+using FluentValidation;
 using TastingOrganizer.Domain.Entities;
 using TastingOrganizer.Domain.Interfaces;
 using TastingOrganizer.Domain.Validation;
@@ -22,7 +23,7 @@ public class CreateTastingUseCase: ICreateTastingUseCase
             Title = createTastingModel.Title
         };
         tasting.IsPublished = false;
-        _validator.Validate(tasting);
+        _validator.ValidateAndThrow(tasting);
         _tastingRepository.SaveTasting(tasting);
 
         return tasting;

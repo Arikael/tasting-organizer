@@ -7,6 +7,6 @@ public class CreateTastingValidator: BaseTastingValidator
 {
     public CreateTastingValidator()
     {
-        RuleFor(x => x.Title).NotEmpty();
+        
     }
 }

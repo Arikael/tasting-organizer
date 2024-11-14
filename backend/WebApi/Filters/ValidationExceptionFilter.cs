@@ -11,9 +11,10 @@ public class ValidationExceptionFilter : IActionFilter, IOrderedFilter
 
     public void OnActionExecuted(ActionExecutedContext context)
     {
-        if (context.Exception is not null)
+        // TODO check what we want to return
+        if (context.Exception is FluentValidation.ValidationException validationException)
         {
-            context.Result = new BadRequestObjectResult(context.Exception);
+            context.Result = new BadRequestObjectResult(validationException.Errors);
             context.ExceptionHandled = true;
         }
     }
