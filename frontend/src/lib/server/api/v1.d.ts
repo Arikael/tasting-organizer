@@ -89,7 +89,7 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         CreateTastingDto: {
-            title?: string | null;
+            title: string;
         };
         /**
          * Format: int32
